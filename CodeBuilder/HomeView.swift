@@ -4,25 +4,22 @@
 //
 //  Created by Miro Gohacki on 9/24/24.
 //
+
 import SwiftUI
 
+// Home Page
 struct HomeView: View {
   var body: some View {
-      
+    
     NavigationView {
-      // Title
-      VStack() {
-        Text("Home")
-          .font(.largeTitle)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-        
+      VStack(spacing: 40) {
         // Title
+        Spacer()
         Text("Welcome to CodeBuilder")
           .font(.largeTitle)
           .fontWeight(.bold)
           .multilineTextAlignment(.center)
-        
+
         // Blue Button
         NavigationLink(destination: ProblemsView()) {
           Text("Problems")
@@ -33,7 +30,7 @@ struct HomeView: View {
             .foregroundColor(.white)
             .cornerRadius(10)
         }
-        
+
         // Green Button
         NavigationLink(destination: LearningView()) {
             Text("Learning")
@@ -44,7 +41,7 @@ struct HomeView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
-        
+
         // Red Button
         NavigationLink(destination: ResumeView()) {
             Text("Resume Tips")
@@ -59,37 +56,48 @@ struct HomeView: View {
       }
       .padding()
     }
-    
-    // Nav Bar at Bottom
-    VStack {
-      TabView {
-        // Home
-        VStack {}
-        .background(.blue)
+  }
+}
+
+struct SearchView: View {
+  var body: some View {
+    Text("Search View")
+  }
+}
+
+struct ProfileView: View {
+  var body: some View {
+    Text("Profile View")
+  }
+}
+
+struct ContentView: View {
+  var body: some View {
+    TabView {
+      // Home
+      HomeView()
         .tabItem {
           Image(systemName: "house.fill")
           Text("Home")
         }
-        
-        // Search
-        VStack {}
-        .background(.gray)
+      
+      // Search
+      SearchView()
         .tabItem {
           Image(systemName: "magnifyingglass")
           Text("Search")
         }
-        
-        // Profile
-        VStack {}
+      
+      // Profile
+      ProfileView()
         .tabItem {
           Image(systemName: "person.fill")
           Text("Profile")
         }
-      }
     }
   }
 }
 
 #Preview{
-    HomeView()
+    ContentView()
 }

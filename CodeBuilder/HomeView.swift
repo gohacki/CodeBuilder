@@ -10,6 +10,10 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 40) {
+                Text("Home")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
                 Spacer()
                 Text("Welcome to CodeBuilder")
                     .font(.largeTitle)
@@ -34,10 +38,18 @@ struct HomeView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
+                NavigationLink(destination: ResumeView()) {
+                    Text("Resume Tips")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
                 Spacer()
             }
             .padding()
-            .navigationTitle("Home")
         }
     }
 }

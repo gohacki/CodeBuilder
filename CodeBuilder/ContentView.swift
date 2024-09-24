@@ -10,52 +10,7 @@ import SwiftUI
 // Home Page
 struct HomeView: View {
   var body: some View {
-    
-    NavigationView {
-      VStack(spacing: 40) {
-        // Title
-        Spacer()
-        Text("Welcome to CodeBuilder")
-          .font(.largeTitle)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-
-        // Blue Button
-        NavigationLink(destination: ProblemsView()) {
-          Text("Problems")
-            .font(.title2)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.accentColor)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-        }
-
-        // Green Button
-        NavigationLink(destination: LearningView()) {
-            Text("Learning")
-                .font(.title2)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.green)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-        }
-
-        // Red Button
-        NavigationLink(destination: ResumeView()) {
-            Text("Resume Tips")
-                .font(.title2)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-        }
-        Spacer()
-      }
-      .padding()
-    }
+    Text("Home View")
   }
 }
 
@@ -95,9 +50,60 @@ struct ContentView: View {
           Text("Profile")
         }
     }
+    .accentColor(.blue)
   }
 }
 
 #Preview{
     ContentView()
 }
+
+
+// Home view stuff
+/*
+ //    NavigationView {
+ //      VStack(spacing: 40) {
+ //        // Title
+ //        Spacer()
+ //        Text("Welcome to CodeBuilder")
+ //          .font(.largeTitle)
+ //          .fontWeight(.bold)
+ //          .multilineTextAlignment(.center)
+ //
+ //        // Blue Button
+ //        NavigationLink(destination: ProblemsView()) {
+ //          Text("Problems")
+ //            .font(.title2)
+ //            .frame(maxWidth: .infinity)
+ //            .padding()
+ //            .background(Color.accentColor)
+ //            .foregroundColor(.white)
+ //            .cornerRadius(10)
+ //        }
+ //
+ //        // Green Button
+ //        NavigationLink(destination: LearningView()) {
+ //            Text("Learning")
+ //                .font(.title2)
+ //                .frame(maxWidth: .infinity)
+ //                .padding()
+ //                .background(Color.green)
+ //                .foregroundColor(.white)
+ //                .cornerRadius(10)
+ //        }
+ //
+ //        // Red Button
+ //        NavigationLink(destination: ResumeView()) {
+ //            Text("Resume Tips")
+ //                .font(.title2)
+ //                .frame(maxWidth: .infinity)
+ //                .padding()
+ //                .background(Color.red)
+ //                .foregroundColor(.white)
+ //                .cornerRadius(10)
+ //        }
+ //        Spacer()
+ //      }
+ //      .padding()
+     //}
+ */

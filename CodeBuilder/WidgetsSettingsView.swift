@@ -1,5 +1,5 @@
 //
-//  NotificationSettingsView.swift
+//  WidgetsSettingsView.swift
 //  CodeBuilder
 //
 //  Created by Aaron Perkel on 9/25/24.
@@ -8,16 +8,16 @@
 import SwiftUICore
 import SwiftUI
 
-struct NotificationSettingsView: View {
+struct WidgetsSettingsView: View {
     var body: some View {
       NavigationStack {
-        Text("Notification Settings")
+        Text("Widgets Settings")
       }
-      .navigationTitle("Notifications")
+      .navigationTitle("Widgets")
       .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview{
-    NotificationSettingsView()
+    WidgetsSettingsView()
 }

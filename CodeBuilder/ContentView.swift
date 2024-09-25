@@ -28,6 +28,7 @@ struct ProfileView: View {
 
 struct ContentView: View {
   var body: some View {
+    
     TabView {
       // Home
       HomeView()

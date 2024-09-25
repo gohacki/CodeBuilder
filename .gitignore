@@ -62,3 +62,5 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 .DS_Store
+CodeBuilder/.DS_Store
+CodeBuilder/Views/.DS_Store

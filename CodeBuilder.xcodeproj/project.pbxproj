@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		A2F4D0E62CA47B2A00B773A3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4D0DA2CA47B2A00B773A3 /* ContentView.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		90AF37B92CA2E4F0006A4534 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,7 +27,6 @@
 		90AF37A82CA2E4EE006A4534 /* CodeBuilder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CodeBuilder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90AF37B82CA2E4F0006A4534 /* CodeBuilderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CodeBuilderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		90AF37C22CA2E4F0006A4534 /* CodeBuilderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CodeBuilderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A2F4D0DA2CA47B2A00B773A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -48,11 +43,6 @@
 		90AF37C52CA2E4F0006A4534 /* CodeBuilderUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CodeBuilderUITests;
-			sourceTree = "<group>";
-		};
-		A2F4D1012CA47CE500B773A3 /* Views */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -86,8 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				90AF37AA2CA2E4EE006A4534 /* CodeBuilder */,
-				A2F4D0DA2CA47B2A00B773A3 /* ContentView.swift */,
-				A2F4D1012CA47CE500B773A3 /* Views */,
 				90AF37BB2CA2E4F0006A4534 /* CodeBuilderTests */,
 				90AF37C52CA2E4F0006A4534 /* CodeBuilderUITests */,
 				90AF37A92CA2E4EE006A4534 /* Products */,
@@ -121,7 +109,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				90AF37AA2CA2E4EE006A4534 /* CodeBuilder */,
-				A2F4D1012CA47CE500B773A3 /* Views */,
 			);
 			name = CodeBuilder;
 			packageProductDependencies = (
@@ -249,7 +236,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2F4D0E62CA47B2A00B773A3 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,16 +18,28 @@ struct SettingsView: View {
         }
         
         Section {
-          NavigationLink(destination: ProblemsView()) {
+          NavigationLink(destination: AccountView()) {
             HStack {
               Image(systemName: "person.fill")
-                .foregroundColor(.blue)
-              Text("aaron perkel")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .clipShape(Circle())
+                .foregroundStyle(.blue)
+                .padding(.trailing, 8)
+              
+              VStack(alignment: .leading, spacing: 4) {
+                Text("aaron perkel")
+                  .font(.system(size: 20, weight: .semibold))
+                Text("Account, CodeBuilder+, and more")
+                  .font(.system(size: 14))
+                  .foregroundColor(.gray)
+              }
             }
+            .padding(.vertical, 8)
           }
         }
-        .padding(.top, 15)
-        .padding(.bottom, 15)
+        .padding(.top, 5)
+        .padding(.bottom, 5)
         
         Section {
           NavigationLink(destination: GeneralSettingsView()) {

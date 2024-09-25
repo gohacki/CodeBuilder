@@ -21,9 +21,9 @@ struct AccountView: View {
         
         VStack(spacing: 2) {
           Text("aaron perkel")
-            .font(.system(size: 24, weight: .semibold))
-          Text("me@aaronperkel.com")
-            .font(.system(size: 16))
+            .font(.system(size: 28, weight: .semibold))
+          Text(verbatim: "me@aaronperkel.com")
+            .font(.system(size: 18))
             .foregroundColor(.gray)
         }
         

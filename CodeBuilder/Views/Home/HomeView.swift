@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeView: View {
   var body: some View {
     NavigationStack {
+      /* // THIS IS REALLY LAGGY FOR SOME REASON
       VStack {
         TabView {
           VStack {
@@ -41,15 +42,14 @@ struct HomeView: View {
               .font(.headline)
             }
           }
-        .padding(.bottom, 20)
         .tabViewStyle(PageTabViewStyle())
         .frame(height: 200)
-      }
+      } */
       
       Text("Hello, Aaron")
         .font(.headline)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.leading, 15)
+        .padding(.leading, 17)
   
       List {
         NavigationLink(destination: ProblemsView()) {

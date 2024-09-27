@@ -22,10 +22,10 @@ struct SearchView: View {
           Text("Imagine the spotify search page")
           Text("Blocky and pictures and stuff")
           Text("Top 150 Interview Questions")
-            .navigationTitle("Search")
-            .navigationBarTitleDisplayMode(.large)
         }
       }
+      .navigationTitle("Search")
+      .navigationBarTitleDisplayMode(.large)
     }
   }
 }

@@ -11,11 +11,8 @@ struct SettingsView: View {
   @State private var searchText = ""
   var body: some View {
     NavigationStack {
+      SearchBar(text: $searchText)
       List {
-        
-        Section {
-          TextField("\(Image(systemName: "magnifyingglass")) Search", text: $searchText)
-        }
         
         Section {
           NavigationLink(destination: AccountView()) {

@@ -11,11 +11,8 @@ struct SearchView: View {
   @State private var searchText = ""
   var body: some View {
     NavigationStack {
+      SearchBar(text: $searchText)
       List {
-        Section {
-          TextField("\(Image(systemName: "magnifyingglass")) Search", text: $searchText)
-        }
-        
         Section {
           Text("Search View")
           Text("This will include types of problems")

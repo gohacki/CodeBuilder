@@ -13,7 +13,7 @@ struct SearchView: View {
     NavigationStack {
       List {
         Section {
-          TextField("Search", text: $searchText)
+          TextField("\(Image(systemName: "magnifyingglass")) Search", text: $searchText)
         }
         
         Section {

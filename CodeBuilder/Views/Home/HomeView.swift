@@ -19,11 +19,7 @@ struct HomeView: View {
   var body: some View {
     NavigationStack {
       VStack {
-        Text("Hello, Aaron")
-          .font(.headline)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .padding(.horizontal)
-        
+          
         AutoScroller(tabItems: tabItems)
           .frame(height: 200)
       

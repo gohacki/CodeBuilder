@@ -30,3 +30,7 @@ struct ArticleDetailView: View {
         }
     }
 }
+
+#Preview {
+  ArticleDetailView(articleTitle: "Preview")
+}

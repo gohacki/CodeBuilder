@@ -94,3 +94,7 @@ struct ProblemDetailView: View {
         }
     }
 }
+
+#Preview {
+  ProblemDetailView(problemTitle: "Preview")
+}

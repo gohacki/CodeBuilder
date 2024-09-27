@@ -21,3 +21,7 @@ struct ProblemsView: View {
         .navigationTitle("Problems")
     }
 }
+
+#Preview {
+  ProblemsView()
+}

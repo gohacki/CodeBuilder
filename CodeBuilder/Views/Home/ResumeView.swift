@@ -21,3 +21,7 @@ struct ResumeView: View {
         .navigationTitle("Resume Tips")
     }
 }
+
+#Preview {
+  ResumeView()
+}

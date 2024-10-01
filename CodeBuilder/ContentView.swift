@@ -49,15 +49,7 @@ struct ContentView: View {
       
       // Settings
       NavigationStack {
-          Group {
-              if authViewModel.isSignedIn {
-                  // User is signed in; show main app interface
-                  SettingsView()
-              } else {
-                  // User is not signed in; show sign-in screen
-                  SignInView()
-              }
-          }
+        SettingsView()
       }
       .tabItem {
         Image(systemName: "gear")
@@ -70,4 +62,5 @@ struct ContentView: View {
 
 #Preview{
     ContentView()
+        .environmentObject(AuthViewModel())
 }

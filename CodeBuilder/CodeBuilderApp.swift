@@ -9,7 +9,9 @@ import SwiftUI
 import Firebase
 
 @main
-struct YourAppName: App {
+struct CodeBuilderApp: App {
+    @StateObject var authViewModel = AuthViewModel()
+
     init() {
         FirebaseApp.configure()
     }
@@ -17,6 +19,7 @@ struct YourAppName: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authViewModel)
         }
     }
 }

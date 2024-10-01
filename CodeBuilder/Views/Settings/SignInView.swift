@@ -1,29 +1,25 @@
 //
-//  SignUpView.swift
+//  SignIn.swift
 //  CodeBuilder
 //
 //  Created by Miro Gohacki on 10/1/24.
 //
+
 import SwiftUI
 
-struct SignUpView: View {
+struct SignInView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
     @State private var email = ""
     @State private var password = ""
-    @State private var displayName = ""
+    @State private var showingSignUp = false
     @State private var showingAlert = false
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Sign Up")
+            Text("Sign In")
                 .font(.largeTitle)
                 .padding(.top, 40)
-            
-            TextField("Display Name", text: $displayName)
-                .autocapitalization(.words)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal)
             
             TextField("Email", text: $email)
                 .autocapitalization(.none)
@@ -35,12 +31,12 @@ struct SignUpView: View {
                 .padding(.horizontal)
             
             Button(action: {
-                authViewModel.signUp(email: email, password: password, displayName: displayName)
+                authViewModel.signIn(email: email, password: password)
             }) {
-                Text("Sign Up")
+                Text("Sign In")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(8)
                     .padding(.horizontal)
@@ -49,6 +45,18 @@ struct SignUpView: View {
                 if isSignedIn {
                     dismiss()
                 }
+            }
+            
+            Button(action: {
+                showingSignUp = true
+            }) {
+                Text("Don't have an account? Sign Up")
+                    .foregroundColor(.blue)
+            }
+            .padding(.top, 8)
+            .sheet(isPresented: $showingSignUp) {
+                SignUpView()
+                    .environmentObject(authViewModel)
             }
         }
         .alert(isPresented: $showingAlert) {

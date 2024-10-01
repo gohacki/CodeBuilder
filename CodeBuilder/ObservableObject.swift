@@ -7,6 +7,8 @@
 import Foundation
 import FirebaseAuth
 import Combine
+import GoogleSignIn
+import Firebase
 
 class AuthViewModel: ObservableObject {
     @Published var user: User?
@@ -48,14 +50,12 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
     func signOut() {
         do {
             try Auth.auth().signOut()
-            DispatchQueue.main.async {
-                self.user = nil
-                self.isSignedIn = false
-            }
+            GIDSignIn.sharedInstance.signOut()
+            self.user = nil
+            self.isSignedIn = false
             print("User signed out")
         } catch let error {
             print("Sign out error: \(error.localizedDescription)")
@@ -82,6 +82,51 @@ class AuthViewModel: ObservableObject {
                         }
                     }
                 }
+            }
+        }
+    }
+    func signInWithGoogle() {
+        // Get the root view controller
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            print("No root view controller")
+            return
+        }
+
+        // Start the sign-in flow.
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] signInResult, error in
+            if let error = error {
+                print("Google Sign-In error: \(error.localizedDescription)")
+                self?.authErrorMessage = error.localizedDescription
+                return
+            }
+
+            guard let signInResult = signInResult else {
+                print("Sign-in result is nil")
+                return
+            }
+
+            guard let idToken = signInResult.user.idToken?.tokenString else {
+                print("No ID token")
+                return
+            }
+
+            let accessToken = signInResult.user.accessToken.tokenString
+
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: accessToken)
+
+            Auth.auth().signIn(with: credential) { [weak self] authResult, error in
+                if let error = error {
+                    print("Firebase sign in with Google error: \(error.localizedDescription)")
+                    self?.authErrorMessage = error.localizedDescription
+                    return
+                }
+
+                // User is signed in
+                self?.user = authResult?.user
+                self?.isSignedIn = true
+                print("User signed in with Google: \(self?.user?.uid ?? "")")
             }
         }
     }

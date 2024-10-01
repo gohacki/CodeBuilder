@@ -46,6 +46,29 @@ struct SignInView: View {
                     dismiss()
                 }
             }
+            Button(action: {
+                authViewModel.signInWithGoogle()
+            }) {
+                HStack {
+                    Image(systemName: "globe")
+                        .foregroundColor(.white)
+                    Text("Sign in with Google")
+                        .foregroundColor(.white)
+                        .bold()
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red)
+                .cornerRadius(8)
+                .padding(.horizontal)
+            }
+
+            // Handle sign-in success
+            .onReceive(authViewModel.$isSignedIn) { isSignedIn in
+                if isSignedIn {
+                    dismiss()
+                }
+            }
             
             Button(action: {
                 showingSignUp = true
@@ -58,6 +81,7 @@ struct SignInView: View {
                 SignUpView()
                     .environmentObject(authViewModel)
             }
+            
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Error"), message: Text(authViewModel.authErrorMessage ?? "An error occurred"), dismissButton: .default(Text("OK")))

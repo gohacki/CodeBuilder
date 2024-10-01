@@ -11,7 +11,8 @@ import Firebase
 @main
 struct CodeBuilderApp: App {
     @StateObject var authViewModel = AuthViewModel()
-
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     init() {
         FirebaseApp.configure()
     }

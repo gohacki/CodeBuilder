@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AutoScroller: View {
     let tabItems: [TabItem]
+    @Binding var path: NavigationPath
     @State private var currentIndex: Int = 0
     @GestureState private var translation: CGFloat = 0
 
@@ -17,21 +18,23 @@ struct AutoScroller: View {
             VStack {
                 HStack(spacing: 0) {
                     ForEach(tabItems.indices, id: \.self) { index in
-                        NavigationLink(value: tabItems[index].destination) {
-                            VStack {
-                                Image(systemName: tabIcon(for: tabItems[index].title))
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 100)
-                                    .foregroundStyle(tabItems[index].color)
-                                Text(tabItems[index].title)
-                                    .font(.headline)
-                                    .foregroundStyle(Color.primary)
-                            }
-                            .frame(width: geometry.size.width)
-                        }
-                    }
-                }
+                        VStack {
+                            Image(systemName: tabIcon(for: tabItems[index].title))
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 100)
+                                .foregroundStyle(tabItems[index].color)
+                            Text(tabItems[index].title)
+                                .font(.headline)
+                                .foregroundStyle(Color.primary)
+                          }
+                          .frame(width: geometry.size.width)
+                          .contentShape(Rectangle())
+                          .onTapGesture {
+                            path.append(tabItems[index].destination)
+                          }
+                      }
+                  }
                 .offset(x: -CGFloat(currentIndex) * geometry.size.width + translation)
                 .frame(width: geometry.size.width, alignment: .leading)
                 .gesture(
@@ -41,7 +44,7 @@ struct AutoScroller: View {
                         }
                         .onEnded { value in
                             let offset = value.translation.width / geometry.size.width
-                            let predictedEndOffset = value.predictedEndTranslation.width / geometry.size.width
+                            let _ = value.predictedEndTranslation.width / geometry.size.width
                             let newIndex = (CGFloat(currentIndex) - offset).rounded()
                             currentIndex = min(max(Int(newIndex), 0), tabItems.count - 1)
                         }

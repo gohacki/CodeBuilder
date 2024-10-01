@@ -6,65 +6,69 @@
 //
 
 
-// THIS IS GLITCHY
-
 import SwiftUI
 
 struct SearchBar: View {
-  @Binding var text: String
-  @State private var isEditing = false
-  
-  var body: some View {
-    HStack {
-      TextField("Search", text: $text)
-        .padding(7)
-        .padding(.horizontal, 25)
-        .background(Color(.systemGray6))
-        .cornerRadius(8)
-        .overlay(
-          HStack {
-            Image(systemName: "magnifyingglass")
-              .foregroundColor(.gray)
-              .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-              .padding(.leading, 8)
-            
-            
-            if isEditing && !text.isEmpty {
-             Button(action: {
-               self.text = ""
-             }) {
-               Image(systemName: "multiply.circle.fill")
-                 .foregroundColor(.gray)
-                 .padding(.trailing, 8)
-             }
-            }
-          }
-        )
-        .onTapGesture {
-          withAnimation {
-            self.isEditing = true
-          }
-        }
-        .padding(.horizontal, 10)
-      if isEditing {
-        Button(action: {
-          withAnimation {
-            self.isEditing = false
-            self.text = ""
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    @Binding var text: String
+    @State private var isEditing = false
 
-          }
-        }) {
-          Text("Cancel")
+    var body: some View {
+        HStack {
+            // Search field
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                    .padding(.leading, 8)
+
+                TextField("Search", text: $text, onEditingChanged: { editing in
+                    withAnimation {
+                        self.isEditing = editing
+                    }
+                })
+                .foregroundColor(.primary)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+
+                if !text.isEmpty {
+                    Button(action: {
+                        self.text = ""
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.trailing, 8)
+                    .transition(.opacity)
+                }
+            }
+            .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+            .background(Color(.systemGray6))
+            .cornerRadius(10.0)
+
+            if isEditing {
+                Button(action: {
+                    withAnimation {
+                        self.isEditing = false
+                        self.text = ""
+                        hideKeyboard()
+                    }
+                }) {
+                    Text("Cancel")
+                }
+                .padding(.leading, 5)
+                //.transition(.move(edge: .trailing))
+            }
         }
-        .padding(.trailing, 15)
-        .transition(.move(edge: .trailing))
-        .animation(.easeInOut, value: isEditing)
-      }
+        .padding(.horizontal)
     }
-    .animation(.default, value: isEditing)
-  }
 }
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
 
 #Preview {
   SearchBar(text: .constant(""))

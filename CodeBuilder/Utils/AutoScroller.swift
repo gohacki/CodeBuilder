@@ -44,9 +44,20 @@ struct AutoScroller: View {
                         }
                         .onEnded { value in
                             let offset = value.translation.width / geometry.size.width
-                            let _ = value.predictedEndTranslation.width / geometry.size.width
-                            let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                            currentIndex = min(max(Int(newIndex), 0), tabItems.count - 1)
+                            let predictedOffset = value.predictedEndTranslation.width / geometry.size.width
+                            let threshold: CGFloat = 0.2
+                          
+                          let newIndex: Int
+                          if offset < -threshold || predictedOffset < -threshold {
+                            newIndex = min(currentIndex + 1, tabItems.count - 1)
+                          } else if offset > threshold || predictedOffset > threshold {
+                            newIndex = max(currentIndex - 1, 0)
+                          } else {
+                            newIndex = currentIndex
+                          }
+                          withAnimation(.easeOut) {
+                            currentIndex = newIndex
+                          }
                         }
                 )
                 .animation(.interactiveSpring(), value: translation == 0)

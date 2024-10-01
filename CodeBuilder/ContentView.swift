@@ -13,6 +13,16 @@ struct ContentView: View {
       // Home
       NavigationStack {
         HomeView()
+          .navigationDestination(for: TabDestination.self) { destination in
+            switch destination {
+            case .problems:
+              ProblemsView()
+            case .learning:
+              LearningView()
+            case .resumeTips:
+              ResumeView()
+            }
+          }
       }
       .tabItem {
         Image(systemName: "house.fill")

@@ -26,32 +26,18 @@ struct HomeView: View {
     TabItem(title: "Learning", color: .orange, destination: .learning),
     TabItem(title: "Resume Tips", color: .brown, destination: .resumeTips)
   ]
-  
-  @State private var path = NavigationPath()
-  
+
   var body: some View {
-    NavigationStack(path: $path) {
-      VStack {
-        AutoScroller(tabItems: tabItems)
-          .frame(height: 200)
-      
-        List {
-          Text("Maybe here we can have like")
-          Text("stats or some other useful info")
-        }
-        .navigationTitle("Home")
-        .navigationBarTitleDisplayMode(.large)
+    VStack {
+      AutoScroller(tabItems: tabItems)
+        .frame(height: 200)
+    
+      List {
+        Text("Maybe here we can have like")
+        Text("stats or some other useful info")
       }
-      .navigationDestination(for: TabDestination.self) { destination in
-        switch destination {
-        case .problems:
-          ProblemsView()
-        case .learning:
-          LearningView()
-        case .resumeTips:
-          ResumeView()
-        }
-      }
+      .navigationTitle("Home")
+      .navigationBarTitleDisplayMode(.large)
     }
   }
 }

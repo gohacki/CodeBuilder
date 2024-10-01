@@ -7,19 +7,31 @@
 
 import SwiftUI
 
+struct TabItem {
+  let title: String
+  let color: Color
+  let destination: TabDestination
+}
+
+enum TabDestination: Hashable {
+  case problems
+  case learning
+  case resumeTips
+}
+
 // Home Page
 struct HomeView: View {
-  @State private var currentIndex = 0
-  let tabItems: [(String, Color, AnyView)] = [
-    ("Problems", Color.blue, AnyView(ProblemsView())),
-    ("Learning", Color.orange, AnyView(LearningView())),
-    ("Resume Tips", Color.brown, AnyView(ResumeView()))
+  let tabItems: [TabItem] = [
+    TabItem(title: "Problems", color: .blue, destination: .problems),
+    TabItem(title: "Learning", color: .orange, destination: .learning),
+    TabItem(title: "Resume Tips", color: .brown, destination: .resumeTips)
   ]
   
+  @State private var path = NavigationPath()
+  
   var body: some View {
-    NavigationStack {
+    NavigationStack(path: $path) {
       VStack {
-          
         AutoScroller(tabItems: tabItems)
           .frame(height: 200)
       
@@ -29,6 +41,16 @@ struct HomeView: View {
         }
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.large)
+      }
+      .navigationDestination(for: TabDestination.self) { destination in
+        switch destination {
+        case .problems:
+          ProblemsView()
+        case .learning:
+          LearningView()
+        case .resumeTips:
+          ResumeView()
+        }
       }
     }
   }

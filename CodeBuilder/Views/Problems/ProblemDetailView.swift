@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ProblemDetailView: View {
     let problemTitle: String
     @State private var availableBlocks = ["func greet() {", "print(\"Hello World\")", "}"]
     @State private var arrangedBlocks: [String?] = Array(repeating: nil, count: 3)
-    @State private var draggedBlock: String?
 
     var body: some View {
         VStack {
@@ -22,8 +22,8 @@ struct ProblemDetailView: View {
             Text("Arrange the code blocks to print 'Hello World'")
                 .padding(.bottom)
 
-            HStack {
-                VStack {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
                     Text("Available Blocks")
                         .font(.headline)
                     ForEach(availableBlocks, id: \.self) { block in
@@ -32,56 +32,40 @@ struct ProblemDetailView: View {
                             .background(Color.blue.opacity(0.1))
                             .cornerRadius(5)
                             .onDrag {
-                                draggedBlock = block
-                                return NSItemProvider(object: block as NSString)
+                                NSItemProvider(object: block as NSString)
                             }
                     }
                 }
                 .padding()
 
-                VStack {
+                VStack(alignment: .leading) {
                     Text("Your Solution")
                         .font(.headline)
 
-                    LazyVStack {
-                        ForEach(0..<arrangedBlocks.count, id: \.self) { index in
-                            ZStack {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.1))
-                                    .frame(height: 50)
-                                    .cornerRadius(5)
+                    ForEach(0..<arrangedBlocks.count, id: \.self) { index in
+                        ZStack {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.1))
+                                .frame(height: 50)
+                                .cornerRadius(5)
 
-                                if let block = arrangedBlocks[index] {
-                                    Text(block)
-                                        .padding()
-                                        .background(Color.green.opacity(0.1))
-                                        .cornerRadius(5)
-                                } else {
-                                    Text("Drop Here")
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            .onDrop(of: [.plainText], isTargeted: nil) { providers in
-                                if arrangedBlocks[index] == nil {
-                                    providers.first?.loadItem(forTypeIdentifier: "public.plain-text", options: nil) { (item, error) in
-                                        DispatchQueue.main.async {
-                                            if let data = item as? Data, let block = String(data: data, encoding: .utf8) {
-                                                arrangedBlocks[index] = block
-                                                if let blockIndex = availableBlocks.firstIndex(of: block) {
-                                                    availableBlocks.remove(at: blockIndex)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return true
-                                }
-                                return false
+                            if let block = arrangedBlocks[index] {
+                                Text(block)
+                                    .padding()
+                                    .background(Color.green.opacity(0.1))
+                                    .cornerRadius(5)
+                            } else {
+                                Text("Drop Here")
+                                    .foregroundColor(.gray)
                             }
                         }
+                        .onDrop(of: [UTType.plainText], isTargeted: nil) { providers in
+                            if arrangedBlocks[index] == nil {
+                                return handleDrop(providers: providers, index: index)
+                            }
+                            return false
+                        }
                     }
-                    .frame(height: 200)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
                 }
                 .padding()
             }
@@ -97,6 +81,23 @@ struct ProblemDetailView: View {
             .padding()
         }
         .padding()
+    }
+
+    func handleDrop(providers: [NSItemProvider], index: Int) -> Bool {
+        if let provider = providers.first {
+            provider.loadObject(ofClass: NSString.self) { (object, error) in
+                DispatchQueue.main.async {
+                    if let text = object as! String? {
+                        arrangedBlocks[index] = text
+                        if let blockIndex = availableBlocks.firstIndex(of: text) {
+                            availableBlocks.remove(at: blockIndex)
+                        }
+                    }
+                }
+            }
+            return true
+        }
+        return false
     }
 
     func checkSolution() {

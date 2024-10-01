@@ -11,11 +11,11 @@ struct AutoScroller: View {
     let tabItems: [TabItem]
     @Binding var path: NavigationPath
     @State private var currentIndex: Int = 0
-    @GestureState private var translation: CGFloat = 0
+    @State private var offset: CGFloat = 0 // Offset for the swipe gesture
 
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
+        VStack(spacing: 0) { // Remove default spacing
+            GeometryReader { geometry in
                 HStack(spacing: 0) {
                     ForEach(tabItems.indices, id: \.self) { index in
                         VStack {
@@ -27,58 +27,56 @@ struct AutoScroller: View {
                             Text(tabItems[index].title)
                                 .font(.headline)
                                 .foregroundStyle(Color.primary)
-                          }
-                          .frame(width: geometry.size.width)
-                          .contentShape(Rectangle())
-                          .onTapGesture {
+                        }
+                        .frame(width: geometry.size.width)
+                        .contentShape(Rectangle()) // Make the entire area tappable
+                        .onTapGesture {
                             path.append(tabItems[index].destination)
-                          }
-                      }
-                  }
-                .offset(x: -CGFloat(currentIndex) * geometry.size.width + translation)
-                .frame(width: geometry.size.width, alignment: .leading)
-                .gesture(
-                    DragGesture()
-                        .updating($translation) { value, state, _ in
-                            state = value.translation.width
                         }
-                        .onEnded { value in
-                            let offset = value.translation.width / geometry.size.width
-                            let predictedOffset = value.predictedEndTranslation.width / geometry.size.width
-                            let threshold: CGFloat = 0.2
-                          
-                          let newIndex: Int
-                          if offset < -threshold || predictedOffset < -threshold {
-                            newIndex = min(currentIndex + 1, tabItems.count - 1)
-                          } else if offset > threshold || predictedOffset > threshold {
-                            newIndex = max(currentIndex - 1, 0)
-                          } else {
-                            newIndex = currentIndex
-                          }
-                          withAnimation(.easeOut) {
-                            currentIndex = newIndex
-                          }
-                        }
-                )
-                .animation(.interactiveSpring(), value: translation == 0)
-
-                // Page Indicator
-                HStack {
-                    ForEach(tabItems.indices, id: \.self) { index in
-                        Capsule()
-                            .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.33))
-                            .frame(width: 45, height: 8)
-                            .onTapGesture {
-                                withAnimation {
-                                    currentIndex = index
-                                }
-                            }
                     }
                 }
-                .padding(.top, 10)
+                .offset(x: -CGFloat(currentIndex) * geometry.size.width + offset)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            offset = value.translation.width
+                        }
+                        .onEnded { value in
+                            let threshold = geometry.size.width / 2 // Swipe half the screen to change
+                            var newIndex = currentIndex
+                            
+                            if -value.translation.width > threshold {
+                                newIndex = min(currentIndex + 1, tabItems.count - 1)
+                            } else if value.translation.width > threshold {
+                                newIndex = max(currentIndex - 1, 0)
+                            }
+                            
+                            withAnimation(.easeOut) {
+                                offset = 0
+                                currentIndex = newIndex
+                            }
+                        }
+                )
             }
+            .frame(height: 150) // Set a fixed height for the main content
+
+            // Page Indicator
+            HStack {
+                ForEach(tabItems.indices, id: \.self) { index in
+                    Capsule()
+                        .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.33))
+                        .frame(width: 45, height: 8)
+                        .onTapGesture {
+                            withAnimation(.easeOut) {
+                                currentIndex = index
+                            }
+                        }
+                }
+            }
+            .frame(height: 30) // Set a fixed height for the page indicator
         }
-        .frame(height: 200)
+        .frame(height: 150) // Set the total height of the AutoScroller
+        .padding(.top, 30)
     }
 
     func tabIcon(for tabItem: String) -> String {
@@ -94,3 +92,8 @@ struct AutoScroller: View {
         }
     }
 }
+
+#Preview{
+    HomeView()
+}
+

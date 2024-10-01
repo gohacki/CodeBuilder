@@ -33,7 +33,6 @@ struct HomeView: View {
     NavigationStack(path: $path) {
       VStack {
         AutoScroller(tabItems: tabItems, path: $path)
-          .frame(height: 200)
         
         List {
           Text("Maybe here we can have like")

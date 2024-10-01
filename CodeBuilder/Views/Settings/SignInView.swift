@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices // For SignInWithAppleButton
 
 struct SignInView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
@@ -16,80 +17,112 @@ struct SignInView: View {
     @State private var showingAlert = false
 
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Sign In")
-                .font(.largeTitle)
-                .padding(.top, 40)
-            
-            TextField("Email", text: $email)
-                .autocapitalization(.none)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal)
-            
-            SecureField("Password", text: $password)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal)
-            
-            Button(action: {
-                authViewModel.signIn(email: email, password: password)
-            }) {
-                Text("Sign In")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-            }
-            .onReceive(authViewModel.$isSignedIn) { isSignedIn in
-                if isSignedIn {
-                    dismiss()
+        NavigationStack {
+            VStack {
+                Spacer()
+                
+                Text("CodeBuilder")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.bottom, 40)
+                
+                // Use a Form for input fields
+                Form {
+                    Section {
+                        TextField("Email", text: $email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                        SecureField("Password", text: $password)
+                    }
                 }
-            }
-            Button(action: {
-                authViewModel.signInWithGoogle()
-            }) {
+                .frame(height: 150)
+                .padding(.horizontal)
+                
+                Button("Sign In") {
+                    authViewModel.signIn(email: email, password: password)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.horizontal)
+                
+                // Improved Separator
                 HStack {
-                    Image(systemName: "globe")
-                        .foregroundColor(.white)
-                    Text("Sign in with Google")
-                        .foregroundColor(.white)
-                        .bold()
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(Color.gray.opacity(0.5))
+                    Text("OR")
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 8)
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(Color.gray.opacity(0.5))
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.red)
-                .cornerRadius(8)
+                .padding(.vertical, 20)
                 .padding(.horizontal)
+                .padding(.bottom, 50)
+                
+                Button(action: {
+                    authViewModel.signInWithGoogle()
+                }) {
+                    HStack {
+                        Image("google_logo") // Ensure you have a Google logo asset
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        Text("Sign in with Google (we need an asset)")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .padding(.horizontal)
+                
+                // Sign in with Apple Button
+                SignInWithAppleButton(
+                    onRequest: { request in
+                        // Handle request
+                    },
+                    onCompletion: { result in
+                        // Handle completion
+                    }
+                )
+                .signInWithAppleButtonStyle(.white)
+                .frame(height: 45)
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                Button("Don't have an account? Sign Up") {
+                    showingSignUp = true
+                }
+                .padding(.bottom, 20)
+                .sheet(isPresented: $showingSignUp) {
+                    SignUpView()
+                        .environmentObject(authViewModel)
+                }
             }
-
-            // Handle sign-in success
+            .navigationTitle("Sign In")
+            .navigationBarTitleDisplayMode(.inline)
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(authViewModel.authErrorMessage ?? "An error occurred"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            .onReceive(authViewModel.$authErrorMessage) { errorMessage in
+                if errorMessage != nil {
+                    showingAlert = true
+                }
+            }
             .onReceive(authViewModel.$isSignedIn) { isSignedIn in
                 if isSignedIn {
                     dismiss()
                 }
-            }
-            
-            Button(action: {
-                showingSignUp = true
-            }) {
-                Text("Don't have an account? Sign Up")
-                    .foregroundColor(.blue)
-            }
-            .padding(.top, 8)
-            .sheet(isPresented: $showingSignUp) {
-                SignUpView()
-                    .environmentObject(authViewModel)
-            }
-            
-        }
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Error"), message: Text(authViewModel.authErrorMessage ?? "An error occurred"), dismissButton: .default(Text("OK")))
-        }
-        .onReceive(authViewModel.$authErrorMessage) { errorMessage in
-            if errorMessage != nil {
-                showingAlert = true
             }
         }
     }
+}
+
+#Preview {
+    SignInView()
+        .environmentObject(AuthViewModel())
 }

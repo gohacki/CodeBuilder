@@ -60,7 +60,7 @@ struct ContentView: View {
   }
 }
 
-#Preview{
-    ContentView()
-        .environmentObject(AuthViewModel())
+#Preview {
+  ContentView()
+    .environmentObject(AuthViewModel())
 }

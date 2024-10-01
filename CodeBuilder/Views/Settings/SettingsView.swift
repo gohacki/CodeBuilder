@@ -37,10 +37,9 @@ struct SettingsView: View {
                             showingSignIn = true
                         }) {
                             HStack {
-                                Image(systemName: "person.crop.circle.badge.plus")
+                                Image(systemName: "person.crop.circle.fill.badge.plus")
                                     .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
+                                    .frame(width: 55, height: 50)
                                     .foregroundStyle(.blue)
                                     .padding(.trailing, 8)
                                 

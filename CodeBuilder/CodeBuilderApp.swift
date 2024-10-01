@@ -24,3 +24,8 @@ struct CodeBuilderApp: App {
         }
     }
 }
+
+#Preview {
+  ContentView()
+    .environmentObject(AuthViewModel())
+}

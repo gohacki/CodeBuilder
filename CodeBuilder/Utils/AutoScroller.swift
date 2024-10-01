@@ -42,7 +42,7 @@ struct AutoScroller: View {
                             offset = value.translation.width
                         }
                         .onEnded { value in
-                            let threshold = geometry.size.width / 2 // Swipe half the screen to change
+                            let threshold = geometry.size.width / 4
                             var newIndex = currentIndex
                             
                             if -value.translation.width > threshold {

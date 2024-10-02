@@ -8,55 +8,61 @@
 import SwiftUI
 
 struct ContentView: View {
+  @EnvironmentObject var authViewModel: AuthViewModel
+  
   var body: some View {
-    TabView {
-      // Home
-      NavigationStack {
-        HomeView()
-          .navigationDestination(for: TabDestination.self) { destination in
-            switch destination {
-            case .problems:
-              ProblemsView()
-            case .learning:
-              LearningView()
-            case .resumeTips:
-              ResumeView()
+    if !authViewModel.isSignedIn {
+      SignInView()
+    } else {
+      TabView {
+        // Home
+        NavigationStack {
+          HomeView()
+            .navigationDestination(for: TabDestination.self) { destination in
+              switch destination {
+              case .problems:
+                ProblemsView()
+              case .learning:
+                LearningView()
+              case .resumeTips:
+                ResumeView()
+              }
             }
-          }
+        }
+        .tabItem {
+          Image(systemName: "house.fill")
+          Text("Home")
+        }
+        
+        // Search
+        NavigationStack {
+          SearchView()
+        }
+        .tabItem {
+          Image(systemName: "magnifyingglass")
+          Text("Search")
+        }
+        
+        // Daily Challenge
+        NavigationStack {
+          DailyChallengeView()
+        }
+        .tabItem {
+          Image(systemName: "calendar")
+          Text("Daily Challenge")
+        }
+        
+        // Settings
+        NavigationStack {
+          SettingsView()
+        }
+        .tabItem {
+          Image(systemName: "gear")
+          Text("Settings")
+        }
       }
-      .tabItem {
-        Image(systemName: "house.fill")
-        Text("Home")
-      }
-      
-      // Search
-      NavigationStack {
-        SearchView()
-      }
-      .tabItem {
-        Image(systemName: "magnifyingglass")
-        Text("Search")
-      }
-      
-      // Daily Challenge
-      NavigationStack {
-        DailyChallengeView()
-      }
-      .tabItem {
-        Image(systemName: "calendar")
-        Text("Daily Challenge")
-      }
-      
-      // Settings
-      NavigationStack {
-        SettingsView()
-      }
-      .tabItem {
-        Image(systemName: "gear")
-        Text("Settings")
-      }
+      .accentColor(.blue)
     }
-    .accentColor(.blue)
   }
 }
 

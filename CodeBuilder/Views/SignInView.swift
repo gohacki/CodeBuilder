@@ -86,6 +86,7 @@ struct SignInView: View {
                     .frame(height: 52)
                     .cornerRadius(10)
                     .padding(.horizontal)
+                    .padding(.bottom, 15)
                     
                   HStack {
                     GoogleSignInButtonView()
@@ -101,12 +102,10 @@ struct SignInView: View {
                 HStack {
                     Text("Don't have an account?")
                         .foregroundColor(.secondary)
-                    Button(action: {
-                        showingSignUp = true
-                    }) {
-                        Text("Sign Up")
-                            .bold()
-                    }
+                  NavigationLink(destination: SignUpView().environmentObject(authViewModel)) {
+                    Text("Sign Up")
+                      .bold()
+                  }
                 }
                 .padding(.bottom, 20)
                 .sheet(isPresented: $showingSignUp) {

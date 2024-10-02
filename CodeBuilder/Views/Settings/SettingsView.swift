@@ -64,7 +64,7 @@ struct SettingsView: View {
                 
                 // Other settings sections...
                 Section {
-                    NavigationLink(destination: GeneralSettingsView()) {
+                    NavigationLink(destination: Text("General Settings")) {
                         HStack {
                             Image(systemName: "gear")
                                 .foregroundColor(.white)
@@ -79,7 +79,7 @@ struct SettingsView: View {
                         }
                     }
                     
-                    NavigationLink(destination: NotificationSettingsView()) {
+                    NavigationLink(destination: Text("Notification Settings")) {
                         HStack {
                             Image(systemName: "bell.badge.fill")
                                 .foregroundColor(.white)
@@ -94,7 +94,7 @@ struct SettingsView: View {
                         }
                     }
                     
-                    NavigationLink(destination: WidgetsSettingsView()) {
+                    NavigationLink(destination: Text("Widget Settings")) {
                         HStack {
                             Image(systemName: "widget.small")
                                 .foregroundColor(.white)

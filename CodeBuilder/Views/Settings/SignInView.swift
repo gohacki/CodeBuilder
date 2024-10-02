@@ -74,6 +74,8 @@ struct SignInView: View {
                 }
                 .buttonStyle(.bordered)
                 .padding(.horizontal)
+                .padding(.bottom, 8)
+              
                 
                 // Sign in with Apple Button
                 SignInWithAppleButton(

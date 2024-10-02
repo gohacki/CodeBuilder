@@ -89,8 +89,3 @@ struct SignUpView: View {
     SignUpView()
         .environmentObject(AuthViewModel())
 }
-
-#Preview {
-  SignUpView()
-    .environmentObject(AuthViewModel())
-}

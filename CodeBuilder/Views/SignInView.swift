@@ -11,6 +11,7 @@ import AuthenticationServices // For SignInWithAppleButton
 struct SignInView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
     @State private var email = ""
     @State private var password = ""
     @State private var showingSignUp = false
@@ -66,11 +67,10 @@ struct SignInView: View {
                 }
                 .padding(.vertical, 10)
                 .padding(.horizontal)
+                .padding(.bottom, 10)
                 
                 // Social Sign-In Buttons
                 VStack(spacing: 10) {
-                    GoogleSignInButtonView()
-                    
                     SignInWithAppleButton(
                         onRequest: { request in
                             // Handle request
@@ -79,10 +79,19 @@ struct SignInView: View {
                             // Handle completion
                         }
                     )
-                    .signInWithAppleButtonStyle(.white)
+                    .signInWithAppleButtonStyle(
+                      // TODO: this isnt working ? always stays black
+                      colorScheme == .dark ? .white : .black
+                    )
                     .frame(height: 52)
                     .cornerRadius(10)
                     .padding(.horizontal)
+                    
+                  HStack {
+                    GoogleSignInButtonView()
+                    GoogleSignInButtonView()
+                    GoogleSignInButtonView()
+                  }
                 }
                 .padding(.bottom, 20)
                 

@@ -12,7 +12,10 @@ import GoogleSignInSwift
 
 struct GoogleSignInButtonView: View {
     var body: some View {
-        GoogleSignInButton(action: handleSignInButton)
+        GoogleSignInButton(
+          style: .icon,
+          action: handleSignInButton
+        )
             .cornerRadius(10)
             .padding(.horizontal)
     }

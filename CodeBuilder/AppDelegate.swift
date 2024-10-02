@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+/*
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
@@ -28,3 +29,4 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return GIDSignIn.sharedInstance.handle(url)
     }
 }
+*/

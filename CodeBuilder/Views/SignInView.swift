@@ -24,26 +24,33 @@ struct SignInView: View {
                 Text("CodeBuilder")
                     .font(.largeTitle)
                     .bold()
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 20)
                 
-                // Use a Form for input fields
-                Form {
-                    Section {
-                        TextField("Email", text: $email)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                        SecureField("Password", text: $password)
-                    }
+                // Custom input fields
+                VStack(spacing: 16) {
+                    TextField("Email", text: $email)
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
                 }
-                .frame(height: 150)
-                .padding(.horizontal)
+                .padding(.bottom, 20)
                 
                 Button("Sign In") {
                     authViewModel.signIn(email: email, password: password)
                 }
                 .buttonStyle(.borderedProminent)
+                .cornerRadius(10)
                 .padding(.horizontal)
+                .padding(.bottom, 10)
                 
                 // Improved Separator
                 HStack {
@@ -57,43 +64,40 @@ struct SignInView: View {
                         .frame(height: 1)
                         .foregroundColor(Color.gray.opacity(0.5))
                 }
-                .padding(.vertical, 20)
+                .padding(.vertical, 10)
                 .padding(.horizontal)
-                .padding(.bottom, 50)
                 
-                Button(action: {
-                    authViewModel.signInWithGoogle()
-                }) {
-                    HStack {
-                        Image("google_logo") // Ensure you have a Google logo asset
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                        Text("Sign in with Google (we need an asset)")
-                    }
-                    .frame(maxWidth: .infinity)
+                // Social Sign-In Buttons
+                VStack(spacing: 10) {
+                    GoogleSignInButtonView()
+                    
+                    SignInWithAppleButton(
+                        onRequest: { request in
+                            // Handle request
+                        },
+                        onCompletion: { result in
+                            // Handle completion
+                        }
+                    )
+                    .signInWithAppleButtonStyle(.white)
+                    .frame(height: 52)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
                 }
-                .buttonStyle(.bordered)
-                .padding(.horizontal)
-                .padding(.bottom, 8)
-              
-                
-                // Sign in with Apple Button
-                SignInWithAppleButton(
-                    onRequest: { request in
-                        // Handle request
-                    },
-                    onCompletion: { result in
-                        // Handle completion
-                    }
-                )
-                .signInWithAppleButtonStyle(.white)
-                .frame(height: 45)
-                .padding(.horizontal)
+                .padding(.bottom, 20)
                 
                 Spacer()
                 
-                Button("Don't have an account? Sign Up") {
-                    showingSignUp = true
+                // Improved Sign Up Prompt
+                HStack {
+                    Text("Don't have an account?")
+                        .foregroundColor(.secondary)
+                    Button(action: {
+                        showingSignUp = true
+                    }) {
+                        Text("Sign Up")
+                            .bold()
+                    }
                 }
                 .padding(.bottom, 20)
                 .sheet(isPresented: $showingSignUp) {

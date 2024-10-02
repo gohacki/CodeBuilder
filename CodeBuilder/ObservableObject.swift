@@ -14,12 +14,17 @@ class AuthViewModel: ObservableObject {
     @Published var user: User?
     @Published var isSignedIn: Bool = false
     @Published var authErrorMessage: String?
+  static let shared = AuthViewModel()
 
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
 
     init() {
         addListeners()
     }
+  
+  func updateSignInState(user: GIDGoogleUser?) {
+          self.isSignedIn = user != nil
+      }
 
     func addListeners() {
         authStateListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in

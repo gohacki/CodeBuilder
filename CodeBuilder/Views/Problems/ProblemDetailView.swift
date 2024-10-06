@@ -12,6 +12,7 @@ struct ProblemDetailView: View {
   @State private var availableBlocks = ["func greet() {", "print(\"Hello World\")", "}"]
   @State private var arrangedBlocks: [String?] = Array(repeating: nil, count: 3)
   @State private var blockCorrectness: [Bool?] = Array(repeating: nil, count: 3) // Tracks the correctness of each block
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel
 
   var body: some View {
     VStack {
@@ -89,6 +90,18 @@ struct ProblemDetailView: View {
             .cornerRadius(10)
         }
         .padding()
+          
+      Button(action: {
+                      // Call problemSolved when the user solves a problem
+                      userStatsViewModel.problemSolved()
+                  }) {
+                      Text("Mark Problem as Solved")
+                          .padding()
+                          .background(Color.blue)
+                          .foregroundColor(.white)
+                          .cornerRadius(10)
+                  }
+                  .padding()
       }
     }
     .padding()

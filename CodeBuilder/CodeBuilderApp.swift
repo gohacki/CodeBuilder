@@ -13,6 +13,7 @@ import GoogleSignIn
 struct CodeBuilderApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var authViewModel = AuthViewModel()
+    @StateObject var userStatsViewModel = UserStatsViewModel()
     
     init() {
         FirebaseApp.configure()
@@ -22,6 +23,7 @@ struct CodeBuilderApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
+                .environmentObject(userStatsViewModel)
                 .onOpenURL { url in
                                     GIDSignIn.sharedInstance.handle(url)
                                 }

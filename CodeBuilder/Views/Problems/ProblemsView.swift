@@ -9,19 +9,44 @@ import SwiftUICore
 import SwiftUI
 
 struct ProblemsView: View {
-    let problems = ["Sample Problem 1", "Sample Problem 2"]
+    let problems: [Problem] = [
+        Problem(
+            title: "Print Hello World",
+            description: "Arrange the code blocks to print 'Hello World'",
+            difficulty: "Easy",
+            articleURL: URL(string: "https://www.example.com/articles/hello-world")!,
+            availableBlocks: ["func greet() {", "print(\"Hello World\")", "}"],
+            correctSolution: ["func greet() {", "print(\"Hello World\")", "}"]
+        ),
+        Problem(
+            title: "Calculate Sum",
+            description: "Arrange the code blocks to calculate the sum of two numbers",
+            difficulty: "Medium",
+            articleURL: URL(string: "https://www.example.com/articles/calculate-sum")!,
+            availableBlocks: ["let sum = a + b", "let a = 5", "let b = 10"],
+            correctSolution: ["let a = 5", "let b = 10", "let sum = a + b"]
+        ),
+        // Add more problems here
+    ]
 
     var body: some View {
-        List(problems, id: \.self) { problem in
-            NavigationLink(destination: ProblemDetailView(problemTitle: problem)) {
-                Text(problem)
-                    .font(.headline)
+        NavigationView {
+            List(problems) { problem in
+                NavigationLink(destination: ProblemDetailView(problem: problem)) {
+                    VStack(alignment: .leading) {
+                        Text(problem.title)
+                            .font(.headline)
+                        Text("Difficulty: \(problem.difficulty)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
             }
+            .navigationTitle("Problems")
         }
-        .navigationTitle("Problems")
     }
 }
 
 #Preview {
-  ProblemsView()
+    ProblemsView()
 }

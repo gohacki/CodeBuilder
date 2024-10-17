@@ -124,9 +124,7 @@ class AuthViewModel: ObservableObject {
         }
         
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        // Create Google Sign In configuration object.
-        let config = GIDConfiguration(clientID: clientID)
+      
         
         // Start the sign-in flow.
         GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] signInResult, error in

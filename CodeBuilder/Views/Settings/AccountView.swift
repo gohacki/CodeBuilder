@@ -2,7 +2,6 @@ import SwiftUI
 
 struct AccountView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var userStatsViewModel: UserStatsViewModel
 
     var body: some View {
         NavigationStack {
@@ -21,14 +20,6 @@ struct AccountView: View {
                         .font(.system(size: 18))
                         .foregroundColor(.gray)
                 }
-
-                VStack {
-                    Text("Problems Solved: \(userStatsViewModel.problemsSolved)")
-                        .font(.system(size: 18))
-                    Text("Current Streak: \(userStatsViewModel.streak) days")
-                        .font(.system(size: 18))
-                }
-                .padding()
 
                 List {
                     Section {
@@ -64,15 +55,10 @@ struct AccountView: View {
             .navigationTitle("CodeBuilder Account")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .onAppear {
-            // Fetch user stats when the account view appears
-            userStatsViewModel.fetchUserStats()
-        }
     }
 }
 
 #Preview {
     AccountView()
         .environmentObject(AuthViewModel())
-        .environmentObject(UserStatsViewModel())
 }

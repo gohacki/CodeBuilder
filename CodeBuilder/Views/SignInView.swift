@@ -87,12 +87,6 @@ struct SignInView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
                     .padding(.bottom, 15)
-                    
-                  HStack {
-                    GoogleSignInButtonView()
-                    GoogleSignInButtonView()
-                    GoogleSignInButtonView()
-                  }
                 }
                 .padding(.bottom, 20)
                 

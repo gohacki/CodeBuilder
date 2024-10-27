@@ -180,12 +180,26 @@ struct ProblemDetailView: View {
 
     // Function to check the solution
     func checkSolution() {
+        var allCorrect = true
+
+        // Check if each block is in the correct position
         for index in 0..<arrangedBlocks.count {
             if let block = arrangedBlocks[index] {
-                blockCorrectness[index] = (block == problem.correctSolution[index])
+                let isCorrect = (block == problem.correctSolution[index])
+                blockCorrectness[index] = isCorrect
+                if !isCorrect {
+                    allCorrect = false
+                }
             } else {
                 blockCorrectness[index] = false
+                allCorrect = false
             }
+        }
+
+        // If the solution is correct, mark it as solved and update Firestore
+        if allCorrect {
+            isProblemSolved = true
+            userStatsViewModel.problemSolved(problemID: problem.id)
         }
     }
 

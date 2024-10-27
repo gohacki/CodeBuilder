@@ -1,3 +1,10 @@
+//
+//  AccountView.swift
+//  CodeBuilder
+//
+//  Created by Miro Gohacki on 9/24/24.
+//
+
 import SwiftUI
 
 struct AccountView: View {
@@ -60,5 +67,5 @@ struct AccountView: View {
 
 #Preview {
     AccountView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared)
 }

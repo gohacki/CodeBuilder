@@ -18,9 +18,11 @@ struct CodeBuilderApp: App {
     }
 
     private func configureFirebase() {
-        // Ensure Firebase is only configured once
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
+            print("✅ Firebase configured successfully.")
+        } else {
+            print("⚠️ Firebase was already configured.")
         }
     }
 
@@ -33,8 +35,8 @@ struct CodeBuilderApp: App {
     }
 }
 
-
 #Preview {
-  ContentView()
-    .environmentObject(AuthViewModel())
+    ContentView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
 }

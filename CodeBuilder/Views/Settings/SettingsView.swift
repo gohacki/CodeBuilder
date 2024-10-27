@@ -1,3 +1,10 @@
+//
+//  SettingsView.swift
+//  CodeBuilder
+//
+//  Created by Miro Gohacki on 9/24/24.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
@@ -118,5 +125,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared)
 }

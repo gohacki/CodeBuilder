@@ -115,126 +115,87 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-    func signInWithGoogle() {
-        // Get the root view controller
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let rootViewController = windowScene.windows.first?.rootViewController else {
-            print("No root view controller")
-            return
-        }
-        
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-      
-        
-        // Start the sign-in flow.
-        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] signInResult, error in
-            if let error = error {
-                print("Google Sign-In error: \(error.localizedDescription)")
-                self?.authErrorMessage = error.localizedDescription
-                return
-            }
-            
-            guard let signInResult = signInResult else {
-                print("Sign-in result is nil")
-                return
-            }
-            
-            guard let idToken = signInResult.user.idToken?.tokenString else {
-                print("No ID token")
-                return
-            }
-            
-            let accessToken = signInResult.user.accessToken.tokenString
-            
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-            
-            // Sign in to Firebase with Google credentials
-            Auth.auth().signIn(with: credential) { [weak self] authResult, error in
-                if let error = error {
-                    print("Firebase sign in with Google error: \(error.localizedDescription)")
-                    self?.authErrorMessage = error.localizedDescription
-                    return
-                }
-                
-                // User is signed in
-                self?.user = authResult?.user
-                self?.isSignedIn = true
-                print("User signed in with Google: \(self?.user?.uid ?? "")")
-                
-                // Optionally, create or update the user's profile in Firestore
-                self?.createUserProfileInFirestore()
-            }
-        }
-    }
 }
+
+
 
 class UserStatsViewModel: ObservableObject {
     @Published var problemsSolved: Int = 0
     @Published var streak: Int = 0
+    @Published var solvedProblemIDs: [String] = []
 
     private var db = Firestore.firestore()
     private var userID: String? {
         return Auth.auth().currentUser?.uid
     }
 
-    // Fetch user stats from Firestore
-    func fetchUserStats() {
+    func problemSolved(problemID: UUID) {
         guard let userID = userID else { return }
         let userRef = db.collection("users").document(userID)
 
-        userRef.getDocument { [weak self] (document, error) in
-            if let document = document, document.exists {
-                let data = document.data()
-                self?.problemsSolved = data?["problemsSolved"] as? Int ?? 0
-                self?.streak = data?["streak"] as? Int ?? 0
-            } else {
-                print("User stats not found")
-            }
-        }
-    }
-
-    // Update user stats when a problem is solved
-    func problemSolved() {
-        guard let userID = userID else { return }
-        let userRef = db.collection("users").document(userID)
-        
-        // Fetch the current date
         let currentDate = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let currentDateString = dateFormatter.string(from: currentDate)
 
-        userRef.getDocument { [weak self] (document, error) in
-            if let document = document, document.exists {
-                var problemsSolved = document.data()?["problemsSolved"] as? Int ?? 0
-                var streak = document.data()?["streak"] as? Int ?? 0
-                let lastSolvedDate = document.data()?["lastProblemSolvedDate"] as? String ?? ""
+        db.runTransaction { (transaction, errorPointer) -> Any? in
+            let document: DocumentSnapshot
+            do {
+                document = try transaction.getDocument(userRef)
+            } catch let fetchError {
+                print("Failed to fetch document: \(fetchError)")
+                return nil
+            }
 
-                // Check if the problem was solved consecutively
-                let calendar = Calendar.current
-                if let lastDate = dateFormatter.date(from: lastSolvedDate) {
-                    let daysDifference = calendar.dateComponents([.day], from: lastDate, to: currentDate).day ?? 0
-                    if daysDifference == 1 {
-                        streak += 1 // Increment the streak if it's consecutive
-                    } else if daysDifference > 1 {
-                        streak = 1 // Reset the streak if more than 1 day passed
-                    }
-                } else {
-                    streak = 1 // If no previous date, start the streak
+            var problemsSolved = document.data()?["problemsSolved"] as? Int ?? 0
+            var streak = document.data()?["streak"] as? Int ?? 0
+            let lastSolvedDate = document.data()?["lastProblemSolvedDate"] as? String ?? ""
+
+            let calendar = Calendar.current
+            if let lastDate = dateFormatter.date(from: lastSolvedDate) {
+                let daysDifference = calendar.dateComponents([.day], from: lastDate, to: currentDate).day ?? 0
+                streak = (daysDifference == 1) ? streak + 1 : 1
+            } else {
+                streak = 1
+            }
+
+            problemsSolved += 1
+
+            transaction.updateData([
+                "problemsSolved": problemsSolved,
+                "streak": streak,
+                "lastProblemSolvedDate": currentDateString,
+                "solvedProblemIDs": FieldValue.arrayUnion([problemID.uuidString])
+            ], forDocument: userRef)
+
+            return nil
+        } completion: { [weak self] (result, error) in
+            if let error = error {
+                print("Transaction failed: \(error.localizedDescription)")
+            } else {
+                DispatchQueue.main.async {
+                    self?.problemsSolved += 1
+//                    self?.streak = streak
+                    self?.solvedProblemIDs.append(problemID.uuidString)
                 }
+            }
+        }
+    }
 
-                problemsSolved += 1
+    func fetchUserStats() {
+        guard let userID = userID else { return }
+        let userRef = db.collection("users").document(userID)
 
-                // Update Firebase
-                userRef.updateData([
-                    "problemsSolved": problemsSolved,
-                    "streak": streak,
-                    "lastProblemSolvedDate": currentDateString
-                ])
+        userRef.getDocument { [weak self] (document, error) in
+            guard let self = self, let document = document, document.exists else {
+                print("User stats not found")
+                return
+            }
 
-                // Update local variables
-                self?.problemsSolved = problemsSolved
-                self?.streak = streak
+            DispatchQueue.main.async {
+                self.problemsSolved = document.data()?["problemsSolved"] as? Int ?? 0
+                self.streak = document.data()?["streak"] as? Int ?? 0
+                self.solvedProblemIDs = document.data()?["solvedProblemIDs"] as? [String] ?? []
             }
         }
     }

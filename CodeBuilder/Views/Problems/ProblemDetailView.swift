@@ -13,6 +13,7 @@ struct ProblemDetailView: View {
     @State private var availableBlocks: [String]
     @State private var arrangedBlocks: [String?]
     @State private var blockCorrectness: [Bool?]
+    @State private var isProblemSolved = false
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel
     @Environment(\.openURL) var openURL
 
@@ -24,114 +25,107 @@ struct ProblemDetailView: View {
     }
 
     var body: some View {
-        VStack {
-            Text(problem.title)
-                .font(.title)
-                .padding()
-
-            Text(problem.description)
-                .padding(.bottom)
-
-            Text("Difficulty: \(problem.difficulty)")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .padding(.bottom)
-
-            HStack(alignment: .top) {
-                // Available Blocks Section
-                VStack(alignment: .leading) {
-                    Text("Available Blocks")
+        ScrollView {
+            VStack(alignment: .leading) {
+                if isProblemSolved {
+                    Text("Congratulations! You've solved this problem.")
                         .font(.headline)
-                    ForEach(availableBlocks, id: \.self) { block in
-                        Text(block)
-                            .padding()
-                            .background(Color.blue.opacity(0.1))
-                            .cornerRadius(5)
-                            .draggable(block)
-                    }
+                        .foregroundColor(.green)
+                        .padding()
                 }
-                .padding()
 
-                // Your Solution Section
-                VStack(alignment: .leading) {
-                    Text("Your Solution")
-                        .font(.headline)
+                Text(problem.title)
+                    .font(.title)
+                    .padding()
 
-                    ForEach(0..<arrangedBlocks.count, id: \.self) { index in
-                        ZStack {
-                            Rectangle()
-                                .fill(Color.gray.opacity(0.1))
-                                .frame(height: 50)
-                                .cornerRadius(5)
+                Text(problem.description)
+                    .padding(.bottom)
 
-                            if let block = arrangedBlocks[index] {
-                                Text(block)
-                                    .padding()
-                                    .background(blockBackgroundColor(for: index))
-                                    .cornerRadius(5)
-                                    .draggable(block)
-                            } else {
-                                Text("Drop Here")
-                                    .foregroundColor(.gray)
+                Text("Difficulty: \(problem.difficulty)")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .padding(.bottom)
+
+                // Adjusted layout
+                VStack(alignment: .leading, spacing: 20) {
+                    // Available Blocks Section
+                    VStack(alignment: .leading) {
+                        Text("Available Blocks")
+                            .font(.headline)
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(availableBlocks, id: \.self) { block in
+                                    CodeBlockView(code: block, backgroundColor: Color.blue.opacity(0.1))
+                                }
                             }
                         }
-                        .onDrop(of: [.text], isTargeted: nil) { providers in
-                            handleDrop(providers: providers, at: index)
+                    }
+                    .padding()
+
+                    // Your Solution Section
+                    VStack(alignment: .leading) {
+                        Text("Your Solution")
+                            .font(.headline)
+
+                        ForEach(0..<arrangedBlocks.count, id: \.self) { index in
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .fill(Color.gray.opacity(0.1))
+                                    .cornerRadius(5)
+
+                                if let block = arrangedBlocks[index] {
+                                    CodeBlockView(code: block, backgroundColor: blockBackgroundColor(for: index))
+                                } else {
+                                    Text("Drop Here")
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                }
+                            }
+                            .onDrop(of: [.text], isTargeted: nil) { providers in
+                                handleDrop(providers: providers, at: index)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
-            }
 
-            // Buttons Section
-            HStack {
-                Button(action: checkSolution) {
-                    Text("Check Solution")
-                        .font(.headline)
-                        .padding()
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding()
+                // Buttons Section
+                HStack {
+                    Button(action: checkSolution) {
+                        Text("Check Solution")
+                            .font(.headline)
+                            .padding()
+                            .background(Color.accentColor)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding()
 
-                Button(action: resetSolution) {
-                    Text("Reset")
-                        .font(.headline)
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    Button(action: resetSolution) {
+                        Text("Reset")
+                            .font(.headline)
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding()
                 }
-                .padding()
 
                 Button(action: {
-                    // Call problemSolved when the user solves a problem
-                    userStatsViewModel.problemSolved()
+                    openURL(problem.articleURL)
                 }) {
-                    Text("Mark Problem as Solved")
+                    Text("Read Article")
+                        .font(.headline)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color.green)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
                 .padding()
             }
-
-            Button(action: {
-                openURL(problem.articleURL)
-            }) {
-                Text("Read Article")
-                    .font(.headline)
-                    .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
             .padding()
-
         }
-        .padding()
     }
 
     // Function to handle drop operations
@@ -174,6 +168,15 @@ struct ProblemDetailView: View {
             return Color.clear
         }
     }
+    
+    func isSolutionCorrect() -> Bool {
+        for index in 0..<arrangedBlocks.count {
+            if arrangedBlocks[index] != problem.correctSolution[index] {
+                return false
+            }
+        }
+        return true
+    }
 
     // Function to check the solution
     func checkSolution() {
@@ -197,6 +200,20 @@ struct ProblemDetailView: View {
     }
 }
 
+struct CodeBlockView: View {
+    let code: String
+    let backgroundColor: Color
+    var body: some View {
+        Text(code)
+            .font(.system(.body, design: .monospaced))
+            .foregroundColor(.primary)
+            .padding()
+            .background(backgroundColor)
+            .cornerRadius(5)
+            .draggable(code)
+    }
+}
+
 #Preview {
     ProblemDetailView(problem: Problem(
         title: "Sample Problem",
@@ -206,4 +223,5 @@ struct ProblemDetailView: View {
         availableBlocks: ["func example() {", "print(\"Sample\")", "}"],
         correctSolution: ["func example() {", "print(\"Sample\")", "}"]
     ))
+    .environmentObject(UserStatsViewModel())
 }

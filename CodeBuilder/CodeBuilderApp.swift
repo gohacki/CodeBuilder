@@ -10,11 +10,18 @@ import Firebase
 
 @main
 struct CodeBuilderApp: App {
-    @StateObject var authViewModel = AuthViewModel()
+    @StateObject var authViewModel = AuthViewModel.shared
     @StateObject var userStatsViewModel = UserStatsViewModel()
     
     init() {
-        FirebaseApp.configure()
+        configureFirebase()
+    }
+
+    private func configureFirebase() {
+        // Ensure Firebase is only configured once
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
     }
 
     var body: some Scene {

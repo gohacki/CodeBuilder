@@ -9,6 +9,7 @@ import SwiftUICore
 import SwiftUI
 
 struct ProblemsView: View {
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel
     let problems: [Problem] = [
         Problem(
             title: "Print Hello World",
@@ -28,14 +29,19 @@ struct ProblemsView: View {
         ),
         // Add more problems here
     ]
-
     var body: some View {
         NavigationView {
             List(problems) { problem in
                 NavigationLink(destination: ProblemDetailView(problem: problem)) {
                     VStack(alignment: .leading) {
-                        Text(problem.title)
-                            .font(.headline)
+                        HStack {
+                            Text(problem.title)
+                                .font(.headline)
+                            if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            }
+                        }
                         Text("Difficulty: \(problem.difficulty)")
                             .font(.subheadline)
                             .foregroundColor(.gray)
@@ -49,4 +55,5 @@ struct ProblemsView: View {
 
 #Preview {
     ProblemsView()
+        .environmentObject(UserStatsViewModel())
 }

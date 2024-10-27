@@ -87,5 +87,6 @@ struct SignUpView: View {
 
 #Preview {
     SignUpView()
-        .environmentObject(AuthViewModel.shared)
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
 }

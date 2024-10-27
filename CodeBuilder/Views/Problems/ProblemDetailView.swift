@@ -4,7 +4,6 @@
 //
 //  Created by Miro Gohacki on 9/24/24.
 //
-// ProblemDetailView.swift
 
 import SwiftUI
 

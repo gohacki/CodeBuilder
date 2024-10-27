@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AccountView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel // Add this line
 
     var body: some View {
         NavigationStack {
@@ -26,6 +27,12 @@ struct AccountView: View {
                     Text(verbatim: authViewModel.user?.email ?? "No Email")
                         .font(.system(size: 18))
                         .foregroundColor(.gray)
+                    
+                    // Display Problems Solved
+                    Text("Problems Solved: \(userStatsViewModel.problemsSolved)")
+                        .font(.system(size: 18))
+                        .foregroundColor(.blue)
+                        .padding(.top, 5)
                 }
 
                 List {
@@ -67,5 +74,6 @@ struct AccountView: View {
 
 #Preview {
     AccountView()
-        .environmentObject(AuthViewModel.shared)
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel
 }

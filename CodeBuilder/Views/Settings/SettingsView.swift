@@ -63,6 +63,7 @@ struct SettingsView: View {
                         .sheet(isPresented: $showingSignIn) {
                             SignInView()
                                 .environmentObject(authViewModel)
+                                .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
                         }
                     }
                 }
@@ -125,5 +126,6 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(AuthViewModel.shared)
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel
 }

@@ -1,9 +1,4 @@
-//
-//  ObservableObject.swift
-//  CodeBuilder
-//
-//  Created by Miro Gohacki on 10/1/24.
-//
+// ObservableObject.swift
 
 import Foundation
 import FirebaseAuth
@@ -230,9 +225,13 @@ class UserStatsViewModel: ObservableObject {
     /// Records that a problem has been solved by the user.
     func problemSolved(problemID: UUID) {
         guard let userID = userID else {
-            DispatchQueue.main.async {
-                // Optionally, set an error message
-            }
+            print("No user is signed in.")
+            return
+        }
+        
+        // Check if the problem is already solved
+        if solvedProblemIDs.contains(problemID.uuidString) {
+            print("Problem already solved. No increment.")
             return
         }
         
@@ -244,6 +243,14 @@ class UserStatsViewModel: ObservableObject {
                 let document = try transaction.getDocument(userRef)
                 
                 if let data = document.data() {
+                    // Check again inside the transaction
+                    let existingSolvedProblemIDs = data[FirestoreKeys.solvedProblemIDs] as? [String] ?? []
+                    if existingSolvedProblemIDs.contains(problemID.uuidString) {
+                        print("Problem already solved inside transaction. No increment.")
+                        return nil // Do not proceed
+                    }
+                    
+                    // Proceed to update
                     var problemsSolved = data[FirestoreKeys.problemsSolved] as? Int ?? 0
                     var streak = data[FirestoreKeys.streak] as? Int ?? 0
                     let lastSolvedTimestamp = data[FirestoreKeys.lastProblemSolvedDate] as? Timestamp
@@ -260,7 +267,7 @@ class UserStatsViewModel: ObservableObject {
                     
                     problemsSolved += 1
                     
-                    // Use arrayUnion to prevent duplicates
+                    // Update the document
                     transaction.updateData([
                         FirestoreKeys.problemsSolved: problemsSolved,
                         FirestoreKeys.streak: streak,
@@ -291,8 +298,7 @@ class UserStatsViewModel: ObservableObject {
                 print("Transaction completed successfully")
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    
-                    // Fetch updated stats to ensure consistency
+                    // Refresh user stats to reflect the latest data
                     self.fetchUserStats()
                 }
             }

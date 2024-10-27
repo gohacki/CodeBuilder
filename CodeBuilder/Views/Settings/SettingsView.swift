@@ -1,3 +1,10 @@
+//
+//  SettingsView.swift
+//  CodeBuilder
+//
+//  Created by Miro Gohacki on 9/24/24.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
@@ -56,6 +63,7 @@ struct SettingsView: View {
                         .sheet(isPresented: $showingSignIn) {
                             SignInView()
                                 .environmentObject(authViewModel)
+                                .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
                         }
                     }
                 }
@@ -118,5 +126,6 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel
 }

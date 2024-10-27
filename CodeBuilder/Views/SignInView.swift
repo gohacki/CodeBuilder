@@ -132,5 +132,6 @@ struct SignInView: View {
 
 #Preview {
     SignInView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
 }

@@ -1,9 +1,5 @@
-//
-//  ObservableObject.swift
-//  CodeBuilder
-//
-//  Created by Miro Gohacki on 10/1/24.
-//
+// ObservableObject.swift
+
 import Foundation
 import FirebaseAuth
 import Combine
@@ -11,45 +7,42 @@ import GoogleSignIn
 import Firebase
 import FirebaseFirestore
 
+// MARK: - Firestore Field Keys
+
+struct FirestoreKeys {
+    static let email = "email"
+    static let problemsSolved = "problemsSolved"
+    static let streak = "streak"
+    static let lastProblemSolvedDate = "lastProblemSolvedDate"
+    static let solvedProblemIDs = "solvedProblemIDs"
+    static let displayName = "displayName"
+}
+
+// MARK: - AuthViewModel
+
 class AuthViewModel: ObservableObject {
+    // Published properties for UI binding
     @Published var user: User?
     @Published var isSignedIn: Bool = false
     @Published var authErrorMessage: String?
+    
+    // Singleton instance
     static let shared = AuthViewModel()
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
-    init() {
+    // Private initializer to enforce singleton usage
+    private init() {
         addListeners()
     }
     
-    func createUserProfileInFirestore() {
-        guard let userID = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
-        
-        // Reference to the user's Firestore document
-        let userRef = db.collection("users").document(userID)
-        
-        // Set user data
-        userRef.setData([
-            "email": Auth.auth().currentUser?.email ?? "",
-            "problemsSolved": 0,
-            "streak": 0,
-            "lastProblemSolvedDate": ""
-        ]) { error in
-            if let error = error {
-                print("Error adding user to Firestore: \(error.localizedDescription)")
-            } else {
-                print("User profile created in Firestore!")
-            }
-        }
+    deinit {
+        removeListeners()
     }
     
-    func updateSignInState(user: GIDGoogleUser?) {
-        self.isSignedIn = user != nil
-    }
+    // MARK: - Listener Management
     
-    func addListeners() {
+    private func addListeners() {
         authStateListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             DispatchQueue.main.async {
                 self?.user = user
@@ -58,41 +51,134 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func removeListeners() {
+    private func removeListeners() {
         if let handle = authStateListenerHandle {
             Auth.auth().removeStateDidChangeListener(handle)
         }
     }
     
+    // MARK: - User Profile Management
+    
+    private func createUserProfileInFirestore() {
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userID)
+        
+        userRef.setData([
+            FirestoreKeys.email: Auth.auth().currentUser?.email ?? "",
+            FirestoreKeys.problemsSolved: 0,
+            FirestoreKeys.streak: 0,
+            FirestoreKeys.lastProblemSolvedDate: Timestamp(date: Date())
+        ], merge: true) { [weak self] error in
+            if let error = error {
+                print("Error adding/updating user in Firestore: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self?.authErrorMessage = "Failed to create user profile."
+                }
+            } else {
+                print("User profile created/updated in Firestore!")
+            }
+        }
+    }
+    
+    // MARK: - Authentication Methods
+    
+    /// Validates email format using a regular expression.
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+    
+    /// Validates password strength.
+    private func isValidPassword(_ password: String) -> Bool {
+        return password.count >= 6
+    }
+    
+    /// Validates display name.
+    private func isValidDisplayName(_ displayName: String) -> Bool {
+        return !displayName.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+    
+    /// Signs in the user with email and password.
     func signIn(email: String, password: String) {
+        // Input Validation
+        guard isValidEmail(email) else {
+            DispatchQueue.main.async {
+                self.authErrorMessage = "Invalid email format."
+            }
+            return
+        }
+        
+        guard isValidPassword(password) else {
+            DispatchQueue.main.async {
+                self.authErrorMessage = "Password must be at least 6 characters."
+            }
+            return
+        }
+        
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+            // Ensure UI updates are on the main thread
             DispatchQueue.main.async {
                 if let error = error {
                     print("Sign in error: \(error.localizedDescription)")
                     self?.authErrorMessage = error.localizedDescription
-                } else {
-                    print("User signed in: \(result?.user.uid ?? "")")
-                    self?.user = result?.user
+                } else if let user = result?.user {
+                    print("User signed in: \(user.uid)")
+                    self?.user = user
                     self?.isSignedIn = true
                     self?.createUserProfileInFirestore()
+                } else {
+                    self?.authErrorMessage = "Unknown sign in error."
                 }
             }
         }
     }
+    
+    /// Signs out the current user.
     func signOut() {
         do {
             try Auth.auth().signOut()
-            GIDSignIn.sharedInstance.signOut()
-            self.user = nil
-            self.isSignedIn = false
-            print("User signed out")
+            DispatchQueue.main.async {
+                self.user = nil
+                self.isSignedIn = false
+                self.authErrorMessage = nil
+                print("User signed out")
+            }
         } catch let error {
             print("Sign out error: \(error.localizedDescription)")
-            authErrorMessage = error.localizedDescription
+            DispatchQueue.main.async {
+                self.authErrorMessage = error.localizedDescription
+            }
         }
     }
+    
+    /// Signs up a new user with email, password, and display name.
     func signUp(email: String, password: String, displayName: String) {
+        // Input Validation
+        guard isValidEmail(email) else {
+            DispatchQueue.main.async {
+                self.authErrorMessage = "Invalid email format."
+            }
+            return
+        }
+        
+        guard isValidPassword(password) else {
+            DispatchQueue.main.async {
+                self.authErrorMessage = "Password must be at least 6 characters."
+            }
+            return
+        }
+        
+        guard isValidDisplayName(displayName) else {
+            DispatchQueue.main.async {
+                self.authErrorMessage = "Display name cannot be empty."
+            }
+            return
+        }
+        
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
+            // Ensure UI updates are on the main thread
             DispatchQueue.main.async {
                 if let error = error {
                     print("Sign up error: \(error.localizedDescription)")
@@ -100,7 +186,7 @@ class AuthViewModel: ObservableObject {
                 } else if let user = result?.user {
                     let changeRequest = user.createProfileChangeRequest()
                     changeRequest.displayName = displayName
-                    changeRequest.commitChanges { error in
+                    changeRequest.commitChanges { [weak self] error in
                         if let error = error {
                             print("Profile update error: \(error.localizedDescription)")
                             self?.authErrorMessage = error.localizedDescription
@@ -111,92 +197,146 @@ class AuthViewModel: ObservableObject {
                             self?.createUserProfileInFirestore()
                         }
                     }
+                } else {
+                    self?.authErrorMessage = "Unknown sign up error."
                 }
             }
         }
     }
 }
 
-
+// MARK: - UserStatsViewModel
 
 class UserStatsViewModel: ObservableObject {
+    // Published properties for UI binding
     @Published var problemsSolved: Int = 0
     @Published var streak: Int = 0
     @Published var solvedProblemIDs: [String] = []
-
+    
     private var db = Firestore.firestore()
+    
+    // Computed property to get current user ID
     private var userID: String? {
         return Auth.auth().currentUser?.uid
     }
-
+    
+    // MARK: - Problem Solved Handling
+    
+    /// Records that a problem has been solved by the user.
     func problemSolved(problemID: UUID) {
-        guard let userID = userID else { return }
+        guard let userID = userID else {
+            print("No user is signed in.")
+            return
+        }
+        
+        // Check if the problem is already solved
+        if solvedProblemIDs.contains(problemID.uuidString) {
+            print("Problem already solved. No increment.")
+            return
+        }
+        
         let userRef = db.collection("users").document(userID)
-
         let currentDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let currentDateString = dateFormatter.string(from: currentDate)
-
+        
         db.runTransaction { (transaction, errorPointer) -> Any? in
-            let document: DocumentSnapshot
             do {
-                document = try transaction.getDocument(userRef)
-            } catch let fetchError {
-                print("Failed to fetch document: \(fetchError)")
+                let document = try transaction.getDocument(userRef)
+                
+                if let data = document.data() {
+                    // Check again inside the transaction
+                    let existingSolvedProblemIDs = data[FirestoreKeys.solvedProblemIDs] as? [String] ?? []
+                    if existingSolvedProblemIDs.contains(problemID.uuidString) {
+                        print("Problem already solved inside transaction. No increment.")
+                        return nil // Do not proceed
+                    }
+                    
+                    // Proceed to update
+                    var problemsSolved = data[FirestoreKeys.problemsSolved] as? Int ?? 0
+                    var streak = data[FirestoreKeys.streak] as? Int ?? 0
+                    let lastSolvedTimestamp = data[FirestoreKeys.lastProblemSolvedDate] as? Timestamp
+                    let lastSolvedDate = lastSolvedTimestamp?.dateValue() ?? Date(timeIntervalSince1970: 0)
+                    
+                    let calendar = Calendar.current
+                    let daysDifference = calendar.dateComponents([.day], from: lastSolvedDate, to: currentDate).day ?? 0
+                    
+                    if daysDifference == 1 {
+                        streak += 1
+                    } else if daysDifference > 1 {
+                        streak = 1
+                    }
+                    
+                    problemsSolved += 1
+                    
+                    // Update the document
+                    transaction.updateData([
+                        FirestoreKeys.problemsSolved: problemsSolved,
+                        FirestoreKeys.streak: streak,
+                        FirestoreKeys.lastProblemSolvedDate: Timestamp(date: currentDate),
+                        FirestoreKeys.solvedProblemIDs: FieldValue.arrayUnion([problemID.uuidString])
+                    ], forDocument: userRef)
+                } else {
+                    // Document does not exist, create it
+                    transaction.setData([
+                        FirestoreKeys.email: Auth.auth().currentUser?.email ?? "",
+                        FirestoreKeys.problemsSolved: 1,
+                        FirestoreKeys.streak: 1,
+                        FirestoreKeys.lastProblemSolvedDate: Timestamp(date: currentDate),
+                        FirestoreKeys.solvedProblemIDs: [problemID.uuidString]
+                    ], forDocument: userRef)
+                }
+            } catch let error {
+                print("Transaction failed: \(error.localizedDescription)")
+                errorPointer?.pointee = error as NSError
                 return nil
             }
-
-            var problemsSolved = document.data()?["problemsSolved"] as? Int ?? 0
-            var streak = document.data()?["streak"] as? Int ?? 0
-            let lastSolvedDate = document.data()?["lastProblemSolvedDate"] as? String ?? ""
-
-            let calendar = Calendar.current
-            if let lastDate = dateFormatter.date(from: lastSolvedDate) {
-                let daysDifference = calendar.dateComponents([.day], from: lastDate, to: currentDate).day ?? 0
-                streak = (daysDifference == 1) ? streak + 1 : 1
-            } else {
-                streak = 1
-            }
-
-            problemsSolved += 1
-
-            transaction.updateData([
-                "problemsSolved": problemsSolved,
-                "streak": streak,
-                "lastProblemSolvedDate": currentDateString,
-                "solvedProblemIDs": FieldValue.arrayUnion([problemID.uuidString])
-            ], forDocument: userRef)
-
             return nil
         } completion: { [weak self] (result, error) in
             if let error = error {
                 print("Transaction failed: \(error.localizedDescription)")
+                // Optionally, set an error message
             } else {
-                DispatchQueue.main.async {
-                    self?.problemsSolved += 1
-//                    self?.streak = streak
-                    self?.solvedProblemIDs.append(problemID.uuidString)
+                print("Transaction completed successfully")
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    // Refresh user stats to reflect the latest data
+                    self.fetchUserStats()
                 }
             }
         }
     }
-
+    
+    // MARK: - Fetching User Statistics
+    
+    /// Fetches the latest user statistics from Firestore.
     func fetchUserStats() {
         guard let userID = userID else { return }
         let userRef = db.collection("users").document(userID)
-
+        
         userRef.getDocument { [weak self] (document, error) in
-            guard let self = self, let document = document, document.exists else {
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error fetching user stats: \(error.localizedDescription)")
+                // Optionally, set an error message
+                return
+            }
+            
+            guard let document = document, document.exists, let data = document.data() else {
                 print("User stats not found")
                 return
             }
-
+            
             DispatchQueue.main.async {
-                self.problemsSolved = document.data()?["problemsSolved"] as? Int ?? 0
-                self.streak = document.data()?["streak"] as? Int ?? 0
-                self.solvedProblemIDs = document.data()?["solvedProblemIDs"] as? [String] ?? []
+                self.problemsSolved = data[FirestoreKeys.problemsSolved] as? Int ?? 0
+                self.streak = data[FirestoreKeys.streak] as? Int ?? 0
+                self.solvedProblemIDs = data[FirestoreKeys.solvedProblemIDs] as? [String] ?? []
             }
         }
+    }
+    
+    // MARK: - Initialization
+    
+    init() {
+        fetchUserStats()
     }
 }

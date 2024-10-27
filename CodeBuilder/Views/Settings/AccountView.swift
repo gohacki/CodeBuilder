@@ -9,7 +9,6 @@ struct AccountView: View {
                 Image(systemName: "person.fill")
                     .resizable()
                     .frame(width: 70, height: 70)
-                    .clipShape(Circle())
                     .foregroundStyle(.blue)
                     .padding(.top, 25)
 

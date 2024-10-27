@@ -7,92 +7,100 @@
 
 import SwiftUI
 
+// TabItem struct for AutoScroller
+struct TabItem {
+    let title: String
+    let color: Color
+    let iconName: String
+    let destination: TabDestination
+}
+
+// Enum for destinations in AutoScroller
+enum TabDestination: Hashable {
+    case problems
+    case learning
+    case resumeTips
+}
+
 struct AutoScroller: View {
-  let tabItems: [TabItem]
-  @Binding var path: NavigationPath
-  @State private var currentIndex: Int = 0
-  @State private var offset: CGFloat = 0 // Offset for the swipe gesture
+    let tabItems: [TabItem] = [
+        TabItem(title: "Problems", color: .blue, iconName: "doc.text.fill", destination: .problems),
+        TabItem(title: "Learning", color: .orange, iconName: "book.fill", destination: .learning),
+        TabItem(title: "Resume Tips", color: .brown, iconName: "briefcase.fill", destination: .resumeTips)
+    ]
+    @Binding var path: NavigationPath
+    @Environment(\.colorScheme) var colorScheme
+    @State private var currentIndex: Int = 0
+    @State private var offset: CGFloat = 0
 
-  var body: some View {
-    VStack(spacing: 0) { // Remove default spacing
-      GeometryReader { geometry in
-        HStack(spacing: 0) {
-          ForEach(tabItems.indices, id: \.self) { index in
-            VStack {
-              Image(systemName: tabIcon(for: tabItems[index].title))
-                .resizable()
-                .scaledToFit()
-                .frame(height: 100)
-                .foregroundStyle(tabItems[index].color)
-              Text(tabItems[index].title)
-                .font(.headline)
-                .foregroundStyle(Color.primary)
+    var body: some View {
+        VStack(spacing: 20) {
+            // Carousel
+            GeometryReader { geometry in
+                let spacing: CGFloat = 16
+                let cardWidth = geometry.size.width * 0.8
+                let totalSpacing = spacing * CGFloat(tabItems.count - 1)
+                let totalWidth = CGFloat(tabItems.count) * cardWidth + totalSpacing
+
+                // Compute xOffset separately
+                let baseOffset = -CGFloat(currentIndex) * (cardWidth + spacing)
+                let centeringOffset = (geometry.size.width - cardWidth) / 2
+                let xOffset = baseOffset + centeringOffset + offset
+
+                HStack(spacing: spacing) {
+                    ForEach(tabItems.indices, id: \.self) { index in
+                        let tabItem = tabItems[index]
+                        CarouselCard(
+                            tabItem: tabItem,
+                            cardWidth: cardWidth,
+                            path: $path
+                        )
+                    }
+                }
+                .frame(width: totalWidth, alignment: .leading)
+                .offset(x: xOffset)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            offset = value.translation.width
+                        }
+                        .onEnded { value in
+                            let threshold = geometry.size.width / 4
+                            var newIndex = currentIndex
+
+                            if -value.translation.width > threshold {
+                                newIndex = min(currentIndex + 1, tabItems.count - 1)
+                            } else if value.translation.width > threshold {
+                                newIndex = max(currentIndex - 1, 0)
+                            }
+
+                            withAnimation(.easeOut) {
+                                offset = 0
+                                currentIndex = newIndex
+                            }
+                        }
+                )
             }
-            .frame(width: geometry.size.width)
-            .contentShape(Rectangle()) // Make the entire area tappable
-            .onTapGesture {
-              path.append(tabItems[index].destination)
+            .frame(height: 220)
+            .padding(.horizontal)
+
+            // Page Indicator
+            HStack(spacing: 8) {
+                ForEach(tabItems.indices, id: \.self) { index in
+                    Circle()
+                        .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.3))
+                        .frame(width: 8, height: 8)
+                        .onTapGesture {
+                            withAnimation(.easeOut) {
+                                currentIndex = index
+                            }
+                        }
+                }
             }
-          }
         }
-        .offset(x: -CGFloat(currentIndex) * geometry.size.width + offset)
-        .gesture(
-          DragGesture()
-            .onChanged { value in
-              offset = value.translation.width
-            }
-            .onEnded { value in
-              let threshold = geometry.size.width / 4
-              var newIndex = currentIndex
-
-              if -value.translation.width > threshold {
-                newIndex = min(currentIndex + 1, tabItems.count - 1)
-              } else if value.translation.width > threshold {
-                newIndex = max(currentIndex - 1, 0)
-              }
-
-              withAnimation(.easeOut) {
-                offset = 0
-                currentIndex = newIndex
-              }
-            })
-      }
-      .frame(height: 150) // Set a fixed height for the main content
-
-      // Page Indicator
-      HStack {
-        ForEach(tabItems.indices, id: \.self) { index in
-          Capsule()
-            .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.33))
-            .frame(width: 45, height: 8)
-            .onTapGesture {
-              withAnimation(.easeOut) {
-                currentIndex = index
-              }
-            }
-        }
-      }
-      .frame(height: 30) // Set a fixed height for the page indicator
     }
-    .frame(height: 150) // Set the total height of the AutoScroller
-    .padding(.top, 30)
-  }
-
-  func tabIcon(for tabItem: String) -> String {
-    switch tabItem {
-    case "Problems":
-      return "doc.text.fill"
-    case "Learning":
-      return "book.fill"
-    case "Resume Tips":
-      return "briefcase.fill"
-    default:
-      return "questionmark"
-    }
-  }
 }
-
-#Preview{
-  HomeView()
+#Preview {
+    HomeView()
+        .environmentObject(AuthViewModel())
 }
-

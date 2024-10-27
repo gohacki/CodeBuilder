@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
   @EnvironmentObject var authViewModel: AuthViewModel
-  
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel // Add this line
   var body: some View {
     if !authViewModel.isSignedIn {
       SignInView()

@@ -2,7 +2,11 @@
 //  SettingsView.swift
 //  CodeBuilder
 //
+<<<<<<< HEAD
 //  Created by aaron perkel on 9/26/24.
+=======
+//  Created by Miro Gohacki on 9/24/24.
+>>>>>>> f31f8e595d8f7cc3dbe376bb2259ae8944a02eef
 //
 
 import SwiftUI
@@ -39,6 +43,7 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
+<<<<<<< HEAD
             VStack(spacing: 20) {
                 // Profile Card
                 if authViewModel.isSignedIn {
@@ -57,6 +62,109 @@ struct SettingsView: View {
                             iconColor: item.color,
                             destination: item.destination
                         )
+=======
+            SearchBar(text: $searchText)
+            List {
+                Section {
+                    if authViewModel.isSignedIn {
+                        // Show account information
+                        NavigationLink(destination: AccountView()) {
+                            HStack {
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .foregroundStyle(.blue)
+                                    .padding(.trailing, 8)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(authViewModel.user?.displayName ?? "No Name")
+                                        .font(.system(size: 20, weight: .semibold))
+                                    Text("Account, CodeBuilder+, and more")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .padding(.vertical, 8)
+                        }
+                    } else {
+                        // Show sign-in prompt
+                        Button(action: {
+                            showingSignIn = true
+                        }) {
+                            HStack {
+                                Image(systemName: "person.crop.circle.fill.badge.plus")
+                                    .resizable()
+                                    .frame(width: 55, height: 50)
+                                    .foregroundStyle(.blue)
+                                    .padding(.trailing, 8)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Sign In")
+                                        .font(.system(size: 20, weight: .semibold))
+                                    Text("Access your account and more")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .padding(.vertical, 8)
+                        }
+                        .sheet(isPresented: $showingSignIn) {
+                            SignInView()
+                                .environmentObject(authViewModel)
+                                .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
+                        }
+                    }
+                }
+                .padding(.top, 5)
+                .padding(.bottom, 5)
+                
+                // Other settings sections...
+                Section {
+                    NavigationLink(destination: Text("General Settings")) {
+                        HStack {
+                            Image(systemName: "gear")
+                                .foregroundColor(.white)
+                                .font(.system(size: 18))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(.systemGray2))
+                                        .frame(width: 28, height: 28)
+                                )
+                                .padding(.trailing, 4)
+                            Text("General")
+                        }
+                    }
+                    
+                    NavigationLink(destination: Text("Notification Settings")) {
+                        HStack {
+                            Image(systemName: "bell.badge.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: 18))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(.red))
+                                        .frame(width: 28, height: 28)
+                                )
+                                .padding(.trailing, 4)
+                            Text("Notifications")
+                        }
+                    }
+                    
+                    NavigationLink(destination: Text("Widget Settings")) {
+                        HStack {
+                            Image(systemName: "widget.small")
+                                .foregroundColor(.white)
+                                .font(.system(size: 18))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(.orange))
+                                        .frame(width: 28, height: 28)
+                                )
+                                .padding(.trailing, 4)
+                            Text("Widgets")
+                        }
+>>>>>>> f31f8e595d8f7cc3dbe376bb2259ae8944a02eef
                     }
                 }
                 .padding(.horizontal)
@@ -207,5 +315,6 @@ struct SettingsOptionView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
+        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel
 }

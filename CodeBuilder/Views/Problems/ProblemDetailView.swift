@@ -4,7 +4,6 @@
 //
 //  Created by Miro Gohacki on 9/24/24.
 //
-// ProblemDetailView.swift
 
 import SwiftUI
 import Combine
@@ -167,6 +166,11 @@ struct ProblemDetailView: View {
     // Function to check the solution
     func checkSolution() {
         var allCorrect = true
+<<<<<<< HEAD
+=======
+
+        // Check if each block is in the correct position
+>>>>>>> f31f8e595d8f7cc3dbe376bb2259ae8944a02eef
         for index in 0..<arrangedBlocks.count {
             if let block = arrangedBlocks[index] {
                 let isCorrect = (block == problem.correctSolution[index])
@@ -179,10 +183,18 @@ struct ProblemDetailView: View {
                 allCorrect = false
             }
         }
+<<<<<<< HEAD
         if allCorrect {
             isProblemSolved = true
             // Update user stats
             userStatsViewModel.markProblemAsSolved(problemID: problem.id.uuidString)
+=======
+
+        // If the solution is correct, mark it as solved and update Firestore
+        if allCorrect {
+            isProblemSolved = true
+            userStatsViewModel.problemSolved(problemID: problem.id)
+>>>>>>> f31f8e595d8f7cc3dbe376bb2259ae8944a02eef
         }
     }
 

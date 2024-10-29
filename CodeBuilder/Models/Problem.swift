@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Problem: Identifiable {
-    let id = UUID()
+struct Problem: Identifiable, Codable {
+    let id: UUID
     let title: String
     let description: String
     let difficulty: String

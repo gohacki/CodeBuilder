@@ -1,0 +1,20 @@
+[
+    {
+        "id": "BEA9F93B-9F17-4126-B0AB-D38FAF213025",
+        "title": "Print Hello World",
+        "description": "Arrange the code blocks to print 'Hello World'",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/hello-world",
+        "availableBlocks": ["func greet() {", "print(\"Hello World\")", "}"],
+        "correctSolution": ["func greet() {", "print(\"Hello World\")", "}"]
+    },
+    {
+        "id": "36353321-28CF-4C21-9152-840D078D8C07",
+        "title": "Calculate Sum",
+        "description": "Arrange the code blocks to calculate the sum of two numbers",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/calculate-sum",
+        "availableBlocks": ["let sum = a + b", "let a = 5", "let b = 10"],
+        "correctSolution": ["let a = 5", "let b = 10", "let sum = a + b"]
+    }
+]

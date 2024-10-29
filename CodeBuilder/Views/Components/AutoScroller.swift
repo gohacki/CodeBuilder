@@ -27,7 +27,7 @@ struct AutoScroller: View {
     @State private var offset: CGFloat = 0
 
     var body: some View {
-        VStack(spacing: 20) {
+      VStack(spacing: 20) {
             // Carousel
             GeometryReader { geometry in
                 let cardWidth = geometry.size.width * 0.8
@@ -74,7 +74,7 @@ struct AutoScroller: View {
                         }
                 )
             }
-            .frame(height: 220)
+            .frame(height: 175)
             .padding(.horizontal)
 
             // Page Indicator
@@ -92,4 +92,11 @@ struct AutoScroller: View {
             }
         }
     }
+}
+
+#Preview {
+    HomeView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
+        .environmentObject(ProblemsData.shared)
 }

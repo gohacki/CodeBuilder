@@ -55,6 +55,7 @@ struct HomeView: View {
                     SignInView()
                         .environmentObject(authViewModel)
                 }
+              
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.large)
@@ -68,6 +69,17 @@ struct HomeView: View {
                     ResumeView()
                 }
             }
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(UIColor.systemBackground),
+                        Color(UIColor.secondarySystemBackground)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+            )
         }
     }
 }
@@ -146,4 +158,11 @@ struct ProgressCardView: View {
                 )
         )
     }
+}
+
+#Preview {
+    HomeView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
+        .environmentObject(ProblemsData.shared)
 }

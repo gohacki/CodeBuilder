@@ -1,10 +1,3 @@
-//
-//  AutoScroller.swift
-//  CodeBuilder
-//
-//  Created by aaron perkel on 9/26/24.
-//
-
 import SwiftUI
 
 // TabItem struct for AutoScroller
@@ -37,8 +30,8 @@ struct AutoScroller: View {
         VStack(spacing: 20) {
             // Carousel
             GeometryReader { geometry in
-                let spacing: CGFloat = 16
                 let cardWidth = geometry.size.width * 0.8
+                let spacing: CGFloat = 16
                 let totalSpacing = spacing * CGFloat(tabItems.count - 1)
                 let totalWidth = CGFloat(tabItems.count) * cardWidth + totalSpacing
 
@@ -99,8 +92,4 @@ struct AutoScroller: View {
             }
         }
     }
-}
-#Preview {
-    HomeView()
-        .environmentObject(AuthViewModel())
 }

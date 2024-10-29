@@ -27,11 +27,12 @@ struct AccountView: View {
                         .font(.system(size: 18))
                         .foregroundColor(.gray)
                     
+                  /*
                     // Display Problems Solved
                     Text("Problems Solved: \(userStatsViewModel.problemsSolved)")
                         .font(.system(size: 18))
                         .foregroundColor(.blue)
-                        .padding(.top, 5)
+                        .padding(.top, 5)*/
                 }
 
                 List {

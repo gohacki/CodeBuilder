@@ -1,10 +1,3 @@
-//
-//  HomeView.swift
-//  CodeBuilder
-//
-//  Created by aaron perkel on 9/25/24.
-//
-
 import SwiftUI
 
 struct HomeView: View {
@@ -153,9 +146,4 @@ struct ProgressCardView: View {
                 )
         )
     }
-}
-
-#Preview {
-    HomeView()
-        .environmentObject(AuthViewModel())
 }

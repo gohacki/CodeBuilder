@@ -1,10 +1,3 @@
-//
-//  CodeBuilderApp.swift
-//  CodeBuilder
-//
-//  Created by Miro Gohacki on 9/24/24.
-//
-
 // CodeBuilderApp.swift
 import SwiftUI
 import Firebase
@@ -40,11 +33,8 @@ struct CodeBuilderApp: App {
 }
 
 #Preview {
-    ContentView()
-        .environmentObject(AuthViewModel.shared)
-        .environmentObject(UserStatsViewModel())
-<<<<<<< HEAD
-        .environmentObject(ProblemsData.shared)
-=======
->>>>>>> f31f8e595d8f7cc3dbe376bb2259ae8944a02eef
+  ContentView()
+    .environmentObject(AuthViewModel.shared)
+    .environmentObject(UserStatsViewModel())
+    .environmentObject(ProblemsData.shared)
 }

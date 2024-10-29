@@ -21,6 +21,6 @@ extension Color {
 }
 
 #Preview {
-  ContentView()
-    .environmentObject(AuthViewModel())
+    ContentView()
+        .environmentObject(AuthViewModel.shared)
 }

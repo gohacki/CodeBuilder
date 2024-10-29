@@ -18,17 +18,17 @@ struct CarouselCard: View {
             Image(systemName: tabItem.iconName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: 50)
+                .frame(width: 65, height: 65)
                 .foregroundColor(.white)
                 .padding()
                 .background(tabItem.color)
-                .clipShape(Circle())
+                .clipShape(RoundedRectangle(cornerRadius: 16))
 
             Text(tabItem.title)
                 .font(.headline)
                 .foregroundColor(.primary)
         }
-        .frame(width: cardWidth - 50)
+        .frame(width: cardWidth - 50, height: 250)
         .padding(25)
         // Remove internal padding
         .background(

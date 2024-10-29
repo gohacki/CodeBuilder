@@ -90,6 +90,7 @@ struct AutoScroller: View {
                         }
                 }
             }
+            .padding(.top, 120)
         }
     }
 }

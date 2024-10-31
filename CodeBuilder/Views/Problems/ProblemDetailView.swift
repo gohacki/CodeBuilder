@@ -1,4 +1,9 @@
-// ProblemDetailView.swift
+//
+//  ProblemDetailView.swift
+//  CodeBuilder
+//
+//  Created by Miro Gohacki on 9/24/24.
+//
 
 import SwiftUI
 import Combine
@@ -115,6 +120,12 @@ struct ProblemDetailView: View {
             }
             .padding()
         }
+        .onAppear {
+            // Check if the problem is already solved
+            if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
+                isProblemSolved = true
+            }
+        }
     }
 
     // Function to handle drop operations
@@ -179,7 +190,7 @@ struct ProblemDetailView: View {
         if allCorrect {
             isProblemSolved = true
             // Update user stats
-            userStatsViewModel.markProblemAsSolved(problemID: problem.id.uuidString)
+            userStatsViewModel.problemSolved(problemID: problem.id)
         }
     }
 

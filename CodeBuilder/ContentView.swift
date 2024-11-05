@@ -16,6 +16,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Daily Challenge", systemImage: "star.fill")
                 }
+            ForumView()
+            .tabItem {
+                Text("Forum")
+            }
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")

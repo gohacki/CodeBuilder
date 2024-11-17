@@ -1,26 +1,16 @@
 // CodeBuilderApp.swift
 import SwiftUI
 import Firebase
-import Combine
 
 @main
 struct CodeBuilderApp: App {
+    // Integrate AppDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     @StateObject var authViewModel = AuthViewModel.shared
     @StateObject var userStatsViewModel = UserStatsViewModel()
     @StateObject var problemsData = ProblemsData.shared
-
-    init() {
-        configureFirebase()
-    }
-
-    private func configureFirebase() {
-        if FirebaseApp.app() == nil {
-            FirebaseApp.configure()
-            print("✅ Firebase configured successfully.")
-        } else {
-            print("⚠️ Firebase was already configured.")
-        }
-    }
+    @StateObject var forumViewModel = ForumViewModel()
 
     var body: some Scene {
         WindowGroup {
@@ -28,13 +18,15 @@ struct CodeBuilderApp: App {
                 .environmentObject(authViewModel)
                 .environmentObject(userStatsViewModel)
                 .environmentObject(problemsData)
+                .environmentObject(forumViewModel)
         }
     }
 }
 
 #Preview {
-  ContentView()
-    .environmentObject(AuthViewModel.shared)
-    .environmentObject(UserStatsViewModel())
-    .environmentObject(ProblemsData.shared)
+    ContentView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
+        .environmentObject(ProblemsData.shared)
+        .environmentObject(ForumViewModel())
 }

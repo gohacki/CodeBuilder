@@ -13,6 +13,6 @@ struct Problem: Identifiable, Codable {
     let description: String
     let difficulty: String
     let articleURL: URL
-    let availableBlocks: [String]
-    let correctSolution: [String]
+    var availableBlocks: [String] // Changed from [CodeBlock] to [String]
+    let correctSolution: [String] // Changed from [CodeBlock] to [String]
 }

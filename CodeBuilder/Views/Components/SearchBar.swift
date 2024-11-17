@@ -5,7 +5,6 @@
 //  Created by aaron perkel on 9/26/24.
 //
 
-
 import SwiftUI
 
 struct SearchBar: View {
@@ -20,7 +19,7 @@ struct SearchBar: View {
           .foregroundColor(.gray)
           .padding(.leading, 8)
 
-        TextField("Search", text: $text, onEditingChanged: { editing in
+        TextField("Search Blocks", text: $text, onEditingChanged: { editing in
           withAnimation {
             self.isEditing = editing
           }
@@ -55,7 +54,7 @@ struct SearchBar: View {
           Text("Cancel")
         }
         .padding(.leading, 5)
-//        .transition(.move(edge: .trailing))
+        .transition(.move(edge: .trailing))
       }
     }
     .padding(.horizontal)

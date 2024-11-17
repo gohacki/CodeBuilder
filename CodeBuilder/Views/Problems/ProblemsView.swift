@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct ProblemsView: View {
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel

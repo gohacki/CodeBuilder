@@ -27,3 +27,8 @@ struct CodeBlockView: View {
             }
     }
 }
+
+#Preview {
+    CodeBlockView(code: "print(\"Hello World\")", backgroundColor: Color.blue.opacity(0.1))
+        .frame(width: 150, height: 50)
+}

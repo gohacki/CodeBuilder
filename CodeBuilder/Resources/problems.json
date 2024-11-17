@@ -16,5 +16,248 @@
         "articleURL": "https://www.example.com/articles/calculate-sum",
         "availableBlocks": ["let sum = a + b", "let a = 5", "let b = 10"],
         "correctSolution": ["let a = 5", "let b = 10", "let sum = a + b"]
+    },
+    {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "Factorial Calculation",
+        "description": "Arrange the code blocks to compute the factorial of a number using recursion",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/factorial-recursion",
+        "availableBlocks": ["func factorial(_ n: Int) -> Int {", "if n == 0 {", "return 1", "}", "return n * factorial(n - 1)", "}"],
+        "correctSolution": ["func factorial(_ n: Int) -> Int {", "if n == 0 {", "return 1", "}", "return n * factorial(n - 1)", "}"]
+    },
+    {
+        "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        "title": "Reverse String",
+        "description": "Arrange the code blocks to reverse a given string",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/reverse-string",
+        "availableBlocks": ["func reverseString(_ s: String) -> String {", "var reversed = \"\"", "for char in s {", "reversed = String(char) + reversed", "}", "return reversed", "}"],
+        "correctSolution": ["func reverseString(_ s: String) -> String {", "var reversed = \"\"", "for char in s {", "reversed = String(char) + reversed", "}", "return reversed", "}"]
+    },
+    {
+        "id": "123e4567-e89b-12d3-a456-426614174000",
+        "title": "Fibonacci Sequence",
+        "description": "Arrange the code blocks to generate the first N Fibonacci numbers",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/fibonacci-sequence",
+        "availableBlocks": ["func fibonacci(_ n: Int) -> [Int] {", "var sequence = [0, 1]", "for i in 2..<n {", "let next = sequence[i-1] + sequence[i-2]", "sequence.append(next)", "}", "return sequence", "}"],
+        "correctSolution": ["func fibonacci(_ n: Int) -> [Int] {", "var sequence = [0, 1]", "for i in 2..<n {", "let next = sequence[i-1] + sequence[i-2]", "sequence.append(next)", "}", "return sequence", "}"]
+    },
+    {
+        "id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
+        "title": "Palindrome Checker",
+        "description": "Arrange the code blocks to check if a string is a palindrome",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/palindrome-checker",
+        "availableBlocks": ["func isPalindrome(_ s: String) -> Bool {", "let cleaned = s.lowercased().filter { $0.isLetter }", "return cleaned == String(cleaned.reversed())", "}"],
+        "correctSolution": ["func isPalindrome(_ s: String) -> Bool {", "let cleaned = s.lowercased().filter { $0.isLetter }", "return cleaned == String(cleaned.reversed())", "}"]
+    },
+    {
+        "id": "6fa459ea-ee8a-3ca4-894e-db77e160355e",
+        "title": "Merge Sorted Arrays",
+        "description": "Arrange the code blocks to merge two sorted arrays into one sorted array",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/merge-sorted-arrays",
+        "availableBlocks": ["func mergeSortedArrays(_ a: [Int], _ b: [Int]) -> [Int] {", "var merged = [Int]()", "var i = 0, j = 0", "while i < a.count && j < b.count {", "if a[i] < b[j] {", "merged.append(a[i])", "i += 1", "} else {", "merged.append(b[j])", "j += 1", "}", "}", "while i < a.count {", "merged.append(a[i])", "i += 1", "}", "while j < b.count {", "merged.append(b[j])", "j += 1", "}", "return merged", "}"],
+        "correctSolution": ["func mergeSortedArrays(_ a: [Int], _ b: [Int]) -> [Int] {", "var merged = [Int]()", "var i = 0, j = 0", "while i < a.count && j < b.count {", "if a[i] < b[j] {", "merged.append(a[i])", "i += 1", "} else {", "merged.append(b[j])", "j += 1", "}", "}", "while i < a.count {", "merged.append(a[i])", "i += 1", "}", "while j < b.count {", "merged.append(b[j])", "j += 1", "}", "return merged", "}"]
+    },
+    {
+        "id": "c56a4180-65aa-42ec-a945-5fd21dec0538",
+        "title": "Find Maximum Element",
+        "description": "Arrange the code blocks to find the maximum element in an array",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/find-maximum-element",
+        "availableBlocks": ["func findMaximum(_ arr: [Int]) -> Int? {", "guard !arr.isEmpty else { return nil }", "var max = arr[0]", "for num in arr {", "if num > max {", "max = num", "}", "}", "return max", "}"],
+        "correctSolution": ["func findMaximum(_ arr: [Int]) -> Int? {", "guard !arr.isEmpty else { return nil }", "var max = arr[0]", "for num in arr {", "if num > max {", "max = num", "}", "}", "return max", "}"]
+    },
+    {
+        "id": "1b9d6bcd-bbfd-4b2d-9b5d-ab0c9e3b3e4c",
+        "title": "Binary Search",
+        "description": "Arrange the code blocks to perform binary search on a sorted array",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/binary-search",
+        "availableBlocks": ["func binarySearch(_ arr: [Int], target: Int) -> Int? {", "var left = 0", "var right = arr.count - 1", "while left <= right {", "let mid = left + (right - left) / 2", "if arr[mid] == target {", "return mid", "} else if arr[mid] < target {", "left = mid + 1", "} else {", "right = mid - 1", "}", "}", "return nil", "}"],
+        "correctSolution": ["func binarySearch(_ arr: [Int], target: Int) -> Int? {", "var left = 0", "var right = arr.count - 1", "while left <= right {", "let mid = left + (right - left) / 2", "if arr[mid] == target {", "return mid", "} else if arr[mid] < target {", "left = mid + 1", "} else {", "right = mid - 1", "}", "}", "return nil", "}"]
+    },
+    {
+        "id": "6b29fc40-5b7e-457a-8efa-8f1a82ca1d44",
+        "title": "Check Prime Number",
+        "description": "Arrange the code blocks to determine if a number is prime",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/check-prime-number",
+        "availableBlocks": ["func isPrime(_ n: Int) -> Bool {", "if n <= 1 { return false }", "for i in 2...Int(sqrt(Double(n))) {", "if n % i == 0 { return false }", "}", "return true", "}"],
+        "correctSolution": ["func isPrime(_ n: Int) -> Bool {", "if n <= 1 { return false }", "for i in 2...Int(sqrt(Double(n))) {", "if n % i == 0 { return false }", "}", "return true", "}"]
+    },
+    {
+        "id": "e2c3d4f5-6a7b-8901-234c-56d7e8f9a0b1",
+        "title": "Find Duplicates",
+        "description": "Arrange the code blocks to find duplicates in an array",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/find-duplicates",
+        "availableBlocks": ["func findDuplicates(_ arr: [Int]) -> [Int] {", "var seen = Set<Int>()", "var duplicates = Set<Int>()", "for num in arr {", "if seen.contains(num) {", "duplicates.insert(num)", "} else {", "seen.insert(num)", "}", "}", "return Array(duplicates)", "}"],
+        "correctSolution": ["func findDuplicates(_ arr: [Int]) -> [Int] {", "var seen = Set<Int>()", "var duplicates = Set<Int>()", "for num in arr {", "if seen.contains(num) {", "duplicates.insert(num)", "} else {", "seen.insert(num)", "}", "}", "return Array(duplicates)", "}"]
+    },
+    {
+        "id": "f3d4e5f6-7b8c-9012-345d-67e8f9a0b1c2",
+        "title": "Bubble Sort",
+        "description": "Arrange the code blocks to sort an array using Bubble Sort",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/bubble-sort",
+        "availableBlocks": ["func bubbleSort(_ arr: inout [Int]) {", "let n = arr.count", "for i in 0..<n {", "for j in 0..<(n - i - 1) {", "if arr[j] > arr[j + 1] {", "arr.swapAt(j, j + 1)", "}", "}", "}", "}"],
+        "correctSolution": ["func bubbleSort(_ arr: inout [Int]) {", "let n = arr.count", "for i in 0..<n {", "for j in 0..<(n - i - 1) {", "if arr[j] > arr[j + 1] {", "arr.swapAt(j, j + 1)", "}", "}", "}", "}"]
+    },
+    {
+        "id": "a8098c1a-f86e-11da-bd1a-00112444be1e",
+        "title": "Merge Two Dictionaries",
+        "description": "Arrange the code blocks to merge two dictionaries in Swift",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/merge-dictionaries",
+        "availableBlocks": ["func mergeDictionaries<K, V>(_ dict1: [K: V], _ dict2: [K: V]) -> [K: V] {", "var merged = dict1", "for (key, value) in dict2 {", "merged[key] = value", "}", "return merged", "}"],
+        "correctSolution": ["func mergeDictionaries<K, V>(_ dict1: [K: V], _ dict2: [K: V]) -> [K: V] {", "var merged = dict1", "for (key, value) in dict2 {", "merged[key] = value", "}", "return merged", "}"]
+    },
+    {
+        "id": "c1a5260a-8363-4c07-a4cd-dbf9a3b5c6f4",
+        "title": "Count Vowels in String",
+        "description": "Arrange the code blocks to count the number of vowels in a string",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/count-vowels",
+        "availableBlocks": ["func countVowels(in s: String) -> Int {", "let vowels = Set(\"aeiouAEIOU\")", "return s.reduce(0) { $0 + (vowels.contains($1) ? 1 : 0) }", "}"],
+        "correctSolution": ["func countVowels(in s: String) -> Int {", "let vowels = Set(\"aeiouAEIOU\")", "return s.reduce(0) { $0 + (vowels.contains($1) ? 1 : 0) }", "}"]
+    },
+    {
+        "id": "9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d",
+        "title": "Remove Whitespaces",
+        "description": "Arrange the code blocks to remove all whitespaces from a string",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/remove-whitespaces",
+        "availableBlocks": ["func removeWhitespaces(from s: String) -> String {", "return s.replacingOccurrences(of: \" \", with: \"\")", "}"],
+        "correctSolution": ["func removeWhitespaces(from s: String) -> String {", "return s.replacingOccurrences(of: \" \", with: \"\")", "}"]
+    },
+    {
+        "id": "3f2504e0-4f89-11d3-9a0c-0305e82c3303",
+        "title": "Check Anagram",
+        "description": "Arrange the code blocks to determine if two strings are anagrams",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/check-anagram",
+        "availableBlocks": ["func areAnagrams(_ s1: String, _ s2: String) -> Bool {", "let sortedS1 = s1.lowercased().sorted()", "let sortedS2 = s2.lowercased().sorted()", "return sortedS1 == sortedS2", "}"],
+        "correctSolution": ["func areAnagrams(_ s1: String, _ s2: String) -> Bool {", "let sortedS1 = s1.lowercased().sorted()", "let sortedS2 = s2.lowercased().sorted()", "return sortedS1 == sortedS2", "}"]
+    },
+    {
+        "id": "3f2504e0-4f89-11d3-9a0c-0305e82c3302",
+        "title": "Find Intersection of Arrays",
+        "description": "Arrange the code blocks to find the intersection of two arrays",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/intersection-arrays",
+        "availableBlocks": ["func intersection(_ a: [Int], _ b: [Int]) -> [Int] {", "let setA = Set(a)", "let setB = Set(b)", "let intersection = setA.intersection(setB)", "return Array(intersection)", "}"],
+        "correctSolution": ["func intersection(_ a: [Int], _ b: [Int]) -> [Int] {", "let setA = Set(a)", "let setB = Set(b)", "let intersection = setA.intersection(setB)", "return Array(intersection)", "}"]
+    },
+    {
+        "id": "3f2504e0-4f89-11d3-9a0c-0305e82c3304",
+        "title": "Capitalize Words",
+        "description": "Arrange the code blocks to capitalize the first letter of each word in a string",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/capitalize-words",
+        "availableBlocks": ["func capitalizeWords(in s: String) -> String {", "return s.split(separator: \" \").map { $0.capitalized }.joined(separator: \" \")", "}"],
+        "correctSolution": ["func capitalizeWords(in s: String) -> String {", "return s.split(separator: \" \").map { $0.capitalized }.joined(separator: \" \")", "}"]
+    },
+    {
+        "id": "1b9d6bcd-bbfd-4b2d-9b5d-ab0c9e3b3e4d",
+        "title": "Find Missing Number",
+        "description": "Arrange the code blocks to find the missing number in a sequence",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/find-missing-number",
+        "availableBlocks": ["func findMissingNumber(in arr: [Int], expectedCount: Int) -> Int? {", "let sumExpected = (expectedCount * (expectedCount + 1)) / 2", "let sumActual = arr.reduce(0, +)", "return sumExpected - sumActual", "}"],
+        "correctSolution": ["func findMissingNumber(in arr: [Int], expectedCount: Int) -> Int? {", "let sumExpected = (expectedCount * (expectedCount + 1)) / 2", "let sumActual = arr.reduce(0, +)", "return sumExpected - sumActual", "}"]
+    },
+    {
+        "id": "c56a4180-65aa-42ec-a945-5fd21dec0539",
+        "title": "Longest Common Prefix",
+        "description": "Arrange the code blocks to find the longest common prefix among an array of strings",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/longest-common-prefix",
+        "availableBlocks": ["func longestCommonPrefix(_ strs: [String]) -> String {", "guard !strs.isEmpty else { return \"\" }", "let sortedStrs = strs.sorted()", "let first = sortedStrs.first!", "let last = sortedStrs.last!", "var i = 0", "while i < first.count && i < last.count {", "let indexFirst = first.index(first.startIndex, offsetBy: i)", "let indexLast = last.index(last.startIndex, offsetBy: i)", "if first[indexFirst] == last[indexLast] {", "i += 1", "} else {", "break", "}", "}", "return String(first.prefix(i))", "}"],
+        "correctSolution": ["func longestCommonPrefix(_ strs: [String]) -> String {", "guard !strs.isEmpty else { return \"\" }", "let sortedStrs = strs.sorted()", "let first = sortedStrs.first!", "let last = sortedStrs.last!", "var i = 0", "while i < first.count && i < last.count {", "let indexFirst = first.index(first.startIndex, offsetBy: i)", "let indexLast = last.index(last.startIndex, offsetBy: i)", "if first[indexFirst] == last[indexLast] {", "i += 1", "} else {", "break", "}", "}", "return String(first.prefix(i))", "}"]
+    },
+    {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "title": "Sum of Digits",
+        "description": "Arrange the code blocks to calculate the sum of digits of an integer",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/sum-of-digits",
+        "availableBlocks": ["func sumOfDigits(_ n: Int) -> Int {", "var number = abs(n)", "var sum = 0", "while number > 0 {", "sum += number % 10", "number /= 10", "}", "return sum", "}"],
+        "correctSolution": ["func sumOfDigits(_ n: Int) -> Int {", "var number = abs(n)", "var sum = 0", "while number > 0 {", "sum += number % 10", "number /= 10", "}", "return sum", "}"]
+    },
+    {
+        "id": "f47ac10b-58cc-4372-a567-0e02b2c3d480",
+        "title": "Rotate Array",
+        "description": "Arrange the code blocks to rotate an array to the right by k steps",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/rotate-array",
+        "availableBlocks": ["func rotate(_ nums: inout [Int], _ k: Int) {", "let n = nums.count", "let k = k % n", "nums = Array(nums[n - k..<n] + nums[0..<n - k])", "}"],
+        "correctSolution": ["func rotate(_ nums: inout [Int], _ k: Int) {", "let n = nums.count", "let k = k % n", "nums = Array(nums[n - k..<n] + nums[0..<n - k])", "}"]
+    },
+    {
+        "id": "123e4567-e89b-12d3-a456-426614174001",
+        "title": "Find First Non-Repeating Character",
+        "description": "Arrange the code blocks to find the first non-repeating character in a string",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/first-non-repeating-character",
+        "availableBlocks": ["func firstNonRepeatingCharacter(in s: String) -> Character? {", "var charCount = [Character: Int]()", "for char in s {", "charCount[char, default: 0] += 1", "}", "for char in s {", "if charCount[char] == 1 {", "return char", "}", "}", "return nil", "}"],
+        "correctSolution": ["func firstNonRepeatingCharacter(in s: String) -> Character? {", "var charCount = [Character: Int]()", "for char in s {", "charCount[char, default: 0] += 1", "}", "for char in s {", "if charCount[char] == 1 {", "return char", "}", "}", "return nil", "}"]
+    },
+    {
+        "id": "3f2504e0-4f89-11d3-9a0c-0305e82c3302",
+        "title": "Longest Substring Without Repeating Characters",
+        "description": "Arrange the code blocks to find the length of the longest substring without repeating characters",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/longest-substring",
+        "availableBlocks": ["func lengthOfLongestSubstring(_ s: String) -> Int {", "var charIndexMap = [Character: Int]()", "var maxLength = 0", "var start = 0", "for (i, char) in s.enumerated() {", "if let index = charIndexMap[char], index >= start {", "start = index + 1", "}", "charIndexMap[char] = i", "maxLength = max(maxLength, i - start + 1)", "}", "return maxLength", "}"],
+        "correctSolution": ["func lengthOfLongestSubstring(_ s: String) -> Int {", "var charIndexMap = [Character: Int]()", "var maxLength = 0", "var start = 0", "for (i, char) in s.enumerated() {", "if let index = charIndexMap[char], index >= start {", "start = index + 1", "}", "charIndexMap[char] = i", "maxLength = max(maxLength, i - start + 1)", "}", "return maxLength", "}"]
+    },
+    {
+        "id": "6fa459ea-ee8a-3ca4-894e-db77e160355f",
+        "title": "Count Occurrences of Element",
+        "description": "Arrange the code blocks to count the number of occurrences of a specific element in an array",
+        "difficulty": "Easy",
+        "articleURL": "https://www.example.com/articles/count-occurrences",
+        "availableBlocks": ["func countOccurrences(_ arr: [Int], target: Int) -> Int {", "return arr.filter { $0 == target }.count", "}"],
+        "correctSolution": ["func countOccurrences(_ arr: [Int], target: Int) -> Int {", "return arr.filter { $0 == target }.count", "}"]
+    },
+    {
+        "id": "c56a4180-65aa-42ec-a945-5fd21dec0539",
+        "title": "Transpose Matrix",
+        "description": "Arrange the code blocks to transpose a given matrix",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/transpose-matrix",
+        "availableBlocks": ["func transpose(_ matrix: [[Int]]) -> [[Int]] {", "guard let firstRow = matrix.first else { return [] }", "var transposed = Array(repeating: Array(repeating: 0, count: matrix.count), count: firstRow.count)", "for (i, row) in matrix.enumerated() {", "for (j, val) in row.enumerated() {", "transposed[j][i] = val", "}", "}", "return transposed", "}"],
+        "correctSolution": ["func transpose(_ matrix: [[Int]]) -> [[Int]] {", "guard let firstRow = matrix.first else { return [] }", "var transposed = Array(repeating: Array(repeating: 0, count: matrix.count), count: firstRow.count)", "for (i, row) in matrix.enumerated() {", "for (j, val) in row.enumerated() {", "transposed[j][i] = val", "}", "}", "return transposed", "}"]
+    },
+    {
+        "id": "1b9d6bcd-bbfd-4b2d-9b5d-ab0c9e3b3e4e",
+        "title": "Sum of Two Integers",
+        "description": "Arrange the code blocks to calculate the sum of two integers without using the '+' operator",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/sum-two-integers",
+        "availableBlocks": ["func getSum(_ a: Int, _ b: Int) -> Int {", "var a = a", "var b = b", "while b != 0 {", "let carry = a & b", "a = a ^ b", "b = carry << 1", "}", "return a", "}"],
+        "correctSolution": ["func getSum(_ a: Int, _ b: Int) -> Int {", "var a = a", "var b = b", "while b != 0 {", "let carry = a & b", "a = a ^ b", "b = carry << 1", "}", "return a", "}"]
+    },
+    {
+        "id": "6b29fc40-5b7e-457a-8efa-8f1a82ca1d45",
+        "title": "Find Second Largest Element",
+        "description": "Arrange the code blocks to find the second largest element in an array",
+        "difficulty": "Medium",
+        "articleURL": "https://www.example.com/articles/second-largest-element",
+        "availableBlocks": ["func secondLargest(_ arr: [Int]) -> Int? {", "var first: Int? = nil", "var second: Int? = nil", "for num in arr {", "if first == nil || num > first! {", "second = first", "first = num", "} else if (second == nil || num > second!) && num != first {", "second = num", "}", "}", "return second", "}"],
+        "correctSolution": ["func secondLargest(_ arr: [Int]) -> Int? {", "var first: Int? = nil", "var second: Int? = nil", "for num in arr {", "if first == nil || num > first! {", "second = first", "first = num", "} else if (second == nil || num > second!) && num != first {", "second = num", "}", "}", "return second", "}"]
+    },
+    {
+        "id": "e2c3d4f5-6a7b-8901-234c-56d7e8f9a0b2",
+        "title": "Remove Nth Node from End",
+        "description": "Arrange the code blocks to remove the Nth node from the end of a linked list",
+        "difficulty": "Hard",
+        "articleURL": "https://www.example.com/articles/remove-nth-node",
+        "availableBlocks": ["class ListNode {", "var val: Int", "var next: ListNode?", "init(_ val: Int) {", "self.val = val", "self.next = nil", "}", "}", "func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {", "let dummy = ListNode(0)", "dummy.next = head", "var first: ListNode? = dummy", "var second: ListNode? = dummy", "for _ in 0..<n+1 {", "first = first?.next", "}", "while first != nil {", "first = first?.next", "second = second?.next", "}", "second?.next = second?.next?.next", "return dummy.next", "}"],
+        "correctSolution": ["class ListNode {", "var val: Int", "var next: ListNode?", "init(_ val: Int) {", "self.val = val", "self.next = nil", "}", "}", "func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {", "let dummy = ListNode(0)", "dummy.next = head", "var first: ListNode? = dummy", "var second: ListNode? = dummy", "for _ in 0..<n+1 {", "first = first?.next", "}", "while first != nil {", "first = first?.next", "second = second?.next", "}", "second?.next = second?.next?.next", "return dummy.next", "}"]
     }
 ]

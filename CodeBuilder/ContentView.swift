@@ -33,4 +33,5 @@ struct ContentView: View {
         .environmentObject(AuthViewModel.shared)
         .environmentObject(UserStatsViewModel())
         .environmentObject(ProblemsData.shared)
+        .environmentObject(ForumViewModel())
 }

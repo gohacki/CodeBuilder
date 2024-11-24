@@ -15,55 +15,52 @@ struct ReplyView: View {
     @State private var isSuccess: Bool = false
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                Text("Reply to: \(post.title)")
-                    .font(.headline)
-                    .padding()
+        VStack(spacing: 16) {
+            Capsule()
+                .frame(width: 40, height: 5)
+                .foregroundColor(Color.gray.opacity(0.5))
+                .padding(.top, 8)
+            
+            Text("Reply to: \(post.title)")
+                .font(.headline)
+                .padding(.horizontal)
+                .multilineTextAlignment(.center)
 
-                TextEditor(text: $replyContent)
-                    .padding(8)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .frame(minHeight: 150)
-
-                Button(action: {
-                    submitReply()
-                }) {
-                    Text("Submit Reply")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
+            TextEditor(text: $replyContent)
+                .frame(height: 100)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
                 .padding(.horizontal)
 
-                // Removed Spacer()
+            Button(action: {
+                submitReply()
+            }) {
+                Text("Submit Reply")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             }
-            .padding()
-            .navigationTitle("Add Reply")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel") {
+            .padding(.horizontal)
+
+            Spacer()
+        }
+        .padding(.bottom)
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text(alertTitle),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK")) {
+                    if isSuccess {
                         dismiss()
                     }
                 }
-            }
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text(alertTitle),
-                    message: Text(alertMessage),
-                    dismissButton: .default(Text("OK")) {
-                        if isSuccess {
-                            dismiss()
-                        }
-                    }
-                )
-            }
+            )
         }
     }
-    
+  
     /// Handles the submission of a reply.
     private func submitReply() {
         let trimmedReply = replyContent.trimmingCharacters(in: .whitespacesAndNewlines)

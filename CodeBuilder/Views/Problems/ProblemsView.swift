@@ -15,23 +15,45 @@ struct ProblemsView: View {
         NavigationView {
             List(problemsData.problems) { problem in
                 NavigationLink(destination: ProblemDetailView(problem: problem)) {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(problem.title)
-                                .font(.headline)
-                            if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                            }
-                        }
-                        Text("Difficulty: \(problem.difficulty)")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                  VStack(alignment: .leading) {
+                    HStack {
+                      Text(problem.title)
+                        .font(.headline)
+                      if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
+                        Image(systemName: "checkmark.circle.fill")
+                          .foregroundColor(.green)
+                      }
+                    }
+                    HStack {
+                      Text("Difficulty:")
+                        .font(.caption)
+                        .padding(0)
+                      
+                      Text(problem.difficulty)
+                      .font(.caption)
+                      .padding(4)
+                      .background(difficultyColor(for: problem.difficulty))
+                      .foregroundColor(.white)
+                      .cornerRadius(5)
+                  }
                     }
                 }
             }
             .navigationTitle("Problems")
         }
+    }
+}
+
+func difficultyColor(for difficulty: String) -> Color {
+    switch difficulty.lowercased() {
+    case "easy":
+        return .green
+    case "medium":
+        return .orange
+    case "hard":
+        return .red
+    default:
+        return .gray
     }
 }
 

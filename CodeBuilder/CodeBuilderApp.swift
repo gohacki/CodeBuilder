@@ -13,18 +13,19 @@ struct CodeBuilderApp: App {
     @StateObject var forumViewModel = ForumViewModel()
 
     var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(authViewModel)
-                .environmentObject(userStatsViewModel)
-                .environmentObject(problemsData)
-                .environmentObject(forumViewModel)
+      WindowGroup {
+        SplashScreenView()
+            .environmentObject(authViewModel)
+            .environmentObject(userStatsViewModel)
+            .environmentObject(problemsData)
+            .environmentObject(forumViewModel)
+        
         }
-    }
+      }
 }
 
 #Preview {
-    ContentView()
+  SplashScreenView()
         .environmentObject(AuthViewModel.shared)
         .environmentObject(UserStatsViewModel())
         .environmentObject(ProblemsData.shared)

@@ -11,7 +11,8 @@ struct ForumView: View {
   @State private var showingPostAlert: Bool = false
   @State private var postAlertMessage: String = ""
   
-  @State private var selectedPost: Post? = nil
+  // Replace selectedPost with replyingToPostIDs
+  @State private var replyingToPostIDs: Set<String> = []
   
   var body: some View {
     NavigationStack {
@@ -74,14 +75,20 @@ struct ForumView: View {
               // Reply Button
               if authViewModel.isSignedIn {
                 Button(action: {
-                    selectedPost = post
-                }) {
-                    HStack {
-                        Image(systemName: "arrowshape.turn.up.left")
-                        Text("Reply")
+                  if let postID = post.id {
+                    if replyingToPostIDs.contains(postID) {
+                      replyingToPostIDs.remove(postID)
+                    } else {
+                      replyingToPostIDs.insert(postID)
                     }
-                    .font(.caption)
-                    .foregroundColor(.blue)
+                  }
+                }) {
+                  HStack {
+                    Image(systemName: "arrowshape.turn.up.left")
+                    Text("Reply")
+                  }
+                  .font(.caption)
+                  .foregroundColor(.blue)
                 }
                 .padding(.top, 5)
               } else {
@@ -89,6 +96,16 @@ struct ForumView: View {
                   .font(.caption)
                   .foregroundColor(.gray)
                   .padding(.top, 5)
+              }
+              
+              // Inline Reply Input
+              if let postID = post.id, replyingToPostIDs.contains(postID) {
+                InlineReplyView(post: post) {
+                  replyingToPostIDs.remove(postID)
+                }
+                .environmentObject(forumViewModel)
+                .environmentObject(authViewModel)
+                .padding(.leading, 16)
               }
             }
             .padding(.vertical, 8)
@@ -145,11 +162,6 @@ struct ForumView: View {
           dismissButton: .default(Text("OK"))
         )
       }
-      .sheet(item: $selectedPost) { post in
-        ReplyView(post: post)
-          .environmentObject(forumViewModel)
-          .environmentObject(authViewModel)
-      }
       .padding()
     }
   }
@@ -179,4 +191,12 @@ struct ForumView: View {
         .environmentObject(ForumViewModel())
     }
   }
+}
+
+#Preview {
+  ForumView()
+    .environmentObject(AuthViewModel.shared)
+    .environmentObject(UserStatsViewModel())
+    .environmentObject(ProblemsData.shared)
+    .environmentObject(ForumViewModel())
 }

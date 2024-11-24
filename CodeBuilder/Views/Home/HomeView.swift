@@ -57,8 +57,6 @@ struct HomeView: View {
                 }
               
             }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: TabDestination.self) { destination in
                 switch destination {
                 case .problems:
@@ -71,12 +69,9 @@ struct HomeView: View {
             }
             .background(
                 LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(UIColor.systemBackground),
-                        Color(UIColor.secondarySystemBackground)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
+                    gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.2)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
             )
@@ -90,15 +85,16 @@ struct ProfileHeaderView: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
+      Spacer()
         HStack(spacing: 16) {
             Image(systemName: "person.fill")
                 .resizable()
                 .frame(width: 50, height: 50)
                 .foregroundStyle(.blue)
-
+          
             VStack(alignment: .leading, spacing: 4) {
                 Text("Welcome, \(authViewModel.user?.displayName ?? "No Name")!")
-                    .font(.title2.bold())
+                .font(.title2.bold())
                     .foregroundColor(.primary)
                 Text("Ready to continue learning?")
                     .font(.subheadline)
@@ -161,8 +157,9 @@ struct ProgressCardView: View {
 }
 
 #Preview {
-    HomeView()
+    ContentView()
         .environmentObject(AuthViewModel.shared)
         .environmentObject(UserStatsViewModel())
         .environmentObject(ProblemsData.shared)
+        .environmentObject(ForumViewModel())
 }

@@ -1,3 +1,5 @@
+// Views/Forum/ReplyView.swift
+
 import SwiftUI
 
 struct ReplyView: View {
@@ -56,6 +58,10 @@ struct ReplyView: View {
         }
     }
     
+    // Additional State Variables
+    @State private var alertTitle: String = ""
+    @State private var isSuccess: Bool = false
+    
     /// Handles the submission of a reply.
     private func submitReply() {
         let trimmedReply = replyContent.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -84,8 +90,14 @@ struct ReplyView: View {
         isSuccess = true
         showingAlert = true
     }
-    
-    // Additional State Variables
-    @State private var alertTitle: String = ""
-    @State private var isSuccess: Bool = false
+}
+
+struct ReplyView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Mock Post for Preview
+        let mockPost = Post(title: "Sample Post", userID: "user123", displayName: "John Doe", timestamp: Date())
+        return ReplyView(post: mockPost)
+            .environmentObject(ForumViewModel())
+            .environmentObject(AuthViewModel.shared)
+    }
 }

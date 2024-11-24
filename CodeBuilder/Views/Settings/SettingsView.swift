@@ -67,17 +67,7 @@ struct SettingsView: View {
                 SignInView()
                     .environmentObject(authViewModel)
             }
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(UIColor.systemBackground),
-                        Color(UIColor.secondarySystemBackground)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-            )
+            .applyBackgroundGradient()
         }
     }
 }

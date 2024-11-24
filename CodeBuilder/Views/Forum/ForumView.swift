@@ -164,6 +164,7 @@ struct ForumView: View {
       }
       .padding()
     }
+    .applyBackgroundGradient()
   }
   /// Handles the creation of a new post.
   func createNewPost() {

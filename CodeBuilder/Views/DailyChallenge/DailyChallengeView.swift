@@ -21,6 +21,7 @@ struct DailyChallengeView: View {
                     .padding()
             }
         }
+        .applyBackgroundGradient()
     }
 }
 

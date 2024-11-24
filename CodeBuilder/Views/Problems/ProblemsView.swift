@@ -41,6 +41,7 @@ struct ProblemsView: View {
             }
             .navigationTitle("Problems")
         }
+        .applyBackgroundGradient()
     }
 }
 

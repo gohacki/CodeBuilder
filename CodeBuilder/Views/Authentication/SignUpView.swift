@@ -19,7 +19,13 @@ struct SignUpView: View {
         NavigationStack {
             VStack {
                 Spacer()
-                
+              
+              Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
+                .cornerRadius(40)
+              
                 Text("Create Account")
                     .font(.largeTitle)
                     .bold()
@@ -31,7 +37,7 @@ struct SignUpView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(.quinary)
                         .cornerRadius(10)
                         .padding(.horizontal)
                     
@@ -40,17 +46,18 @@ struct SignUpView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(.quinary)
                         .cornerRadius(10)
                         .padding(.horizontal)
                     
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(.quinary)
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
                 .padding(.bottom, 20)
+            
                 
                 Button("Sign Up") {
                     authViewModel.signUp(email: email, password: password, displayName: displayName)

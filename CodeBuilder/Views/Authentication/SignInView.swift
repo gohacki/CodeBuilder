@@ -21,6 +21,12 @@ struct SignInView: View {
         NavigationStack {
             VStack {
                 Spacer()
+              
+              Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
+                .cornerRadius(40)
                 
                 Text("CodeBuilder")
                     .font(.largeTitle)
@@ -34,12 +40,12 @@ struct SignInView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(.quinary)
                         .cornerRadius(10)
                         .padding(.horizontal)
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(.quinary)
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
@@ -80,7 +86,6 @@ struct SignInView: View {
                         }
                     )
                     .signInWithAppleButtonStyle(
-                      // TODO: this isnt working ? always stays black
                       colorScheme == .dark ? .white : .black
                     )
                     .frame(height: 52)

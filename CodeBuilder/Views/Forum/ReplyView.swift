@@ -1,3 +1,5 @@
+// Views/Forum/ReplyView.swift
+
 import SwiftUI
 
 struct ReplyView: View {
@@ -5,24 +7,26 @@ struct ReplyView: View {
     @EnvironmentObject var forumViewModel: ForumViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
-    
+
     @State private var replyContent: String = ""
     @State private var showingAlert: Bool = false
     @State private var alertMessage: String = ""
-    
+    @State private var alertTitle: String = ""
+    @State private var isSuccess: Bool = false
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 20) {
                 Text("Reply to: \(post.title)")
                     .font(.headline)
                     .padding()
-                
+
                 TextEditor(text: $replyContent)
-                    .padding()
+                    .padding(8)
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .frame(height: 150)
-                
+                    .frame(minHeight: 150)
+
                 Button(action: {
                     submitReply()
                 }) {
@@ -34,14 +38,18 @@ struct ReplyView: View {
                         .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                
-                Spacer()
+
+                // Removed Spacer()
             }
             .padding()
             .navigationTitle("Add Reply")
-            .navigationBarItems(trailing: Button("Cancel") {
-                dismiss()
-            })
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
             .alert(isPresented: $showingAlert) {
                 Alert(
                     title: Text(alertTitle),
@@ -84,8 +92,14 @@ struct ReplyView: View {
         isSuccess = true
         showingAlert = true
     }
-    
-    // Additional State Variables
-    @State private var alertTitle: String = ""
-    @State private var isSuccess: Bool = false
+}
+
+struct ReplyView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Mock Post for Preview
+        let mockPost = Post(title: "Sample Post", userID: "user123", displayName: "John Doe", timestamp: Date())
+        return ReplyView(post: mockPost)
+            .environmentObject(ForumViewModel())
+            .environmentObject(AuthViewModel.shared)
+    }
 }

@@ -20,6 +20,7 @@ struct SplashScreenView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 200, height: 200)
+                    .cornerRadius(40)
                 Text("CodeBuilder")
                     .font(.largeTitle)
                     .fontWeight(.bold)

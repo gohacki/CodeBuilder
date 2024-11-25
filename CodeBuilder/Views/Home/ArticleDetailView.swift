@@ -5,7 +5,6 @@
 //  Created by Miro Gohacki on 9/24/24.
 //
 
-import SwiftUICore
 import SwiftUI
 
 struct ArticleDetailView: View {
@@ -13,24 +12,30 @@ struct ArticleDetailView: View {
 
     var body: some View {
         ScrollView {
-            Text(getArticleContent())
-                .padding()
+            if let content = loadMarkdown(for: articleTitle) {
+                Text(content)
+                    .padding()
+            } else {
+                Text("Content not available.")
+                    .padding()
+            }
         }
         .navigationTitle(articleTitle)
     }
 
-    func getArticleContent() -> String {
-        switch articleTitle {
-        case "Introduction to Arrays":
-            return "Arrays are collections of elements..."
-        case "Understanding Recursion":
-            return "Recursion is a method where the solution..."
-        default:
-            return "Content not available."
-        }
-    }
-}
+    func loadMarkdown(for title: String) -> String? {
+        // Convert the article title to the corresponding file name
+        let fileName = title.replacingOccurrences(of: " ", with: "") + ".md"
 
-#Preview {
-  ArticleDetailView(articleTitle: "Preview")
+        guard let fileURL = Bundle.main.url(forResource: fileName, withExtension: nil, subdirectory: "Views/Home/Articles"),
+              let content = try? String(contentsOf: fileURL, encoding: .utf8) else {
+            print("DEBUG: File not found for \(fileName) in Views/Home/Articles")
+            return nil
+        }
+        print("DEBUG: File found at \(fileURL.path)")
+        return content
+    }
+
+
+
 }

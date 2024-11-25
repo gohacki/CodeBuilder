@@ -1,20 +1,19 @@
 import SwiftUI
-
 struct ProblemDetailView: View {
     let problem: Problem
     @State private var availableBlocks: [String]
     @State private var arrangedBlocks: [String]
     @State private var isProblemSolved = false
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel
-    @Environment(\.openURL) var openURL
-    
+    @State private var showArticle = false // State to control navigation
+
     // MARK: - Initialization
     init(problem: Problem) {
         self.problem = problem
         _availableBlocks = State(initialValue: problem.availableBlocks)
         _arrangedBlocks = State(initialValue: Array(repeating: "", count: problem.correctSolution.count))
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -24,38 +23,34 @@ struct ProblemDetailView: View {
                         .foregroundColor(.green)
                         .padding()
                 }
-                
+
                 ProblemHeaderView(problem: problem)
-                
-                // Search Bar for Available Blocks
-                SearchBar(text: $searchText)
-                    .padding(.horizontal)
-                
-                // Available Blocks Section with Categories
-                AvailableBlocksSection(availableBlocks: $availableBlocks, searchText: $searchText)
-                
-                // Your Solution Section with Vertical Stack
+
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Your Solution")
                         .font(.headline)
-                    
-                    // Draggable List of Arranged Blocks
+
                     DragGestureList(arrangedBlocks: $arrangedBlocks, availableBlocks: $availableBlocks, problem: problem, isProblemSolved: $isProblemSolved, userStatsViewModel: userStatsViewModel)
                 }
                 .padding()
-                
-                // Buttons Section
-                SolutionButtonsSection(checkSolution: checkSolution, resetSolution: resetSolution, openArticle: {
-                    openURL(problem.articleURL)
-                })
+
+                SolutionButtonsSection(
+                    checkSolution: checkSolution,
+                    resetSolution: resetSolution,
+                    openArticle: {
+                        showArticle = true // Trigger navigation
+                    }
+                )
             }
             .padding()
         }
         .onAppear {
-            // Check if the problem is already solved
             if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
                 isProblemSolved = true
             }
+        }
+        .sheet(isPresented: $showArticle) {
+            ArticleDetailView(articleTitle: problem.articleTitle)
         }
         .alert(isPresented: $showingAlert) {
             Alert(
@@ -65,12 +60,11 @@ struct ProblemDetailView: View {
             )
         }
     }
-    
+
     // MARK: - Additional States
-    @State private var searchText: String = ""
     @State private var showingAlert: Bool = false
     @State private var alertMessage: String = ""
-    
+
     // MARK: - Helper Functions
     private func checkSolution() {
         var allCorrect = true
@@ -80,7 +74,7 @@ struct ProblemDetailView: View {
                 break
             }
         }
-        
+
         if allCorrect {
             isProblemSolved = true
             userStatsViewModel.problemSolved(problemID: problem.id)
@@ -88,16 +82,18 @@ struct ProblemDetailView: View {
         } else {
             alertMessage = "❌ Some blocks are incorrect. Please try again."
         }
-        
+
         showingAlert = true
     }
-    
+
     private func resetSolution() {
         arrangedBlocks = Array(repeating: "", count: problem.correctSolution.count)
         availableBlocks = problem.availableBlocks
         isProblemSolved = false
     }
 }
+
+
 
 struct AvailableBlocksSection: View {
     @Binding var availableBlocks: [String]
@@ -311,7 +307,8 @@ struct DragGestureList_Previews: PreviewProvider {
                 title: "Sample Problem",
                 description: "Arrange the code blocks to complete the function.",
                 difficulty: "Easy",
-                articleURL: URL(string: "https://www.example.com/articles/sample-problem")!,
+                articleTitle: "Sample Problem Article"
+,
                 availableBlocks: [
                     "func example() {",
                     "print(\"Sample\")",

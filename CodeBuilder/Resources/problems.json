@@ -4,7 +4,7 @@
         "title": "Print Hello World",
         "description": "Arrange the code blocks to print 'Hello World' in the console.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/hello-world",
+        "articleTitle": "Hello World",
         "availableBlocks": [
             "func greet() {",
             "print(\"Hello World\")",
@@ -21,7 +21,7 @@
         "title": "Calculate Sum",
         "description": "Arrange the code blocks to calculate the sum of two numbers.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/calculate-sum",
+        "articleTitle": "Arithmetic Operations",
         "availableBlocks": [
             "let sum = a + b",
             "let a = 5",
@@ -38,7 +38,7 @@
         "title": "Factorial Calculation",
         "description": "Arrange the code blocks to compute the factorial of a number using recursion.",
         "difficulty": "Hard",
-        "articleURL": "https://www.example.com/articles/factorial-recursion",
+        "articleTitle": "Understanding Recursion",
         "availableBlocks": [
             "func factorial(_ n: Int) -> Int {",
             "if n == 0 {",
@@ -61,7 +61,7 @@
         "title": "Reverse String",
         "description": "Arrange the code blocks to reverse a given string.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/reverse-string",
+        "articleTitle": "String Manipulations",
         "availableBlocks": [
             "func reverseString(_ s: String) -> String {",
             "var reversed = \"\"",
@@ -86,7 +86,7 @@
         "title": "Fibonacci Sequence",
         "description": "Arrange the code blocks to generate the first N Fibonacci numbers.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/fibonacci-sequence",
+        "articleTitle": "Understanding Recursion",
         "availableBlocks": [
             "func fibonacci(_ n: Int) -> [Int] {",
             "var sequence = [0, 1]",
@@ -113,7 +113,7 @@
         "title": "Palindrome Checker",
         "description": "Arrange the code blocks to check if a string is a palindrome.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/palindrome-checker",
+        "articleTitle": "String Manipulations",
         "availableBlocks": [
             "func isPalindrome(_ s: String) -> Bool {",
             "let cleaned = s.lowercased().filter { $0.isLetter }",
@@ -132,7 +132,7 @@
         "title": "Merge Sorted Arrays",
         "description": "Arrange the code blocks to merge two sorted arrays into one sorted array.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/merge-sorted-arrays",
+        "articleTitle": "Array Manipulations",
         "availableBlocks": [
             "func mergeSortedArrays(_ a: [Int], _ b: [Int]) -> [Int] {",
             "var merged = [Int]()",
@@ -187,7 +187,7 @@
         "title": "Find Maximum Element",
         "description": "Arrange the code blocks to find the maximum element in an array.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/find-maximum-element",
+        "articleTitle": "Array Manipulations",
         "availableBlocks": [
             "func findMaximum(_ arr: [Int]) -> Int? {",
             "guard !arr.isEmpty else { return nil }",
@@ -218,7 +218,7 @@
         "title": "Binary Search",
         "description": "Arrange the code blocks to perform binary search on a sorted array.",
         "difficulty": "Hard",
-        "articleURL": "https://www.example.com/articles/binary-search",
+        "articleTitle": "Array Manipulations",
         "availableBlocks": [
             "func binarySearch(_ arr: [Int], target: Int) -> Int? {",
             "var left = 0",
@@ -259,7 +259,7 @@
         "title": "Count Occurrences of Element",
         "description": "Arrange the code blocks to count the number of occurrences of a specific element in an array.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/count-occurrences",
+        "articleTitle": "Introduction To Arrays",
         "availableBlocks": [
             "func countOccurrences(_ arr: [Int], target: Int) -> Int {",
             "return arr.filter { $0 == target }.count",
@@ -276,7 +276,7 @@
         "title": "Find Intersection of Arrays",
         "description": "Arrange the code blocks to find the intersection of two arrays.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/intersection-arrays",
+        "articleTitle": "Array Manipulations",
         "availableBlocks": [
             "func intersection(_ a: [Int], _ b: [Int]) -> [Int] {",
             "let setA = Set(a)",
@@ -299,7 +299,7 @@
         "title": "Longest Substring Without Repeating Characters",
         "description": "Arrange the code blocks to find the length of the longest substring without repeating characters.",
         "difficulty": "Hard",
-        "articleURL": "https://www.example.com/articles/longest-substring",
+        "articleTitle": "String Manipulations",
         "availableBlocks": [
             "func lengthOfLongestSubstring(_ s: String) -> Int {",
             "var charIndexMap = [Character: Int]()",
@@ -336,7 +336,7 @@
         "title": "Transpose Matrix",
         "description": "Arrange the code blocks to transpose a given matrix.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/transpose-matrix",
+        "articleTitle": "Array Manipulations",
         "availableBlocks": [
             "func transpose(_ matrix: [[Int]]) -> [[Int]] {",
             "guard let firstRow = matrix.first else { return [] }",
@@ -367,7 +367,7 @@
         "title": "Capitalize Words",
         "description": "Arrange the code blocks to capitalize the first letter of each word in a string.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/capitalize-words",
+        "articleTitle": "String Manipulations",
         "availableBlocks": [
             "func capitalizeWords(in s: String) -> String {",
             "return s.split(separator: \" \").map { $0.capitalized }.joined(separator: \" \")",
@@ -384,7 +384,7 @@
         "title": "Remove Nth Node from End",
         "description": "Arrange the code blocks to remove the Nth node from the end of a linked list.",
         "difficulty": "Hard",
-        "articleURL": "https://www.example.com/articles/remove-nth-node",
+        "articleTitle": "Linked List Manipulations",
         "availableBlocks": [
             "class ListNode {",
             "var val: Int",
@@ -441,7 +441,7 @@
         "title": "Bubble Sort",
         "description": "Arrange the code blocks to sort an array using Bubble Sort.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/bubble-sort",
+        "articleTitle": "Searching And Sorting",
         "availableBlocks": [
             "func bubbleSort(_ arr: inout [Int]) {",
             "let n = arr.count",
@@ -472,7 +472,7 @@
         "title": "Remove Whitespaces",
         "description": "Arrange the code blocks to remove all whitespaces from a string.",
         "difficulty": "Easy",
-        "articleURL": "https://www.example.com/articles/remove-whitespaces",
+        "articleTitle": "String Manipulations",
         "availableBlocks": [
             "func removeWhitespaces(from s: String) -> String {",
             "return s.replacingOccurrences(of: \" \", with: \"\")",
@@ -489,7 +489,7 @@
         "title": "Find Second Largest Element",
         "description": "Arrange the code blocks to find the second largest element in an array.",
         "difficulty": "Medium",
-        "articleURL": "https://www.example.com/articles/second-largest-element",
+        "articleTitle": "Searching And Sorting",
         "availableBlocks": [
             "func secondLargest(_ arr: [Int]) -> Int? {",
             "var first: Int? = nil",

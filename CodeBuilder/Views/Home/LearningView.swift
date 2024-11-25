@@ -9,7 +9,7 @@ import SwiftUICore
 import SwiftUI
 
 struct LearningView: View {
-    let articles = ["Introduction to Arrays", "Understanding Recursion"]
+    let articles = ["Hello World, Introduction To Arrays", "Understanding Recursion", "Arithmetic Operations", "String Manipulations", "Array Manipulations", "Linked List Manipulations", "Search And Sorting", "Sliding Window"]
 
     var body: some View {
         List(articles, id: \.self) { article in

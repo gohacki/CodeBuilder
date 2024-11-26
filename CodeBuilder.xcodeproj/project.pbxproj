@@ -12,6 +12,7 @@
 		9025D52C2CAC90DB000EFD32 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D52B2CAC90DB000EFD32 /* FirebaseAnalytics */; };
 		9025D52F2CAC9129000EFD32 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D52E2CAC9129000EFD32 /* GoogleSignIn */; };
 		9025D5312CAC9129000EFD32 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D5302CAC9129000EFD32 /* GoogleSignInSwift */; };
+		A2E9708E2CF55BF700E1CF12 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = A2E9708D2CF55BF700E1CF12 /* MarkdownUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 				9025D5312CAC9129000EFD32 /* GoogleSignInSwift in Frameworks */,
 				9025D51B2CAC84FC000EFD32 /* FirebaseAuth in Frameworks */,
 				9025D52F2CAC9129000EFD32 /* GoogleSignIn in Frameworks */,
+				A2E9708E2CF55BF700E1CF12 /* MarkdownUI in Frameworks */,
 				9025D51D2CAC84FC000EFD32 /* FirebaseFirestore in Frameworks */,
 				9025D52C2CAC90DB000EFD32 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -104,6 +106,7 @@
 				90AF37AA2CA2E4EE006A4534 /* CodeBuilder */,
 				90AF37BB2CA2E4F0006A4534 /* CodeBuilderTests */,
 				90AF37C52CA2E4F0006A4534 /* CodeBuilderUITests */,
+				A2E9708C2CF55BF700E1CF12 /* Frameworks */,
 				90AF37A92CA2E4EE006A4534 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,6 +119,13 @@
 				90AF37C22CA2E4F0006A4534 /* CodeBuilderUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A2E9708C2CF55BF700E1CF12 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,6 +153,7 @@
 				9025D52B2CAC90DB000EFD32 /* FirebaseAnalytics */,
 				9025D52E2CAC9129000EFD32 /* GoogleSignIn */,
 				9025D5302CAC9129000EFD32 /* GoogleSignInSwift */,
+				A2E9708D2CF55BF700E1CF12 /* MarkdownUI */,
 			);
 			productName = CodeBuilder;
 			productReference = 90AF37A82CA2E4EE006A4534 /* CodeBuilder.app */;
@@ -229,6 +240,7 @@
 			packageReferences = (
 				9025D5192CAC84FC000EFD32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				9025D52D2CAC9129000EFD32 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				A2E9708B2CF55BB700E1CF12 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 90AF37A92CA2E4EE006A4534 /* Products */;
@@ -617,6 +629,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		A2E9708B2CF55BB700E1CF12 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -644,6 +664,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9025D52D2CAC9129000EFD32 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		A2E9708D2CF55BF700E1CF12 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A2E9708B2CF55BB700E1CF12 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

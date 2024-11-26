@@ -23,7 +23,7 @@ struct InlineReplyView: View {
           VStack(spacing: 8) {
               TextField("Write a reply...", text: $replyContent)
                   .padding(8)
-                  .background(Color(.systemGray6))
+                  .background(.quinary)
                   .cornerRadius(8)
 
               HStack {

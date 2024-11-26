@@ -64,14 +64,14 @@ open CodeBuilder.xcworkspace
   - Select a simulator or connect a device, then build and run the project from Xcode.
 2.	Sign Up or Log In
   - Create a new account using your email and a password.
-	- Alternatively, sign in if you already have an account.
+  - Alternatively, sign in if you already have an account.
 3.	Explore Features
   - Home: View your progress and navigate to different sections.
-	- Problems: Browse and solve coding problems.
+  - Problems: Browse and solve coding problems.
   - Daily Challenge: Attempt the daily coding challenge.
   - Forum: Interact with the community by reading and creating posts.
 	- Settings: Manage your account and app preferences.
  4.	Solve Problems
   - Drag and drop code blocks from the available blocks section to the solution area.
-	- Check your solution and receive immediate feedback.
+  - Check your solution and receive immediate feedback.
   - Read related articles to understand the concepts better.

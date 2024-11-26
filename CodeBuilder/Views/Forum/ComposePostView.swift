@@ -22,7 +22,7 @@ struct ComposePostView: View {
             VStack {
                 TextField("Enter your question", text: $newPostTitle)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(.quinary)
                     .cornerRadius(10)
                     .padding()
 

@@ -19,33 +19,29 @@ struct InlineReplyView: View {
     @State private var alertMessage: String = ""
     @State private var alertTitle: String = ""
 
-    var body: some View {
-        VStack(spacing: 8) {
-            TextField("Write a reply...", text: $replyContent)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+  var body: some View {
+          VStack(spacing: 8) {
+              TextField("Write a reply...", text: $replyContent)
+                  .padding(8)
+                  .background(Color(.systemGray6))
+                  .cornerRadius(8)
 
-            HStack {
-                Spacer()
-                Button(action: {
-                    submitReply()
-                }) {
-                    Text("Submit")
-                        .font(.caption)
-                        .padding(6)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-            }
-        }
-        .alert(isPresented: $showingAlert) {
-            Alert(
-                title: Text(alertTitle),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("OK"))
-            )
-        }
-    }
+              HStack {
+                  Spacer()
+                  Button(action: {
+                      submitReply()
+                  }) {
+                      Text("Submit")
+                          .font(.subheadline)
+                          .padding(8)
+                          .background(Color.blue)
+                          .foregroundColor(.white)
+                          .cornerRadius(8)
+                  }
+              }
+          }
+          .padding(.horizontal)
+      }
 
     private func submitReply() {
         // Same validation and submission logic as before

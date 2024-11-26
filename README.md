@@ -3,16 +3,14 @@
 Welcome to **CodeBuilder**! CodeBuilder is an educational iOS application designed to help users learn and practice coding skills in a fun and interactive way. The app provides a platform where users can solve coding problems by arranging code blocks, read educational articles, participate in daily challenges, and engage with a community through a built-in forum.
 
 ## Table of Contents
--	Features
-- Requirements
-- Installation
-- Usage
-- App Structure
-- Screenshots
-- Technologies Used
-- Contributing
-- License
-- Contact
+-	[Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [App Structure](#app-structure)
+- [Screenshots](#screenshots)
+- [Technologies Used](#technologies-used)
+- [License](#license)
 
 ## Features
 - Interactive Problem Solving: Solve coding problems by dragging and dropping code blocks to build correct solutions.
@@ -75,3 +73,43 @@ open CodeBuilder.xcworkspace
   - Drag and drop code blocks from the available blocks section to the solution area.
   - Check your solution and receive immediate feedback.
   - Read related articles to understand the concepts better.
+
+## App Structure
+- Models
+  - Problem.swift: Defines the structure for coding problems.
+- ViewModels
+  - AuthViewModel.swift: Handles user authentication logic.
+  - UserStatsViewModel.swift: Manages user statistics and progress.
+  - ForumViewModel.swift: Manages forum data and interactions.
+  - ProblemsData.swift: Loads and manages the list of coding problems.
+-	Views
+  - Authentication: SignInView.swift, SignUpView.swift
+  -	Home: HomeView.swift, ArticleDetailView.swift, LearningView.swift, ResumeView.swift
+  -	Problems: ProblemsView.swift, ProblemDetailView.swift
+  - Forum: ForumView.swift, ComposePostView.swift, PostView.swift, ReplyView.swift
+  - Components: Reusable views like CodeBlockView.swift, SearchBar.swift, AutoScroller.swift
+  - Settings: SettingsView.swift, AccountView.swift
+Utilities
+  - BackgroundGradientModifier.swift: Applies a gradient background.
+  - ColorExtensions.swift: Custom color definitions.
+  - MenuItem.swift: Defines menu items for settings.
+  - SplashScreenView.swift: Displays the splash screen.
+
+## Screenshots
+
+> Insert Screenshots Here
+
+## Technologies Used
+- SwiftUI: For building the user interface.
+- Firebase: Authentication, Firestore database, and data storage.
+- Combine: For managing asynchronous events.
+- MarkdownUI: To render Markdown content in articles.
+- CocoaPods: Dependency management.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
+
+---
+
+Thank you for checking out CodeBuilder! We hope this tool aids in your journey to becoming a proficient coder. If you have any questions or feedback, feel free to reach out.

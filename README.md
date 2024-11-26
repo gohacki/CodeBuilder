@@ -70,7 +70,7 @@ open CodeBuilder.xcworkspace
   - Problems: Browse and solve coding problems.
   - Daily Challenge: Attempt the daily coding challenge.
   - Forum: Interact with the community by reading and creating posts.
-	- Settings: Manage your account and app preferences.
+  - Settings: Manage your account and app preferences.
  4.	Solve Problems
   - Drag and drop code blocks from the available blocks section to the solution area.
   - Check your solution and receive immediate feedback.

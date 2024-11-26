@@ -10,16 +10,19 @@ import SwiftUI
 
 struct ResumeView: View {
     let articles = ["Introduction to Arrays", "Understanding Recursion"]
-
-    var body: some View {
-        List(articles, id: \.self) { article in
-            NavigationLink(destination: ArticleDetailView(articleTitle: article)) {
-                Text(article)
-                    .font(.headline)
-            }
+  var body: some View {
+    GradientBackgroundView{
+      List(articles, id: \.self) { article in
+        NavigationLink(destination: ArticleDetailView(articleTitle: article)) {
+          Text(article)
+            .font(.headline)
         }
-        .navigationTitle("Resume Tips")
+      }
+      .background(Color.clear)
+      .scrollContentBackground(.hidden)
+      .navigationTitle("Resume Tips")
     }
+  }
 }
 
 #Preview {

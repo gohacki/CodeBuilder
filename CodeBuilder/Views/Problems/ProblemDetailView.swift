@@ -141,6 +141,7 @@ struct AvailableBlocksSection: View {
             }
         }
         .padding()
+      
     }
 
     private func toggleCategory(_ category: String) {
@@ -166,6 +167,7 @@ struct AvailableBlocksSection: View {
         return availableBlocks.filter { categorizeBlock($0) == category }
     }
 }
+
 
 struct CategoryHeader: View {
     let category: String

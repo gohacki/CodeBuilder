@@ -16,7 +16,7 @@ struct SettingsView: View {
             subtitle: "Customize app settings",
             iconName: "gearshape.fill",
             color: .blue,
-            destination: AnyView(Text("General Settings"))
+            destination: AnyView(GeneralSettingsView())
         ),
         MenuItem(
             title: "Notifications",
@@ -34,42 +34,37 @@ struct SettingsView: View {
         )
     ]
 
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                // Profile Card
-                if authViewModel.isSignedIn {
-                    ProfileCardView()
-                } else {
-                    SignInPromptView(showingSignIn: $showingSignIn)
-                }
-
-                // Settings Options
-                VStack(spacing: 16) {
-                    ForEach(settingsItems, id: \.title) { item in
-                        SettingsOptionView(
-                            title: item.title,
-                            subtitle: item.subtitle ?? "",
-                            iconName: item.iconName,
-                            iconColor: item.color,
-                            destination: item.destination
-                        )
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.top, 10)
-
-                Spacer()
+  var body: some View {
+    GradientBackgroundView {
+      NavigationStack {
+        VStack(spacing: 20) {
+          // Settings Options
+          VStack(spacing: 16) {
+            ForEach(settingsItems, id: \.title) { item in
+              SettingsOptionView(
+                title: item.title,
+                subtitle: item.subtitle ?? "",
+                iconName: item.iconName,
+                iconColor: item.color,
+                destination: item.destination
+              )
             }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showingSignIn) {
-                SignInView()
-                    .environmentObject(authViewModel)
-            }
-            .applyBackgroundGradient()
+          }
+          .padding(.horizontal)
+          .padding(.top, 10)
+          
+          Spacer()
         }
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.large)
+        .sheet(isPresented: $showingSignIn) {
+          SignInView()
+            .environmentObject(authViewModel)
+        }
+        .applyBackgroundGradient()
+      }
     }
+  }
 }
 
 struct ProfileCardView: View {
@@ -96,14 +91,6 @@ struct ProfileCardView: View {
                 Spacer()
             }
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(UIColor.secondarySystemBackground))
-                    .shadow(
-                        color: Color.black.opacity(colorScheme == .dark ? 0.3 : 0.1),
-                        radius: 8, x: 0, y: 4
-                    )
-            )
             .padding(.horizontal)
         }
     }

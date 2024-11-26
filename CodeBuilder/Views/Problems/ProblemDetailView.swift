@@ -1,11 +1,15 @@
 import SwiftUI
+
 struct ProblemDetailView: View {
     let problem: Problem
     @State private var availableBlocks: [String]
     @State private var arrangedBlocks: [String]
     @State private var isProblemSolved = false
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel
-    @State private var showArticle = false // State to control navigation
+    @State private var showArticle = false
+
+    // Add this line
+    @State private var searchText = ""
 
     // MARK: - Initialization
     init(problem: Problem) {
@@ -25,12 +29,20 @@ struct ProblemDetailView: View {
                 }
 
                 ProblemHeaderView(problem: problem)
+              
+                AvailableBlocksSection(availableBlocks: $availableBlocks)
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Your Solution")
                         .font(.headline)
 
-                    DragGestureList(arrangedBlocks: $arrangedBlocks, availableBlocks: $availableBlocks, problem: problem, isProblemSolved: $isProblemSolved, userStatsViewModel: userStatsViewModel)
+                    DragGestureList(
+                        arrangedBlocks: $arrangedBlocks,
+                        availableBlocks: $availableBlocks,
+                        problem: problem,
+                        isProblemSolved: $isProblemSolved,
+                        userStatsViewModel: userStatsViewModel
+                    )
                 }
                 .padding()
 
@@ -38,7 +50,7 @@ struct ProblemDetailView: View {
                     checkSolution: checkSolution,
                     resetSolution: resetSolution,
                     openArticle: {
-                        showArticle = true // Trigger navigation
+                        showArticle = true
                     }
                 )
             }
@@ -60,6 +72,7 @@ struct ProblemDetailView: View {
             )
         }
     }
+
 
     // MARK: - Additional States
     @State private var showingAlert: Bool = false
@@ -94,31 +107,29 @@ struct ProblemDetailView: View {
 }
 
 
-
 struct AvailableBlocksSection: View {
     @Binding var availableBlocks: [String]
-    @Binding var searchText: String
     @State private var expandedCategories: Set<String> = ["Initialization", "Control Flow", "Functions", "Others"]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Available Blocks")
                 .font(.headline)
-            
+
             // Categorization Logic
             ForEach(["Initialization", "Control Flow", "Functions", "Others"], id: \.self) { category in
                 VStack(alignment: .leading) {
                     CategoryHeader(category: category, isExpanded: expandedCategories.contains(category)) {
                         toggleCategory(category)
                     }
-                    
+
                     if expandedCategories.contains(category) {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
                                 ForEach(filteredAvailableBlocks(for: category), id: \.self) { block in
                                     CodeBlockView(code: block, backgroundColor: Color.blue.opacity(0.1))
-                                        .onTapGesture {
-                                            addBlockToSolution(block)
+                                        .onDrag {
+                                            NSItemProvider(object: block as NSString)
                                         }
                                 }
                             }
@@ -131,7 +142,7 @@ struct AvailableBlocksSection: View {
         }
         .padding()
     }
-    
+
     private func toggleCategory(_ category: String) {
         if expandedCategories.contains(category) {
             expandedCategories.remove(category)
@@ -139,9 +150,9 @@ struct AvailableBlocksSection: View {
             expandedCategories.insert(category)
         }
     }
-    
+
     private func categorizeBlock(_ block: String) -> String {
-        // Enhanced categorization logic based on keywords
+        // Basic categorization logic
         if block.contains("func") || block.contains("let") || block.contains("var") {
             return "Initialization"
         } else if block.contains("if") || block.contains("for") || block.contains("while") || block.contains("return") {
@@ -150,22 +161,9 @@ struct AvailableBlocksSection: View {
             return "Functions"
         }
     }
-    
+
     private func filteredAvailableBlocks(for category: String) -> [String] {
-        let blocksInCategory = availableBlocks.filter { categorizeBlock($0) == category }
-        if searchText.isEmpty {
-            return blocksInCategory
-        } else {
-            return blocksInCategory.filter { $0.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    private func addBlockToSolution(_ block: String) {
-        // Logic to add block to the first empty slot
-        if let index = availableBlocks.firstIndex(of: block) {
-            availableBlocks.remove(at: index)
-            // This requires binding to arrangedBlocks; consider using a delegate or environment object
-        }
+        return availableBlocks.filter { categorizeBlock($0) == category }
     }
 }
 

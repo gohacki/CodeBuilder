@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import MarkdownUI
 
 struct ArticleDetailView: View {
     let articleTitle: String
 
     var body: some View {
-      
         ScrollView {
             if let content = loadMarkdown(for: articleTitle) {
-                Text(content)
+                Markdown(content)
                     .padding()
             } else {
                 Text("Content not available.")

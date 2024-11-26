@@ -89,83 +89,78 @@ class ForumViewModel: ObservableObject {
     }
 
     /// Fetches posts from Firestore and sets up listeners for their replies.
-    func fetchPosts() {
-      db.collection("posts")
-          .order(by: "timestamp", descending: true)
-          .addSnapshotListener { [weak self] (querySnapshot, error) in
-              guard let self = self else { return }
-              if let error = error {
+  func fetchPosts() {
+          db.collection("posts")
+              .order(by: "timestamp", descending: true)
+              .addSnapshotListener { [weak self] (querySnapshot, error) in
+                  guard let self = self else { return }
+                  if let error = error {
+                      DispatchQueue.main.async {
+                          self.errorMessage = "Failed to fetch posts: \(error.localizedDescription)"
+                      }
+                      print("Failed to fetch posts: \(error.localizedDescription)")
+                      return
+                  }
+
+                  // Decode posts
+                  let fetchedPosts: [Post] = querySnapshot?.documents.compactMap { doc in
+                      do {
+                          var post = try doc.data(as: Post.self)
+                          post.id = doc.documentID // Set the id manually
+                          return post
+                      } catch {
+                          print("Error decoding post: \(error.localizedDescription)")
+                          return nil
+                      }
+                  } ?? []
+
                   DispatchQueue.main.async {
-                      self.errorMessage = "Failed to fetch posts: \(error.localizedDescription)"
+                      // Replace the entire posts array
+                      self.posts = fetchedPosts
+
+                      // Set up reply listeners
+                      self.setupReplyListeners(for: fetchedPosts)
                   }
-                  print("Failed to fetch posts: \(error.localizedDescription)")
-                  return
               }
-              
-              // Decode posts
-              let fetchedPosts: [Post] = querySnapshot?.documents.compactMap { doc in
-                  do {
-                      var post = try doc.data(as: Post.self)
-                      post.id = doc.documentID // Set the id manually
-                      print("Fetched post: \(post.title) with ID: \(post.id ?? "No ID")")
-                      return post
-                  } catch {
-                      print("Error decoding post: \(error.localizedDescription)")
-                      return nil
+      }
+  private func setupReplyListeners(for posts: [Post]) {
+      // Remove existing listeners
+      for listener in replyListeners.values {
+          listener.remove()
+      }
+      replyListeners.removeAll()
+
+      // Add listeners for the new posts
+      for post in posts {
+          guard let postId = post.id else { continue }
+
+          let listener = db.collection("posts").document(postId).collection("replies")
+              .order(by: "timestamp", descending: false)
+              .addSnapshotListener { [weak self] (querySnapshot, error) in
+                  guard let self = self else { return }
+                  if let error = error {
+                      DispatchQueue.main.async {
+                          self.errorMessage = "Failed to fetch replies: \(error.localizedDescription)"
+                      }
+                      print("Failed to fetch replies: \(error.localizedDescription)")
+                      return
                   }
-              } ?? []
-              
-                
-                print("Total fetched posts: \(fetchedPosts.count)")
-                
-                // Determine added and removed posts
-                let existingPostIDs = Set(self.posts.compactMap { $0.id })
-                let fetchedPostIDs = Set(fetchedPosts.compactMap { $0.id })
-                
-                let addedPosts = fetchedPosts.filter { post in
-                    if let id = post.id {
-                        return !existingPostIDs.contains(id)
-                    }
-                    return false
-                }
-                
-                let removedPosts = self.posts.filter { post in
-                    if let id = post.id {
-                        return !fetchedPostIDs.contains(id)
-                    }
-                    return false
-                }
-                
-                // Remove listeners for removed posts
-                for post in removedPosts {
-                    if let id = post.id, let listener = self.replyListeners[id] {
-                        listener.remove()
-                        self.replyListeners.removeValue(forKey: id)
-                        print("Removed listener for post ID: \(id)")
-                    }
-                }
-                
-                // Add new posts and set up listeners for their replies
-                for post in addedPosts {
-                    if let id = post.id {
-                        self.posts.append(post)
-                        print("Added post: \(post.title) with ID: \(id)")
-                        self.listenToReplies(for: post)
-                    }
-                }
-                
-                // Update existing posts if needed (e.g., title changes)
-                for index in self.posts.indices {
-                    if let fetchedPost = fetchedPosts.first(where: { $0.id == self.posts[index].id }) {
-                        self.posts[index].title = fetchedPost.title
-                        self.posts[index].userID = fetchedPost.userID
-                        self.posts[index].displayName = fetchedPost.displayName
-                        self.posts[index].timestamp = fetchedPost.timestamp
-                        print("Updated post: \(self.posts[index].title) with ID: \(self.posts[index].id ?? "No ID")")
-                    }
-                }
-            }
-    }
+
+                  let fetchedReplies: [Reply] = querySnapshot?.documents.compactMap { doc in
+                      try? doc.data(as: Reply.self)
+                  } ?? []
+
+                  DispatchQueue.main.async {
+                      if let index = self.posts.firstIndex(where: { $0.id == postId }) {
+                          self.posts[index].replies = fetchedReplies
+                      }
+                  }
+              }
+
+          // Store the listener
+          replyListeners[postId] = listener
+      }
+  }
     
     /// Sets up a listener for the replies subcollection of a given post.
     private func listenToReplies(for post: Post) {

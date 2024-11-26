@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel
     @Environment(\.colorScheme) var colorScheme
     @State private var showingSignIn = false
     @State private var path = NavigationPath()
@@ -31,19 +32,19 @@ struct HomeView: View {
                         HStack(spacing: 16) {
                             ProgressCardView(
                                 title: "Problems Solved",
-                                value: "42",
+                                value: "\(userStatsViewModel.problemsSolved)",
                                 iconName: "checkmark.seal.fill",
                                 iconColor: .green
                             )
                             ProgressCardView(
                                 title: "Lessons Completed",
-                                value: "15",
+                                value: "0",
                                 iconName: "book.fill",
                                 iconColor: .orange
                             )
                             ProgressCardView(
                                 title: "Resume Tips Read",
-                                value: "5",
+                                value: "0",
                                 iconName: "briefcase.fill",
                                 iconColor: .purple
                             )
@@ -84,34 +85,26 @@ struct ProfileHeaderView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.colorScheme) var colorScheme
 
-    var body: some View {
+  var body: some View {
       Spacer()
-        HStack(spacing: 16) {
-            Image(systemName: "person.fill")
-                .resizable()
-                .frame(width: 50, height: 50)
-                .foregroundStyle(.blue)
-          
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Welcome, \(authViewModel.user?.displayName ?? "No Name")!")
-                .font(.title2.bold())
-                    .foregroundColor(.primary)
-                Text("Ready to continue learning?")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
+      HStack(spacing: 16) {
+        Image(systemName: "person.fill")
+          .resizable()
+          .frame(width: 50, height: 50)
+          .foregroundStyle(.blue)
+        
+        VStack(alignment: .leading, spacing: 4) {
+          Text("Welcome, \(authViewModel.user?.displayName ?? "No Name")!")
+            .font(.title2.bold())
+            .foregroundColor(.primary)
+          Text("Ready to continue learning?")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.cardBackground)
-                .shadow(
-                    color: Color.black.opacity(colorScheme == .dark ? 0.3 : 0.1),
-                    radius: 8, x: 0, y: 4
-                )
-        )
-        .padding(.horizontal)
+        Spacer()
+      }
+      .padding()
+      .padding(.horizontal)
     }
 }
 

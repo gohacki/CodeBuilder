@@ -22,6 +22,14 @@ struct ArticleDetailView: View {
             }
         }
         .navigationTitle(articleTitle)
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.2)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        )
     }
 
   func loadMarkdown(for title: String) -> String? {

@@ -13,26 +13,47 @@ struct GeneralSettingsView: View {
     var body: some View {
         List {
             // Account Section
-            Section(header: Text("Account")) {
-                NavigationLink(destination: AccountView()) {
-                    HStack {
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.blue)
-                        Text("Account")
-                    }
-                }
+          Section {
+            NavigationLink(destination: PreferencesView()) {
+              HStack {
+                Image(systemName: "info.square.fill")
+                  .foregroundColor(.gray)
+                Text("About")
+              }
             }
-
-            // Additional General Settings Sections
-            Section(header: Text("Preferences")) {
-                NavigationLink(destination: PreferencesView()) {
-                    HStack {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(.gray)
-                        Text("Preferences")
-                    }
-                }
+            
+            NavigationLink(destination: PreferencesView()) {
+              HStack {
+                Image(systemName: "globe")
+                  .foregroundColor(.blue)
+                Text("Language")
+              }
             }
+            
+            NavigationLink(destination: PreferencesView()) {
+              HStack {
+                Image(systemName: "bell.badge.fill")
+                  .foregroundColor(.red)
+                Text("Notifications")
+              }
+            }
+            
+            NavigationLink(destination: PreferencesView()) {
+              HStack {
+                Image(systemName: "speaker.wave.3.fill")
+                  .foregroundColor(.pink)
+                Text("Sounds & Haptics")
+              }
+            }
+            
+            NavigationLink(destination: PreferencesView()) {
+              HStack {
+                Image(systemName: "widget.small")
+                  .foregroundColor(.orange)
+                Text("Widgets")
+              }
+            }
+          }
 
             // Add more sections as needed
         }
@@ -45,17 +66,15 @@ struct GeneralSettingsView: View {
 // Placeholder for PreferencesView
 struct PreferencesView: View {
     var body: some View {
-        Text("Preferences Settings")
+        Text("Settings")
             .font(.largeTitle)
             .foregroundColor(.primary)
             .navigationTitle("Preferences")
     }
 }
 
-struct GeneralSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        GeneralSettingsView()
-            .environmentObject(AuthViewModel.shared)
-            .environmentObject(UserStatsViewModel())
-    }
-}
+#Preview {
+  GeneralSettingsView()
+      .environmentObject(AuthViewModel.shared)
+      .environmentObject(UserStatsViewModel())
+  }

@@ -22,7 +22,7 @@ struct SettingsView: View {
             MenuItem(
                 title: "General",
                 subtitle: "Customize app settings",
-                iconName: "gearshape.fill",
+                iconName: "gear",
                 color: .gray,
                 destination: AnyView(GeneralSettingsView())
             )

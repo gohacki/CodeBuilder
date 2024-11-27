@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D53E9FB2CF78D9A0037C362 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0D53E9FA2CF78D9A0037C362 /* MarkdownUI */; };
 		9025D51B2CAC84FC000EFD32 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D51A2CAC84FC000EFD32 /* FirebaseAuth */; };
 		9025D51D2CAC84FC000EFD32 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D51C2CAC84FC000EFD32 /* FirebaseFirestore */; };
 		9025D52C2CAC90DB000EFD32 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D52B2CAC90DB000EFD32 /* FirebaseAnalytics */; };
 		9025D52F2CAC9129000EFD32 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D52E2CAC9129000EFD32 /* GoogleSignIn */; };
 		9025D5312CAC9129000EFD32 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9025D5302CAC9129000EFD32 /* GoogleSignInSwift */; };
-		90546B792CF5FA9A005FE88A /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 90546B782CF5FA9A005FE88A /* MarkdownUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +77,7 @@
 				9025D5312CAC9129000EFD32 /* GoogleSignInSwift in Frameworks */,
 				9025D51B2CAC84FC000EFD32 /* FirebaseAuth in Frameworks */,
 				9025D52F2CAC9129000EFD32 /* GoogleSignIn in Frameworks */,
-				90546B792CF5FA9A005FE88A /* MarkdownUI in Frameworks */,
+				0D53E9FB2CF78D9A0037C362 /* MarkdownUI in Frameworks */,
 				9025D51D2CAC84FC000EFD32 /* FirebaseFirestore in Frameworks */,
 				9025D52C2CAC90DB000EFD32 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -145,7 +145,7 @@
 				9025D52B2CAC90DB000EFD32 /* FirebaseAnalytics */,
 				9025D52E2CAC9129000EFD32 /* GoogleSignIn */,
 				9025D5302CAC9129000EFD32 /* GoogleSignInSwift */,
-				90546B782CF5FA9A005FE88A /* MarkdownUI */,
+				0D53E9FA2CF78D9A0037C362 /* MarkdownUI */,
 			);
 			productName = CodeBuilder;
 			productReference = 90AF37A82CA2E4EE006A4534 /* CodeBuilder.app */;
@@ -232,7 +232,7 @@
 			packageReferences = (
 				9025D5192CAC84FC000EFD32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				9025D52D2CAC9129000EFD32 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-				90546B772CF5FA9A005FE88A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				0D53E96C2CF78C8F0037C362 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 90AF37A92CA2E4EE006A4534 /* Products */;
@@ -605,6 +605,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0D53E96C2CF78C8F0037C362 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 		9025D5192CAC84FC000EFD32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -621,17 +629,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
-		90546B772CF5FA9A005FE88A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.4.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0D53E9FA2CF78D9A0037C362 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0D53E96C2CF78C8F0037C362 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
+		};
 		9025D51A2CAC84FC000EFD32 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9025D5192CAC84FC000EFD32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -656,11 +661,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9025D52D2CAC9129000EFD32 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
-		};
-		90546B782CF5FA9A005FE88A /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 90546B772CF5FA9A005FE88A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

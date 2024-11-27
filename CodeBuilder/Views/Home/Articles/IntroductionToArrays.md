@@ -20,3 +20,4 @@ let first = numbers[0]
 
 // Add a new element
 numbers.append(6)
+

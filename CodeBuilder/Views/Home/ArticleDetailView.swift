@@ -40,7 +40,6 @@ struct ArticleDetailView: View {
           print("DEBUG: File not found for \(fileName)")
           return nil
       }
-      print("DEBUG: File found at \(fileURL.path)")
       return try? String(contentsOf: fileURL, encoding: .utf8)
   }
   

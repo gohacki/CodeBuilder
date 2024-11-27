@@ -9,7 +9,7 @@ import SwiftUICore
 import SwiftUI
 
 struct LearningView: View {
-    let articles = ["Hello World, Introduction To Arrays", "Understanding Recursion", "Arithmetic Operations", "String Manipulations", "Array Manipulations", "Linked List Manipulations", "Search And Sorting", "Sliding Window"]
+    let articles = ["Hello World", "Introduction To Arrays", "Understanding Recursion", "Arithmetic Operations", "String Manipulations", "Array Manipulations", "Understanding Big O Notation", "Two Pointer Technique","Depth First Search","Breadth First Search", "Introduction To Linked Lists", "Linked List Manipulations", "Searching And Sorting", "Sliding Window"]
 
   var body: some View {
     GradientBackgroundView{

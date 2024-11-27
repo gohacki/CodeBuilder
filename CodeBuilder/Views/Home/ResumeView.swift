@@ -9,11 +9,12 @@ import SwiftUICore
 import SwiftUI
 
 struct ResumeView: View {
-    let articles = ["Introduction to Arrays", "Understanding Recursion"]
+    let articles = ["Resume Topics", "How to Write a Cover Letter", "STAR Bullet Point Method", "Cover Letter Header Example", "Questions for the Interviewer", "Resume Header", "Common Behavioral Interview Questions", "Common Technical Interview Questions"]
+
   var body: some View {
     GradientBackgroundView{
       List(articles, id: \.self) { article in
-        NavigationLink(destination: ArticleDetailView(articleTitle: article)) {
+        NavigationLink(destination: ResumeDetailView(articleTitle: article)) {
           Text(article)
             .font(.headline)
         }
@@ -23,8 +24,4 @@ struct ResumeView: View {
       .navigationTitle("Resume Tips")
     }
   }
-}
-
-#Preview {
-  ResumeView()
 }

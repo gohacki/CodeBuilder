@@ -9,62 +9,57 @@ struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var showingSignIn = false
 
-    // Menu items for settings
-    let settingsItems: [MenuItem] = [
-        MenuItem(
-            title: "General",
-            subtitle: "Customize app settings",
-            iconName: "gearshape.fill",
-            color: .blue,
-            destination: AnyView(GeneralSettingsView())
-        ),
-        MenuItem(
-            title: "Notifications",
-            subtitle: "Manage notification preferences",
-            iconName: "bell.fill",
-            color: .red,
-            destination: AnyView(Text("Notification Settings"))
-        ),
-        MenuItem(
-            title: "Widgets",
-            subtitle: "Configure your widgets",
-            iconName: "square.grid.2x2.fill",
-            color: .orange,
-            destination: AnyView(Text("Widget Settings"))
-        )
-    ]
-
-  var body: some View {
-    GradientBackgroundView {
-      NavigationStack {
-        VStack(spacing: 20) {
-          // Settings Options
-          VStack(spacing: 16) {
-            ForEach(settingsItems, id: \.title) { item in
-              SettingsOptionView(
-                title: item.title,
-                subtitle: item.subtitle ?? "",
-                iconName: item.iconName,
-                iconColor: item.color,
-                destination: item.destination
-              )
-            }
-          }
-          .padding(.horizontal)
-          .padding(.top, 10)
-          
-          Spacer()
-        }
-        .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $showingSignIn) {
-          SignInView()
-            .environmentObject(authViewModel)
-        }
-        .applyBackgroundGradient()
-      }
+    // Computed property for settings items
+    var settingsItems: [MenuItem] {
+        [
+            MenuItem(
+                title: authViewModel.user?.displayName ?? "No Name",
+                subtitle: "Account, CodeBuilder+, and more",
+                iconName: "person.fill",
+                color: .blue,
+                destination: AnyView(AccountView())
+            ),
+            MenuItem(
+                title: "General",
+                subtitle: "Customize app settings",
+                iconName: "gearshape.fill",
+                color: .gray,
+                destination: AnyView(GeneralSettingsView())
+            )
+        ]
     }
-  }
+
+    var body: some View {
+        GradientBackgroundView {
+            NavigationStack {
+                VStack(spacing: 20) {
+                    // Settings Options
+                    VStack(spacing: 16) {
+                        ForEach(settingsItems, id: \.title) { item in
+                            SettingsOptionView(
+                                title: item.title,
+                                subtitle: item.subtitle ?? "",
+                                iconName: item.iconName,
+                                iconColor: item.color,
+                                destination: item.destination
+                            )
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    
+                    Spacer()
+                }
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.large)
+                .sheet(isPresented: $showingSignIn) {
+                    SignInView()
+                        .environmentObject(authViewModel)
+                }
+                .applyBackgroundGradient()
+            }
+        }
+    }
 }
 
 struct ProfileCardView: View {

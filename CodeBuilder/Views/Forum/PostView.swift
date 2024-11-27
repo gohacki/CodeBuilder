@@ -21,7 +21,7 @@ struct PostView: View {
                 Image(systemName: "person.circle.fill")
                     .resizable()
                     .frame(width: 40, height: 40)
-                    .foregroundColor(.blue)
+                    .foregroundColor(UserColor.color(for: post.userID)) // Apply user-specific color
                 VStack(alignment: .leading) {
                     Text(post.displayName)
                         .font(.headline)

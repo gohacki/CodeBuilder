@@ -16,7 +16,7 @@ struct ReplyView: View {
           Image(systemName: "person.circle.fill")
               .resizable()
               .frame(width: 30, height: 30)
-              .foregroundColor(.orange) 
+              .foregroundColor(UserColor.color(for: reply.userID)) // Apply user-specific color
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(reply.displayName)

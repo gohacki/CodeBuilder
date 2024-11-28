@@ -1,14 +1,13 @@
 // SettingsView.swift
 // CodeBuilder
 // Created by aaron perkel on 9/26/24.
-
 import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
         GradientBackgroundView {
             NavigationStack {
-                SettingsContentView()
+                SettingsContentView() // loads the main settings content
                     .navigationTitle("Settings")
                     .navigationBarTitleDisplayMode(.large)
                     .applyBackgroundGradient()
@@ -18,11 +17,12 @@ struct SettingsView: View {
 }
 
 #Preview {
-      SettingsView()
-          .environmentObject(AuthViewModel.shared)
-          .environmentObject(UserStatsViewModel())
+    SettingsView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
 }
 
+// profile card at the top of the settings for user info
 struct ProfileCardView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.colorScheme) var colorScheme
@@ -35,7 +35,6 @@ struct ProfileCardView: View {
                     .frame(width: 50, height: 50)
                     .foregroundStyle(.blue)
 
-                // User Info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(authViewModel.user?.displayName ?? "No Name")
                         .font(.title2.bold())
@@ -52,22 +51,21 @@ struct ProfileCardView: View {
     }
 }
 
+// prompt shown if the user isn't signed in
 struct SignInPromptView: View {
     @Binding var showingSignIn: Bool
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Button(action: {
-            showingSignIn = true
+            showingSignIn = true // opens sign-in dialog
         }) {
             HStack(spacing: 16) {
-                // Sign-In Icon
                 Image(systemName: "person.badge.plus.fill")
                     .resizable()
                     .frame(width: 60, height: 60)
                     .foregroundColor(.green)
 
-                // Sign-In Info
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Sign In")
                         .font(.title2.bold())
@@ -92,6 +90,7 @@ struct SignInPromptView: View {
     }
 }
 
+// reusable view for each settings option
 struct SettingsOptionView: View {
     var title: String
     var subtitle: String
@@ -103,7 +102,6 @@ struct SettingsOptionView: View {
     var body: some View {
         NavigationLink(destination: destination) {
             HStack(spacing: 16) {
-                // Icon
                 Image(systemName: iconName)
                     .font(.system(size: 24))
                     .foregroundColor(.white)
@@ -111,7 +109,6 @@ struct SettingsOptionView: View {
                     .background(iconColor)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
 
-                // Text
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.headline)

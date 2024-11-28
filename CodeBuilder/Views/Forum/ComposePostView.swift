@@ -5,21 +5,21 @@
 //  Created by aaron perkel on 11/25/24.
 //
 
-
 import SwiftUI
 
 struct ComposePostView: View {
-    @EnvironmentObject var forumViewModel: ForumViewModel
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var forumViewModel: ForumViewModel // forum data management
+    @EnvironmentObject var authViewModel: AuthViewModel // user authentication
+    @Environment(\.dismiss) var dismiss // dismisses the view
 
-    @State private var newPostTitle: String = ""
-    @State private var showingAlert: Bool = false
-    @State private var alertMessage: String = ""
+    @State private var newPostTitle: String = "" // holds the new post's title
+    @State private var showingAlert: Bool = false // tracks if an alert is shown
+    @State private var alertMessage: String = "" // message for the alert
 
     var body: some View {
         NavigationStack {
             VStack {
+                // input field for the post title
                 TextField("Enter your question", text: $newPostTitle)
                     .padding()
                     .background(.quinary)
@@ -31,11 +31,13 @@ struct ComposePostView: View {
             .navigationTitle("New Post")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // cancel button to dismiss the view
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
+                // post button to create the new post
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Post") {
                         createNewPost()
@@ -53,6 +55,7 @@ struct ComposePostView: View {
         }
     }
 
+    // validates and creates the new post
     private func createNewPost() {
         let trimmedTitle = newPostTitle.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedTitle.isEmpty else {
@@ -67,12 +70,13 @@ struct ComposePostView: View {
             return
         }
 
+        // add the post to the forum
         forumViewModel.addPost(
             title: trimmedTitle,
             userID: currentUser.uid,
             displayName: currentUser.displayName ?? "Anonymous"
         )
 
-        dismiss()
+        dismiss() // close the compose view after posting
     }
 }

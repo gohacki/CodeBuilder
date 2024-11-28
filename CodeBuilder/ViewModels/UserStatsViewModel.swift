@@ -11,24 +11,20 @@ import Combine
 import Firebase
 import FirebaseFirestore
 
-// MARK: - UserStatsViewModel
-
 class UserStatsViewModel: ObservableObject {
-    // Published properties for UI binding
-    @Published var problemsSolved: Int = 0
-    @Published var streak: Int = 0
-    @Published var solvedProblemIDs: [String] = []
-    
-    private var db = Firestore.firestore()
-    
-    // Computed property to get current user ID
+    @Published var problemsSolved: Int = 0 // total problems solved
+    @Published var streak: Int = 0 // current streak of consecutive days
+    @Published var solvedProblemIDs: [String] = [] // list of solved problem IDs
+
+    private var db = Firestore.firestore() // Firestore database reference
+
     private var userID: String? {
-        return Auth.auth().currentUser?.uid
+        return Auth.auth().currentUser?.uid // current user's ID
     }
     
     // MARK: - Problem Solved Handling
     
-    /// Records that a problem has been solved by the user.
+    /// Records a solved problem and updates Firestore.
     func problemSolved(problemID: UUID) {
         guard let userID = userID else {
             print("No user is signed in.")
@@ -43,32 +39,28 @@ class UserStatsViewModel: ObservableObject {
                 let document = try transaction.getDocument(userRef)
                 
                 if let data = document.data() {
-                    // Check if the problem is already solved
+                    // update solved problems and streak
                     var existingSolvedProblemIDs = data[FirestoreKeys.solvedProblemIDs] as? [String] ?? []
                     if existingSolvedProblemIDs.contains(problemID.uuidString) {
                         print("Problem already solved. No increment.")
-                        return nil // Do not proceed
+                        return nil
                     }
                     
-                    // Proceed to update
                     var problemsSolved = data[FirestoreKeys.problemsSolved] as? Int ?? 0
                     var streak = data[FirestoreKeys.streak] as? Int ?? 0
-                    let lastSolvedTimestamp = data[FirestoreKeys.lastProblemSolvedDate] as? Timestamp
-                    let lastSolvedDate = lastSolvedTimestamp?.dateValue() ?? Date(timeIntervalSince1970: 0)
-                    
-                    let calendar = Calendar.current
-                    let daysDifference = calendar.dateComponents([.day], from: lastSolvedDate, to: currentDate).day ?? 0
-                    
+                    let lastSolvedDate = (data[FirestoreKeys.lastProblemSolvedDate] as? Timestamp)?.dateValue() ?? Date(timeIntervalSince1970: 0)
+
+                    let daysDifference = Calendar.current.dateComponents([.day], from: lastSolvedDate, to: currentDate).day ?? 0
                     if daysDifference == 1 {
                         streak += 1
                     } else if daysDifference > 1 {
                         streak = 1
                     }
-                    
+
                     problemsSolved += 1
                     existingSolvedProblemIDs.append(problemID.uuidString)
-                    
-                    // Update the document
+
+                    // Update Firestore
                     transaction.updateData([
                         FirestoreKeys.problemsSolved: problemsSolved,
                         FirestoreKeys.streak: streak,
@@ -76,7 +68,7 @@ class UserStatsViewModel: ObservableObject {
                         FirestoreKeys.solvedProblemIDs: existingSolvedProblemIDs
                     ], forDocument: userRef)
                 } else {
-                    // Document does not exist, create it
+                    // create a new document if it doesn't exist
                     transaction.setData([
                         FirestoreKeys.email: Auth.auth().currentUser?.email ?? "",
                         FirestoreKeys.problemsSolved: 1,
@@ -94,19 +86,16 @@ class UserStatsViewModel: ObservableObject {
         } completion: { [weak self] (result, error) in
             if let error = error {
                 print("Transaction failed: \(error.localizedDescription)")
-                // Optionally, set an error message
             } else {
                 print("Transaction completed successfully")
-                DispatchQueue.main.async { [weak self] in
-                    self?.fetchUserStats()
-                }
+                self?.fetchUserStats() // refresh stats
             }
         }
     }
     
     // MARK: - Fetching User Statistics
     
-    /// Fetches the latest user statistics from Firestore.
+    /// Fetches user stats from Firestore.
     func fetchUserStats() {
         guard let userID = userID else { return }
         let userRef = db.collection("users").document(userID)
@@ -116,7 +105,6 @@ class UserStatsViewModel: ObservableObject {
             
             if let error = error {
                 print("Error fetching user stats: \(error.localizedDescription)")
-                // Optionally, set an error message
                 return
             }
             
@@ -136,6 +124,6 @@ class UserStatsViewModel: ObservableObject {
     // MARK: - Initialization
     
     init() {
-        fetchUserStats()
+        fetchUserStats() // load stats on initialization
     }
 }

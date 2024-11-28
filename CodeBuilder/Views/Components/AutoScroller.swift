@@ -2,13 +2,13 @@ import SwiftUI
 
 // TabItem struct for AutoScroller
 struct TabItem {
-    let title: String
-    let color: Color
-    let iconName: String
-    let destination: TabDestination
+    let title: String // name of the tab
+    let color: Color // background color for the card
+    let iconName: String // SF Symbol for the card
+    let destination: TabDestination // navigation destination
 }
 
-// Enum for destinations in AutoScroller
+// Enum for carousel destinations
 enum TabDestination: Hashable {
     case problems
     case learning
@@ -21,21 +21,21 @@ struct AutoScroller: View {
         TabItem(title: "Learning", color: .orange, iconName: "book.fill", destination: .learning),
         TabItem(title: "Resume Tips", color: .brown, iconName: "briefcase.fill", destination: .resumeTips)
     ]
-    @Binding var path: NavigationPath
-    @Environment(\.colorScheme) var colorScheme
-    @State private var currentIndex: Int = 0
-    @State private var offset: CGFloat = 0
+
+    @Binding var path: NavigationPath // navigation state
+    @Environment(\.colorScheme) var colorScheme // light/dark mode
+    @State private var currentIndex: Int = 0 // current visible tab index
+    @State private var offset: CGFloat = 0 // swipe offset
 
     var body: some View {
-      VStack(spacing: 20) {
-            // Carousel
+        VStack(spacing: 20) {
+            // carousel section
             GeometryReader { geometry in
                 let cardWidth = geometry.size.width * 0.8
                 let spacing: CGFloat = 16
                 let totalSpacing = spacing * CGFloat(tabItems.count - 1)
                 let totalWidth = CGFloat(tabItems.count) * cardWidth + totalSpacing
 
-                // Compute xOffset separately
                 let baseOffset = -CGFloat(currentIndex) * (cardWidth + spacing)
                 let centeringOffset = (geometry.size.width - cardWidth) / 2
                 let xOffset = baseOffset + centeringOffset + offset
@@ -55,18 +55,20 @@ struct AutoScroller: View {
                 .gesture(
                     DragGesture()
                         .onChanged { value in
-                            offset = value.translation.width
+                            offset = value.translation.width // track swipe distance
                         }
                         .onEnded { value in
                             let threshold = geometry.size.width / 4
                             var newIndex = currentIndex
 
+                            // determine new index based on swipe
                             if -value.translation.width > threshold {
                                 newIndex = min(currentIndex + 1, tabItems.count - 1)
                             } else if value.translation.width > threshold {
                                 newIndex = max(currentIndex - 1, 0)
                             }
 
+                            // reset offset and update index with animation
                             withAnimation(.easeOut) {
                                 offset = 0
                                 currentIndex = newIndex
@@ -77,15 +79,15 @@ struct AutoScroller: View {
             .frame(height: 175)
             .padding(.horizontal)
 
-            // Page Indicator
+            // page indicator
             HStack(spacing: 8) {
                 ForEach(tabItems.indices, id: \.self) { index in
                     Circle()
-                        .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.3))
+                        .fill(Color.primary.opacity(currentIndex == index ? 1 : 0.3)) // highlight current index
                         .frame(width: 8, height: 8)
                         .onTapGesture {
                             withAnimation(.easeOut) {
-                                currentIndex = index
+                                currentIndex = index // navigate to tapped index
                             }
                         }
                 }
@@ -93,11 +95,4 @@ struct AutoScroller: View {
             .padding(.top, 120)
         }
     }
-}
-
-#Preview {
-    HomeView()
-        .environmentObject(AuthViewModel.shared)
-        .environmentObject(UserStatsViewModel())
-        .environmentObject(ProblemsData.shared)
 }

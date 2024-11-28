@@ -5,23 +5,22 @@ struct HomeView: View {
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel
     @Environment(\.colorScheme) var colorScheme
     @State private var showingSignIn = false
-    @State private var path = NavigationPath()
+    @State private var path = NavigationPath() // handles navigation within the view
     
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $path) { // navigation container
             ScrollView {
                 VStack(spacing: 20) {
-                    // Welcome Header
+                    // profile or sign-in section
                     if authViewModel.isSignedIn {
                         ProfileHeaderView()
                     } else {
                         SignInPromptView(showingSignIn: $showingSignIn)
                     }
                     
-                    // AutoScroller Carousel
-                    AutoScroller(path: $path)
+                    AutoScroller(path: $path) // carousel for navigation shortcuts
                     
-                    // Additional Content
+                    // progress cards section
                     VStack(spacing: 16) {
                         Text("Your Progress")
                             .font(.headline)
@@ -38,13 +37,13 @@ struct HomeView: View {
                             )
                             ProgressCardView(
                                 title: "Lessons Completed",
-                                value: "0",
+                                value: "0", // update dynamically when lessons are tracked
                                 iconName: "book.fill",
                                 iconColor: .orange
                             )
                             ProgressCardView(
                                 title: "Resume Tips Read",
-                                value: "0",
+                                value: "0", // update dynamically when resume tips are tracked
                                 iconName: "briefcase.fill",
                                 iconColor: .purple
                             )
@@ -56,7 +55,6 @@ struct HomeView: View {
                     SignInView()
                         .environmentObject(authViewModel)
                 }
-              
             }
             .navigationDestination(for: TabDestination.self) { destination in
                 switch destination {
@@ -80,35 +78,34 @@ struct HomeView: View {
     }
 }
 
-// Profile Header View
+// profile header for signed-in users
 struct ProfileHeaderView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.colorScheme) var colorScheme
 
-  var body: some View {
-      Spacer()
-      HStack(spacing: 16) {
-        Image(systemName: "person.fill")
-          .resizable()
-          .frame(width: 50, height: 50)
-          .foregroundStyle(.blue)
-        
-        VStack(alignment: .leading, spacing: 4) {
-          Text("Welcome, \(authViewModel.user?.displayName ?? "No Name")!")
-            .font(.title2.bold())
-            .foregroundColor(.primary)
-          Text("Ready to continue learning?")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: "person.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundStyle(.blue)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Welcome, \(authViewModel.user?.displayName ?? "No Name")!")
+                    .font(.title2.bold())
+                    .foregroundColor(.primary)
+                Text("Ready to continue learning?")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
         }
-        Spacer()
-      }
-      .padding()
-      .padding(.horizontal)
+        .padding()
+        .padding(.horizontal)
     }
 }
 
-// Progress Card View
+// reusable progress card
 struct ProgressCardView: View {
     var title: String
     var value: String

@@ -7,11 +7,9 @@ struct ProblemDetailView: View {
     @State private var isProblemSolved = false
     @EnvironmentObject var userStatsViewModel: UserStatsViewModel
     @State private var showArticle = false
+    @State private var searchText = "" // for filtering blocks (future feature maybe)
 
-    // Add this line
-    @State private var searchText = ""
-
-    // MARK: - Initialization
+    // initializer to set up the available and arranged blocks
     init(problem: Problem) {
         self.problem = problem
         _availableBlocks = State(initialValue: problem.availableBlocks)
@@ -25,12 +23,12 @@ struct ProblemDetailView: View {
                     Text("🎉 Congratulations! You've solved this problem.")
                         .font(.headline)
                         .foregroundColor(.green)
-                        .padding()
+                        .padding() // success message
                 }
 
-                ProblemHeaderView(problem: problem)
-              
-                AvailableBlocksSection(availableBlocks: $availableBlocks)
+                ProblemHeaderView(problem: problem) // shows title, description, and difficulty
+
+                AvailableBlocksSection(availableBlocks: $availableBlocks) // shows the available blocks to drag
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Your Solution")
@@ -42,15 +40,15 @@ struct ProblemDetailView: View {
                         problem: problem,
                         isProblemSolved: $isProblemSolved,
                         userStatsViewModel: userStatsViewModel
-                    )
+                    ) // area for arranging blocks
                 }
                 .padding()
 
                 SolutionButtonsSection(
-                    checkSolution: checkSolution,
-                    resetSolution: resetSolution,
+                    checkSolution: checkSolution, // check if the solution is correct
+                    resetSolution: resetSolution, // reset the current solution
                     openArticle: {
-                        showArticle = true
+                        showArticle = true // open the article view
                     }
                 )
             }
@@ -58,13 +56,13 @@ struct ProblemDetailView: View {
         }
         .onAppear {
             if userStatsViewModel.solvedProblemIDs.contains(problem.id.uuidString) {
-                isProblemSolved = true
+                isProblemSolved = true // automatically mark as solved if already done
             }
         }
         .sheet(isPresented: $showArticle) {
-            ArticleDetailView(articleTitle: problem.articleTitle)
+            ArticleDetailView(articleTitle: problem.articleTitle) // show the article
         }
-        .alert(isPresented: $showingAlert) {
+        .alert(isPresented: $showingAlert) { // alert for correct/incorrect feedback
             Alert(
                 title: Text("Result"),
                 message: Text(alertMessage),
@@ -73,12 +71,9 @@ struct ProblemDetailView: View {
         }
     }
 
-
-    // MARK: - Additional States
     @State private var showingAlert: Bool = false
     @State private var alertMessage: String = ""
 
-    // MARK: - Helper Functions
     private func checkSolution() {
         var allCorrect = true
         for index in 0..<arrangedBlocks.count {
@@ -106,7 +101,7 @@ struct ProblemDetailView: View {
     }
 }
 
-
+// section for displaying available blocks in categories
 struct AvailableBlocksSection: View {
     @Binding var availableBlocks: [String]
     @State private var expandedCategories: Set<String> = ["Initialization", "Control Flow", "Functions", "Others"]
@@ -116,11 +111,10 @@ struct AvailableBlocksSection: View {
             Text("Available Blocks")
                 .font(.headline)
 
-            // Categorization Logic
             ForEach(["Initialization", "Control Flow", "Functions", "Others"], id: \.self) { category in
                 VStack(alignment: .leading) {
                     CategoryHeader(category: category, isExpanded: expandedCategories.contains(category)) {
-                        toggleCategory(category)
+                        toggleCategory(category) // collapse/expand logic
                     }
 
                     if expandedCategories.contains(category) {
@@ -129,7 +123,7 @@ struct AvailableBlocksSection: View {
                                 ForEach(filteredAvailableBlocks(for: category), id: \.self) { block in
                                     CodeBlockView(code: block, backgroundColor: Color.blue.opacity(0.1))
                                         .onDrag {
-                                            NSItemProvider(object: block as NSString)
+                                            NSItemProvider(object: block as NSString) // enable dragging blocks
                                         }
                                 }
                             }
@@ -141,7 +135,6 @@ struct AvailableBlocksSection: View {
             }
         }
         .padding()
-      
     }
 
     private func toggleCategory(_ category: String) {
@@ -153,7 +146,7 @@ struct AvailableBlocksSection: View {
     }
 
     private func categorizeBlock(_ block: String) -> String {
-        // Basic categorization logic
+        // quick logic to sort blocks into categories
         if block.contains("func") || block.contains("let") || block.contains("var") {
             return "Initialization"
         } else if block.contains("if") || block.contains("for") || block.contains("while") || block.contains("return") {
@@ -168,12 +161,12 @@ struct AvailableBlocksSection: View {
     }
 }
 
-
+// header for each block category
 struct CategoryHeader: View {
     let category: String
     let isExpanded: Bool
     let toggle: () -> Void
-    
+
     var body: some View {
         HStack {
             Text(category)
@@ -189,18 +182,19 @@ struct CategoryHeader: View {
     }
 }
 
+// list for arranging the blocks
 struct DragGestureList: View {
     @Binding var arrangedBlocks: [String]
     @Binding var availableBlocks: [String]
     let problem: Problem
     @Binding var isProblemSolved: Bool
     @ObservedObject var userStatsViewModel: UserStatsViewModel
-    
+
     var body: some View {
         VStack {
             ForEach(arrangedBlocks.indices, id: \.self) { index in
                 if arrangedBlocks[index].isEmpty {
-                    DropZoneView()
+                    DropZoneView() // empty slot for a block
                         .onDrop(of: [.plainText], isTargeted: nil) { providers in
                             handleDrop(providers: providers, at: index)
                         }
@@ -208,7 +202,7 @@ struct DragGestureList: View {
                 } else {
                     CodeBlockView(code: arrangedBlocks[index], backgroundColor: Color.blue.opacity(0.2))
                         .onDrag {
-                            return NSItemProvider(object: arrangedBlocks[index] as NSString)
+                            NSItemProvider(object: arrangedBlocks[index] as NSString)
                         }
                         .onDrop(of: [.plainText], isTargeted: nil) { providers in
                             handleDrop(providers: providers, at: index)
@@ -218,29 +212,33 @@ struct DragGestureList: View {
             }
         }
     }
-    
-    private func handleDrop(providers: [NSItemProvider], at index: Int) -> Bool {
-        guard let provider = providers.first else { return false }
-        provider.loadObject(ofClass: String.self) { (object, error) in
-            DispatchQueue.main.async {
-                if let block = object as? String {
-                    // Remove block from availableBlocks
-                    if let availableIndex = availableBlocks.firstIndex(of: block) {
-                        availableBlocks.remove(at: availableIndex)
-                    }
-                    // Replace any existing block in the drop zone back to availableBlocks
-                    if !arrangedBlocks[index].isEmpty {
-                        availableBlocks.append(arrangedBlocks[index])
-                    }
-                    // Assign the new block
-                    arrangedBlocks[index] = block
-                }
-            }
-        }
-        return true
-    }
+
+  private func handleDrop(providers: [NSItemProvider], at index: Int) -> Bool {
+      guard let provider = providers.first else { return false }
+      
+      // Use `loadObject` correctly
+      provider.loadObject(ofClass: NSString.self) { (object, error) in
+          guard let block = object as? String else { return } // safely unwrap as String
+          DispatchQueue.main.async {
+              // remove the block from availableBlocks
+              if let availableIndex = availableBlocks.firstIndex(of: block) {
+                  availableBlocks.remove(at: availableIndex)
+              }
+              
+              // put the replaced block back into availableBlocks
+              if !arrangedBlocks[index].isEmpty {
+                  availableBlocks.append(arrangedBlocks[index])
+              }
+              
+              // assign the dropped block to the arrangedBlocks
+              arrangedBlocks[index] = block
+          }
+      }
+      return true
+  }
 }
 
+// empty space for dropped blocks
 struct DropZoneView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)

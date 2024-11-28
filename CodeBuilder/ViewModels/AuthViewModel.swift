@@ -1,5 +1,3 @@
-// AuthViewModel.swift
-
 import Foundation
 import FirebaseAuth
 import Combine
@@ -7,7 +5,7 @@ import Firebase
 import FirebaseFirestore
 
 // MARK: - Firestore Field Keys
-
+// Keys for fields in the Firestore user document
 struct FirestoreKeys {
     static let email = "email"
     static let problemsSolved = "problemsSolved"
@@ -18,34 +16,28 @@ struct FirestoreKeys {
 }
 
 // MARK: - AuthViewModel
-
-import Foundation
-import FirebaseAuth
-import Combine
-import Firebase
-import FirebaseFirestore
-
 class AuthViewModel: ObservableObject {
-    @Published var user: User?
-    @Published var isSignedIn: Bool = false
-    @Published var authErrorMessage: String?
+    @Published var user: User? // Current authenticated user
+    @Published var isSignedIn: Bool = false // Tracks authentication state
+    @Published var authErrorMessage: String? // Holds any authentication errors for UI
 
-    // Singleton instance
+    // Singleton instance for global access
     static let shared = AuthViewModel()
 
-    private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
+    private var authStateListenerHandle: AuthStateDidChangeListenerHandle? // Firebase auth listener
 
     // Private initializer to enforce singleton usage
     private init() {
-        addListeners()
+        addListeners() // Attach Firebase auth state listener
     }
 
     deinit {
-        removeListeners()
+        removeListeners() // Detach Firebase auth state listener
     }
 
     // MARK: - Listener Management
 
+    // Adds an auth state listener to track user login/logout changes
     private func addListeners() {
         authStateListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             DispatchQueue.main.async {
@@ -55,6 +47,7 @@ class AuthViewModel: ObservableObject {
         }
     }
 
+    // Removes the auth state listener
     private func removeListeners() {
         if let handle = authStateListenerHandle {
             Auth.auth().removeStateDidChangeListener(handle)
@@ -68,11 +61,11 @@ class AuthViewModel: ObservableObject {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    self?.authErrorMessage = error.localizedDescription
+                    self?.authErrorMessage = error.localizedDescription // Capture error message
                     completion(false, error)
                 } else if let user = result?.user {
-                    self?.user = user
-                    self?.isSignedIn = true
+                    self?.user = user // Update the current user
+                    self?.isSignedIn = true // Mark user as signed in
                     completion(true, nil)
                 } else {
                     self?.authErrorMessage = "Unknown sign-in error."
@@ -85,17 +78,17 @@ class AuthViewModel: ObservableObject {
     /// Signs out the current user.
     func signOut() {
         do {
-            try Auth.auth().signOut()
+            try Auth.auth().signOut() // Attempt to sign out
             DispatchQueue.main.async {
-                self.user = nil
-                self.isSignedIn = false
-                self.authErrorMessage = nil
+                self.user = nil // Clear the current user
+                self.isSignedIn = false // Mark user as signed out
+                self.authErrorMessage = nil // Clear any auth error messages
                 print("User signed out")
             }
         } catch let error {
             print("Sign out error: \(error.localizedDescription)")
             DispatchQueue.main.async {
-                self.authErrorMessage = error.localizedDescription
+                self.authErrorMessage = error.localizedDescription // Capture error message
             }
         }
     }
@@ -131,21 +124,21 @@ class AuthViewModel: ObservableObject {
             DispatchQueue.main.async {
                 if let error = error {
                     print("Sign up error: \(error.localizedDescription)")
-                    self?.authErrorMessage = error.localizedDescription
+                    self?.authErrorMessage = error.localizedDescription // Capture error message
                     completion(false, error)
                 } else if let user = result?.user {
                     let changeRequest = user.createProfileChangeRequest()
-                    changeRequest.displayName = displayName
+                    changeRequest.displayName = displayName // Update user profile display name
                     changeRequest.commitChanges { [weak self] error in
                         if let error = error {
                             print("Profile update error: \(error.localizedDescription)")
-                            self?.authErrorMessage = error.localizedDescription
+                            self?.authErrorMessage = error.localizedDescription // Capture error message
                             completion(false, error)
                         } else {
-                            self?.user = Auth.auth().currentUser
-                            self?.isSignedIn = true
+                            self?.user = Auth.auth().currentUser // Update the current user
+                            self?.isSignedIn = true // Mark user as signed in
                             print("User signed up and profile updated")
-                            self?.createUserProfileInFirestore()
+                            self?.createUserProfileInFirestore() // Create Firestore profile
                             completion(true, nil)
                         }
                     }
@@ -159,6 +152,7 @@ class AuthViewModel: ObservableObject {
 
     // MARK: - User Profile Management
 
+    /// Creates or updates the user profile in Firestore.
     private func createUserProfileInFirestore() {
         guard let userID = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
@@ -173,7 +167,7 @@ class AuthViewModel: ObservableObject {
             if let error = error {
                 print("Error adding/updating user in Firestore: \(error.localizedDescription)")
                 DispatchQueue.main.async {
-                    self?.authErrorMessage = "Failed to create user profile."
+                    self?.authErrorMessage = "Failed to create user profile." // Capture error message
                 }
             } else {
                 print("User profile created/updated in Firestore!")
@@ -183,16 +177,19 @@ class AuthViewModel: ObservableObject {
 
     // MARK: - Validation Methods
 
+    /// Validates email format.
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
         let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
 
+    /// Validates that the password is at least 6 characters long.
     private func isValidPassword(_ password: String) -> Bool {
         return password.count >= 6
     }
 
+    /// Validates that the display name is not empty.
     private func isValidDisplayName(_ displayName: String) -> Bool {
         return !displayName.trimmingCharacters(in: .whitespaces).isEmpty
     }

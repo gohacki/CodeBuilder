@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct CodeBlockView: View {
-    let code: String
-    let backgroundColor: Color
+    let code: String // the code to display
+    let backgroundColor: Color // background color for the block
 
     var body: some View {
         Text(code)
-            .font(.system(.body, design: .monospaced))
+            .font(.system(.body, design: .monospaced)) // monospaced font for code readability
             .foregroundColor(.primary)
             .padding()
-            .background(backgroundColor)
+            .background(backgroundColor) // customizable background color
             .cornerRadius(5)
             .overlay(
-                RoundedRectangle(cornerRadius: 5)
+                RoundedRectangle(cornerRadius: 5) // border styling
                     .stroke(Color.gray.opacity(0.5), lineWidth: 1)
             )
-            .onDrag {
+            .onDrag { // enables drag-and-drop functionality
                 NSItemProvider(object: code as NSString)
             }
     }
@@ -30,5 +30,5 @@ struct CodeBlockView: View {
 
 #Preview {
     CodeBlockView(code: "print(\"Hello World\")", backgroundColor: Color.blue.opacity(0.1))
-        .frame(width: 150, height: 50)
+        .frame(width: 150, height: 50) // fixed frame for preview
 }

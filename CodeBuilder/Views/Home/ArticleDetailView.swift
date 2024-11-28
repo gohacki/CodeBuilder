@@ -13,6 +13,7 @@ struct ArticleDetailView: View {
 
     var body: some View {
         ScrollView {
+            // display the markdown content or a fallback message
             if let content = loadMarkdown(for: articleTitle) {
                 Markdown(content)
                     .padding()
@@ -21,29 +22,27 @@ struct ArticleDetailView: View {
                     .padding()
             }
         }
-        .navigationTitle(articleTitle)
+        .navigationTitle(articleTitle) // show the article title as the screen's title
         .background(
             LinearGradient(
                 gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.2)]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+            .ignoresSafeArea() // extend the gradient to cover the full screen
         )
     }
 
-  func loadMarkdown(for title: String) -> String? {
-      // Convert the article title to the corresponding file name
-      let fileName = title.replacingOccurrences(of: " ", with: "") + ".md"
+    // load markdown content from a file based on the article title
+    func loadMarkdown(for title: String) -> String? {
+        let fileName = title.replacingOccurrences(of: " ", with: "") + ".md" // convert title to file name
 
-      guard let fileURL = Bundle.main.url(forResource: fileName, withExtension: nil) else {
-          print("DEBUG: File not found for \(fileName)")
-          return nil
-      }
-      return try? String(contentsOf: fileURL, encoding: .utf8)
-  }
-  
-
+        guard let fileURL = Bundle.main.url(forResource: fileName, withExtension: nil) else {
+            print("DEBUG: File not found for \(fileName)") // log missing file for debugging
+            return nil
+        }
+        return try? String(contentsOf: fileURL, encoding: .utf8)
+    }
 }
 
 #Preview {

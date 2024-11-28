@@ -5,16 +5,13 @@
 //  Created by aaron perkel on 11/27/24.
 //
 
-
-// Views/SettingsContentView.swift
-
 import SwiftUI
 
 struct SettingsContentView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.colorScheme) var colorScheme
 
-    // Computed property for settings items
+    // settings menu items
     var settingsItems: [MenuItem] {
         [
             MenuItem(
@@ -36,7 +33,7 @@ struct SettingsContentView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            // Settings Options
+            // settings options
             VStack(spacing: 16) {
                 ForEach(settingsItems, id: \.title) { item in
                     SettingsOptionView(

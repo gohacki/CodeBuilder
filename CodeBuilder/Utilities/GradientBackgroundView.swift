@@ -16,7 +16,6 @@ struct GradientBackgroundView<Content: View>: View {
 
     var body: some View {
         ZStack {
-            // Apply the gradient background
             LinearGradient(
                 gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.2)]),
                 startPoint: .topLeading,
@@ -24,7 +23,6 @@ struct GradientBackgroundView<Content: View>: View {
             )
             .ignoresSafeArea()
             
-            // Overlay the content
             content
         }
     }

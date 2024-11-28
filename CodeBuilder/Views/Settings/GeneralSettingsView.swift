@@ -7,63 +7,66 @@
 import SwiftUI
 
 struct GeneralSettingsView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @EnvironmentObject var userStatsViewModel: UserStatsViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel // access authentication details
+    @EnvironmentObject var userStatsViewModel: UserStatsViewModel // access user stats
 
     var body: some View {
         List {
-            // Account Section
-          Section {
-            NavigationLink(destination: PreferencesView()) {
-              HStack {
-                Image(systemName: "info.square.fill")
-                  .foregroundColor(.gray)
-                Text("About")
-              }
+            // account-related settings section
+            Section {
+                // link to "About" settings
+                NavigationLink(destination: PreferencesView()) {
+                    HStack {
+                        Image(systemName: "info.square.fill")
+                            .foregroundColor(.gray)
+                        Text("About")
+                    }
+                }
+                
+                // link to "Language" settings
+                NavigationLink(destination: PreferencesView()) {
+                    HStack {
+                        Image(systemName: "globe")
+                            .foregroundColor(.blue)
+                        Text("Language")
+                    }
+                }
+                
+                // link to "Notifications" settings
+                NavigationLink(destination: PreferencesView()) {
+                    HStack {
+                        Image(systemName: "bell.badge.fill")
+                            .foregroundColor(.red)
+                        Text("Notifications")
+                    }
+                }
+                
+                // link to "Sounds & Haptics" settings
+                NavigationLink(destination: PreferencesView()) {
+                    HStack {
+                        Image(systemName: "speaker.wave.3.fill")
+                            .foregroundColor(.pink)
+                        Text("Sounds & Haptics")
+                    }
+                }
+                
+                // link to "Widgets" settings
+                NavigationLink(destination: PreferencesView()) {
+                    HStack {
+                        Image(systemName: "widget.small")
+                            .foregroundColor(.orange)
+                        Text("Widgets")
+                    }
+                }
             }
-            
-            NavigationLink(destination: PreferencesView()) {
-              HStack {
-                Image(systemName: "globe")
-                  .foregroundColor(.blue)
-                Text("Language")
-              }
-            }
-            
-            NavigationLink(destination: PreferencesView()) {
-              HStack {
-                Image(systemName: "bell.badge.fill")
-                  .foregroundColor(.red)
-                Text("Notifications")
-              }
-            }
-            
-            NavigationLink(destination: PreferencesView()) {
-              HStack {
-                Image(systemName: "speaker.wave.3.fill")
-                  .foregroundColor(.pink)
-                Text("Sounds & Haptics")
-              }
-            }
-            
-            NavigationLink(destination: PreferencesView()) {
-              HStack {
-                Image(systemName: "widget.small")
-                  .foregroundColor(.orange)
-                Text("Widgets")
-              }
-            }
-          }
-
-            // Add more sections as needed
         }
-        .listStyle(InsetGroupedListStyle())
-        .navigationTitle("General Settings")
-        .navigationBarTitleDisplayMode(.inline)
+        .listStyle(InsetGroupedListStyle()) // group style for the list
+        .navigationTitle("General Settings") // title for the screen
+        .navigationBarTitleDisplayMode(.inline) // display title in a compact style
     }
 }
 
-// Placeholder for PreferencesView
+// placeholder for the actual settings pages
 struct PreferencesView: View {
     var body: some View {
         Text("Settings")
@@ -74,7 +77,7 @@ struct PreferencesView: View {
 }
 
 #Preview {
-  GeneralSettingsView()
-      .environmentObject(AuthViewModel.shared)
-      .environmentObject(UserStatsViewModel())
-  }
+    GeneralSettingsView()
+        .environmentObject(AuthViewModel.shared)
+        .environmentObject(UserStatsViewModel())
+}

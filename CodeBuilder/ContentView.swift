@@ -1,37 +1,28 @@
-// ContentView.swift
+// Views/ContentView.swift
+
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     var body: some View {
-        TabView {
-            HomeView()
-              .tabItem {
-                  Label("Home", systemImage: "house.fill")
-              }
-            ProblemsView()
-              .tabItem {
-                  Label("Problems", systemImage: "list.number")
-              }
-            DailyChallengeView()
-              .tabItem {
-                  Label("Daily Challenge", systemImage: "star.fill")
-              }
-            ForumView()
-              .tabItem {
-                Label("Forum", systemImage: "paperplane.fill")
+        Group {
+            if authViewModel.isSignedIn {
+                MainTabView()
+            } else {
+                SignInView()
             }
-            SettingsView()
-              .tabItem {
-                  Label("Settings", systemImage: "gearshape.fill")
-              }
         }
+        .animation(.easeInOut, value: authViewModel.isSignedIn)
     }
 }
 
-#Preview {
-    ContentView()
-        .environmentObject(AuthViewModel.shared)
-        .environmentObject(UserStatsViewModel())
-        .environmentObject(ProblemsData.shared)
-        .environmentObject(ForumViewModel())
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(AuthViewModel.shared)
+            .environmentObject(UserStatsViewModel())
+            .environmentObject(ProblemsData.shared)
+            .environmentObject(ForumViewModel())
+    }
 }

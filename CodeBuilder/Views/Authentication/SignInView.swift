@@ -1,142 +1,146 @@
-//
-//  SignIn.swift
-//  CodeBuilder
-//
-//  Created by Miro Gohacki on 10/1/24.
-//
+// Views/Authentication/SignInView.swift
 
 import SwiftUI
 import AuthenticationServices // For SignInWithAppleButton
 
 struct SignInView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) var colorScheme
-    @State private var email = ""
-    @State private var password = ""
-    @State private var showingSignUp = false
-    @State private var showingAlert = false
-
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Spacer()
-              
-              Image("Logo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 150, height: 150)
-                .cornerRadius(40)
-                
-                Text("CodeBuilder")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.bottom, 20)
-                
-                // Custom input fields
-                VStack(spacing: 16) {
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .padding()
-                        .background(.quinary)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                    SecureField("Password", text: $password)
-                        .padding()
-                        .background(.quinary)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                }
-                .padding(.bottom, 20)
-                
-                Button("Sign In") {
-                    authViewModel.signIn(email: email, password: password)
-                }
-                .buttonStyle(.borderedProminent)
-                .cornerRadius(10)
-                .padding(.horizontal)
-                .padding(.bottom, 10)
-                
-                // Improved Separator
-                HStack {
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(Color.gray.opacity(0.5))
-                    Text("OR")
-                        .foregroundColor(.gray)
-                        .padding(.horizontal, 8)
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(Color.gray.opacity(0.5))
-                }
-                .padding(.vertical, 10)
-                .padding(.horizontal)
-                .padding(.bottom, 10)
-                
-                // Social Sign-In Buttons
-                VStack(spacing: 10) {
-                    SignInWithAppleButton(
-                        onRequest: { request in
-                            // Handle request
-                        },
-                        onCompletion: { result in
-                            // Handle completion
-                        }
-                    )
-                    .signInWithAppleButtonStyle(
-                      colorScheme == .dark ? .white : .black
-                    )
-                    .frame(height: 52)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    .padding(.bottom, 15)
-                }
-                .padding(.bottom, 20)
-                
-                Spacer()
-                
-                // Improved Sign Up Prompt
-                HStack {
-                    Text("Don't have an account?")
-                        .foregroundColor(.secondary)
-                  NavigationLink(destination: SignUpView().environmentObject(authViewModel)) {
-                    Text("Sign Up")
-                      .bold()
-                  }
-                }
-                .padding(.bottom, 20)
-                .sheet(isPresented: $showingSignUp) {
-                    SignUpView()
-                        .environmentObject(authViewModel)
-                }
-            }
-            .navigationTitle("Sign In")
-            .navigationBarTitleDisplayMode(.inline)
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("Error"),
-                    message: Text(authViewModel.authErrorMessage ?? "An error occurred"),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            .onReceive(authViewModel.$authErrorMessage) { errorMessage in
-                if errorMessage != nil {
-                    showingAlert = true
-                }
-            }
-            .onReceive(authViewModel.$isSignedIn) { isSignedIn in
-                if isSignedIn {
-                    dismiss()
-                }
-            }
+  @EnvironmentObject var authViewModel: AuthViewModel
+  @Environment(\.dismiss) var dismiss
+  @Environment(\.colorScheme) var colorScheme
+  @State private var email = ""
+  @State private var password = ""
+  @State private var showingSignUp = false
+  @State private var showingAlert = false
+  @State private var alertMessage = ""
+  
+  var body: some View {
+    NavigationStack {
+      VStack {
+        Spacer()
+        
+        Image("Logo")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 150, height: 150)
+          .cornerRadius(40)
+        
+        Text("CodeBuilder")
+          .font(.largeTitle)
+          .bold()
+          .padding(.bottom, 20)
+        
+        // Custom input fields
+        VStack(spacing: 16) {
+          TextField("Email", text: $email)
+            .keyboardType(.emailAddress)
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+            .padding()
+            .background(Color(.quaternarySystemFill))
+            .cornerRadius(10)
+            .padding(.horizontal)
+          
+          SecureField("Password", text: $password)
+            .padding()
+            .background(Color(.quaternarySystemFill))
+            .cornerRadius(10)
+            .padding(.horizontal)
         }
+        .padding(.bottom, 20)
+        
+        Button("Sign In") {
+          authViewModel.signIn(email: email, password: password) { success, error in
+            if success {
+              // Optionally handle additional success logic here
+              // For example, reset the input fields
+              email = ""
+              password = ""
+              // The view will dismiss automatically via the onReceive for isSignedIn
+            } else {
+              // Handle error by showing an alert
+              alertMessage = error?.localizedDescription ?? "An unknown error occurred."
+              showingAlert = true
+            }
+          }
+        }
+        .buttonStyle(.borderedProminent)
+        .cornerRadius(10)
+        .padding(.horizontal)
+        .padding(.bottom, 10)
+        
+        // Improved Separator
+        HStack {
+          Rectangle()
+            .frame(height: 1)
+            .foregroundColor(Color.gray.opacity(0.5))
+          Text("OR")
+            .foregroundColor(.gray)
+            .padding(.horizontal, 8)
+          Rectangle()
+            .frame(height: 1)
+            .foregroundColor(Color.gray.opacity(0.5))
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal)
+        .padding(.bottom, 10)
+        
+        // Social Sign-In Buttons
+        VStack(spacing: 10) {
+          SignInWithAppleButton(
+            onRequest: { request in
+              // Handle request
+            },
+            onCompletion: { result in
+              // Handle completion
+            }
+          )
+          .signInWithAppleButtonStyle(
+            colorScheme == .dark ? .white : .black
+          )
+          .frame(height: 52)
+          .cornerRadius(10)
+          .padding(.horizontal)
+          .padding(.bottom, 15)
+        }
+        .padding(.bottom, 20)
+        
+        Spacer()
+        
+        // Improved Sign Up Prompt
+        HStack {
+          Text("Don't have an account?")
+            .foregroundColor(.secondary)
+          NavigationLink(destination: SignUpView().environmentObject(authViewModel)) {
+            Text("Sign Up")
+              .bold()
+          }
+        }
+        .padding(.bottom, 20)
+        .sheet(isPresented: $showingSignUp) {
+          SignUpView()
+            .environmentObject(authViewModel)
+        }
+      }
+      .navigationTitle("Sign In")
+      .navigationBarTitleDisplayMode(.inline)
+      .alert(isPresented: $showingAlert) {
+        Alert(
+          title: Text("Error"),
+          message: Text(alertMessage),
+          dismissButton: .default(Text("OK"))
+        )
+      }
+      .onReceive(authViewModel.$authErrorMessage) { errorMessage in
+        if errorMessage != nil {
+          showingAlert = true
+        }
+      }
+      .onReceive(authViewModel.$isSignedIn) { isSignedIn in
+        if isSignedIn {
+          dismiss()
+        }
+      }
     }
-}
-
-#Preview {
-    SignInView()
-        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
-        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
+  }
+  
 }

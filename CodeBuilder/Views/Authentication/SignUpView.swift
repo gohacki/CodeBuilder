@@ -1,9 +1,4 @@
-//
-//  SignUpView.swift
-//  CodeBuilder
-//
-//  Created by Miro Gohacki on 10/1/24.
-//
+// Views/Authentication/SignUpView.swift
 
 import SwiftUI
 
@@ -14,17 +9,18 @@ struct SignUpView: View {
     @State private var password = ""
     @State private var displayName = ""
     @State private var showingAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationStack {
             VStack {
                 Spacer()
               
-              Image("Logo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 150, height: 150)
-                .cornerRadius(40)
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .cornerRadius(40)
               
                 Text("Create Account")
                     .font(.largeTitle)
@@ -37,7 +33,7 @@ struct SignUpView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .padding()
-                        .background(.quinary)
+                        .background(Color(.quaternarySystemFill))
                         .cornerRadius(10)
                         .padding(.horizontal)
                     
@@ -46,21 +42,33 @@ struct SignUpView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .padding()
-                        .background(.quinary)
+                        .background(Color(.quaternarySystemFill))
                         .cornerRadius(10)
                         .padding(.horizontal)
                     
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(.quinary)
+                        .background(Color(.quaternarySystemFill))
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
                 .padding(.bottom, 20)
             
-                
                 Button("Sign Up") {
-                    authViewModel.signUp(email: email, password: password, displayName: displayName)
+                    authViewModel.signUp(email: email, password: password, displayName: displayName) { success, error in
+                        if success {
+                            // Optionally handle additional success logic here
+                            // For example, reset the input fields
+                            email = ""
+                            password = ""
+                            displayName = ""
+                            // The view will dismiss automatically via the onReceive for isSignedIn
+                        } else {
+                            // Handle error by showing an alert
+                            alertMessage = error?.localizedDescription ?? "An unknown error occurred."
+                            showingAlert = true
+                        }
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .cornerRadius(10)
@@ -74,7 +82,7 @@ struct SignUpView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(
                     title: Text("Error"),
-                    message: Text(authViewModel.authErrorMessage ?? "An error occurred"),
+                    message: Text(alertMessage),
                     dismissButton: .default(Text("OK"))
                 )
             }
@@ -92,8 +100,10 @@ struct SignUpView: View {
     }
 }
 
-#Preview {
-    SignUpView()
-        .environmentObject(AuthViewModel.shared) // Use the shared singleton instance
-        .environmentObject(UserStatsViewModel()) // Provide UserStatsViewModel if needed
+struct SignUpView_Previews: PreviewProvider {
+    static var previews: some View {
+        SignUpView()
+            .environmentObject(AuthViewModel.shared)
+            .environmentObject(UserStatsViewModel())
+    }
 }

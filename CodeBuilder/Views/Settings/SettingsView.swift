@@ -5,61 +5,22 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @Environment(\.colorScheme) var colorScheme
-    @State private var showingSignIn = false
-
-    // Computed property for settings items
-    var settingsItems: [MenuItem] {
-        [
-            MenuItem(
-                title: authViewModel.user?.displayName ?? "No Name",
-                subtitle: "Account, CodeBuilder+, and more",
-                iconName: "person.fill",
-                color: .blue,
-                destination: AnyView(AccountView())
-            ),
-            MenuItem(
-                title: "General",
-                subtitle: "Customize app settings",
-                iconName: "gear",
-                color: .gray,
-                destination: AnyView(GeneralSettingsView())
-            )
-        ]
-    }
-
     var body: some View {
         GradientBackgroundView {
             NavigationStack {
-                VStack(spacing: 20) {
-                    // Settings Options
-                    VStack(spacing: 16) {
-                        ForEach(settingsItems, id: \.title) { item in
-                            SettingsOptionView(
-                                title: item.title,
-                                subtitle: item.subtitle ?? "",
-                                iconName: item.iconName,
-                                iconColor: item.color,
-                                destination: item.destination
-                            )
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    
-                    Spacer()
-                }
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.large)
-                .sheet(isPresented: $showingSignIn) {
-                    SignInView()
-                        .environmentObject(authViewModel)
-                }
-                .applyBackgroundGradient()
+                SettingsContentView()
+                    .navigationTitle("Settings")
+                    .navigationBarTitleDisplayMode(.large)
+                    .applyBackgroundGradient()
             }
         }
     }
+}
+
+#Preview {
+      SettingsView()
+          .environmentObject(AuthViewModel.shared)
+          .environmentObject(UserStatsViewModel())
 }
 
 struct ProfileCardView: View {

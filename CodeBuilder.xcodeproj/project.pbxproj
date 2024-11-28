@@ -42,7 +42,7 @@
 		9025D5362CAC9329000EFD32 /* Exceptions for "CodeBuilder" folder in "CodeBuilder" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				"Supporting Files/Info.plist",
 			);
 			target = 90AF37A72CA2E4EE006A4534 /* CodeBuilder */;
 		};
@@ -438,7 +438,7 @@
 				DEVELOPMENT_TEAM = C6735YMRFQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CodeBuilder/Info.plist;
+				INFOPLIST_FILE = "CodeBuilder/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Code Builder";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -470,7 +470,7 @@
 				DEVELOPMENT_TEAM = C6735YMRFQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CodeBuilder/Info.plist;
+				INFOPLIST_FILE = "CodeBuilder/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Code Builder";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

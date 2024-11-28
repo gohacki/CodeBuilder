@@ -66,16 +66,6 @@ struct GeneralSettingsView: View {
     }
 }
 
-// placeholder for the actual settings pages
-struct PreferencesView: View {
-    var body: some View {
-        Text("Settings")
-            .font(.largeTitle)
-            .foregroundColor(.primary)
-            .navigationTitle("Preferences")
-    }
-}
-
 #Preview {
     GeneralSettingsView()
         .environmentObject(AuthViewModel.shared)

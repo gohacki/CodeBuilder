@@ -2,21 +2,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    // call the shared authentication view model
     @EnvironmentObject var authViewModel: AuthViewModel
 
     var body: some View {
-        // set up conditional view rendering
-        Group {
+        ZStack {
             if authViewModel.isSignedIn {
-                // if user is signed in, show main tab view
                 MainTabView()
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
             } else {
-                // otherwise prompt them to sign in
                 SignInView()
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .leading).combined(with: .opacity),
+                        removal: .move(edge: .trailing).combined(with: .opacity)
+                    ))
             }
         }
-        .animation(.easeInOut, value: authViewModel.isSignedIn)
+        .animation(.easeInOut(duration: 0.5), value: authViewModel.isSignedIn)
     }
 }
 

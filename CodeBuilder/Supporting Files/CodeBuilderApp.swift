@@ -17,7 +17,7 @@ struct CodeBuilderApp: App {
     // defining the main user interface
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
                 .environmentObject(authViewModel) // inject authentication logic
                 .environmentObject(userStatsViewModel) // inject user stats management model
                 .environmentObject(problemsData) // inject problem data management model

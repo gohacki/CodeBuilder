@@ -96,8 +96,16 @@ Utilities
   - SplashScreenView.swift: Displays the splash screen.
 
 ## Screenshots
-
-> Insert Screenshots Here
+### Login Screen
+![Login Screen](login.png)
+### Home Screen
+![Home Screen](home.png)
+### Problems List
+![Problems List](prob.png)
+### Daily Challenge
+![Daily Challenge](dc.png)
+### Forum
+![Forum](forum.png)
 
 ## Technologies Used
 - SwiftUI: For building the user interface.
